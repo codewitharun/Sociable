@@ -1,0 +1,69 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/Comfortaa-Bold.ttf",
+      "sha1": "030d538c445730fb1ec262b0e2bd748cdfceb272"
+    },
+    {
+      "path": "src/assets/fonts/Comfortaa-Light.ttf",
+      "sha1": "59ba6ecb3d687de56df4e0c793bf2871456cbed1"
+    },
+    {
+      "path": "src/assets/fonts/Comfortaa-Medium.ttf",
+      "sha1": "eda88ba64df47e9d918b3926f9d84653a5a82bd7"
+    },
+    {
+      "path": "src/assets/fonts/Comfortaa-Regular.ttf",
+      "sha1": "018c91b57e43873172a1767df40434cb56e130e4"
+    },
+    {
+      "path": "src/assets/fonts/Comfortaa-SemiBold.ttf",
+      "sha1": "8aa11f225d34b7d4e25aec3ca6b5cae30a444ce8"
+    },
+    {
+      "path": "src/assets/fonts/InstagramSans-Bold.ttf",
+      "sha1": "c3b6befc46a9ae06a066e88505d515cfd34cc785"
+    },
+    {
+      "path": "src/assets/fonts/InstagramSans-Light.ttf",
+      "sha1": "77090f07a422f2f6f9792d79c5dc897d840e79ed"
+    },
+    {
+      "path": "src/assets/fonts/InstagramSans-Medium.ttf",
+      "sha1": "c2377065c3683aa7a239ebf89b72e9e171bb192d"
+    },
+    {
+      "path": "src/assets/fonts/InstagramSans-Regular.ttf",
+      "sha1": "205c8da7bcb4e59c2a764e20d8ba9d95da94f32a"
+    },
+    {
+      "path": "src/assets/fonts/InstagramSansCondensed-Bold.ttf",
+      "sha1": "f83568ea21c6841a5ff73012f8d0d624d148b86e"
+    },
+    {
+      "path": "src/assets/fonts/InstagramSansCondensed-Regular.ttf",
+      "sha1": "95cdbb03695ab634947427f4004f6d9b9ee9c67f"
+    },
+    {
+      "path": "src/assets/fonts/InstagramSansHeadline-Regular.ttf",
+      "sha1": "d3a5112c9e8c1bae5bc76dc373280d7f45e1c9c3"
+    },
+    {
+      "path": "src/assets/fonts/InstagramSansScript-Bold.ttf",
+      "sha1": "e783abf52a71bec8926fa5b769930a9c7fb80d9b"
+    },
+    {
+      "path": "src/assets/fonts/InstagramSansScript-Regular.ttf",
+      "sha1": "0f632764e864ad015b9599eadd7a66a6620c64e9"
+    },
+    {
+      "path": "src/assets/fonts/Logo-Regular.ttf",
+      "sha1": "f41b4bc879dd935dc9292ca6b266890dde5fc7c2"
+    },
+    {
+      "path": "src/assets/fonts/Nabla-Regular.ttf",
+      "sha1": "c50a0335afa1534ded079620cf4ddc65b1090dc8"
+    }
+  ]
+}

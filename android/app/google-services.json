@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "783880828424",
+    "project_id": "sociable-2f985",
+    "storage_bucket": "sociable-2f985.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:783880828424:android:695bdc200369186b9843bd",
+        "android_client_info": {
+          "package_name": "com.sociable"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "783880828424-lm4ods8ql4osrr3hmt1ik1rfqkracauk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sociable",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "783880828424-errl5i9tcucvu8i9bl1643gi7ur1h4km.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWJKpp1X3UzMap86X0EKB-47pXBUhRHIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "783880828424-errl5i9tcucvu8i9bl1643gi7ur1h4km.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "783880828424-rnglaorq8t4b0c5re489flbeiq4tr9e5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.sociable"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
