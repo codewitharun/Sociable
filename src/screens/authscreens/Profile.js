@@ -26,7 +26,7 @@ import firestore from '@react-native-firebase/firestore';
 import {color} from 'react-native-reanimated';
 const Profile = ({navigation, params}) => {
   const [name, setName] = useState('');
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState('hejr');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
@@ -38,13 +38,13 @@ const Profile = ({navigation, params}) => {
   // const parsedUserData = JSON.stringify(JSON.parse(userData));
   // console.log('User data is after' + userData.displayName);
   const update = {
-    photoUrl: userData?.photoUrl == '' ? image : userData?.photoUrl,
-    displayName: User.displayName == null ? name : User.displayName,
-    email: User.email == null ? email : User.email,
-    phoneNumber:
-      userData?.phoneNumber == '' ? '+91' + phone : userData?.phoneNumber,
-    address: userData?.address == '' ? address : userData?.address,
-    bio: userData?.bio == '' ? bio : userData?.bio,
+    photoUrl: image,
+    // displayName: userData?.displayName == '' ? name : userData?.displayName,
+    displayName: name,
+    email: email,
+    phoneNumber: '+91' + phone,
+    address: address,
+    bio: bio,
   };
   useEffect(() => {
     firestore()
@@ -61,11 +61,18 @@ const Profile = ({navigation, params}) => {
         // Document fields
         userDetails = documentSnapshot.data();
         // All the document related data
-        userDetails['id'] = documentSnapshot.id;
+        // userDetails['id'] = documentSnapshot.id;
         console.log('user details: ' + JSON.stringify(userDetails));
 
         setUserData(userDetails);
+        setEmail(userDetails?.email);
+        setName(userDetails?.displayName);
+        setAddress(userDetails?.address);
+        setBio(userDetails?.bio);
+        setPhone(userDetails?.phoneNumber?.slice(3));
+        setImage(userDetails?.photoUrl);
       });
+    // uploadDetails();
   }, []);
 
   console.log(User);
@@ -113,17 +120,16 @@ const Profile = ({navigation, params}) => {
         .getDownloadURL();
       setImage(urrl);
       console.log('url link get after image upload', urrl);
+      await firestore()
+        .collection('Users')
+        .doc(User.uid)
+        .set(update)
+        .then(() => {
+          console.log('User updated!');
+        });
     } catch (error) {
       console.log(' image upload to storage', error);
     }
-    await firestore()
-      .collection('Users')
-      .doc(User.uid)
-      .set(update)
-      .then(() => {
-        User.updateProfile(update);
-        console.log('User updated!');
-      });
   }
   const captureImage = async type => {
     let options = {
@@ -131,10 +137,9 @@ const Profile = ({navigation, params}) => {
       maxWidth: 300,
       maxHeight: 550,
       quality: 1,
-      videoQuality: 'low',
-
-      durationLimit: 30, //Video max duration in seconds
-      saveToPhotos: true,
+      includeExtra: true,
+      saveToPhotos: false,
+      cameraType: 'front',
     };
     let isCameraPermitted = await requestCameraPermission();
     let isStoragePermitted = await requestExternalWritePermission();
@@ -212,7 +217,7 @@ const Profile = ({navigation, params}) => {
       mediaType: type,
       maxWidth: 300,
       maxHeight: 550,
-
+      saveToPhotos: false,
       quality: 1,
     };
     launchImageLibrary(options, response => {
@@ -243,14 +248,6 @@ const Profile = ({navigation, params}) => {
       setFilePath(response);
     });
   };
-
-  async function imgageUrl() {
-    // const reference = storage().ref(User.uid);
-    // const pathToFile = filePath.assets[0].uri;
-    // reference.putFile(pathToFile);
-    // const urrl = storage().ref(User.uid).getDownloadURL();
-    // setImage(urrl);
-  }
 
   return (
     <SafeAreaView style={{backgroundColor: 'black'}}>
@@ -284,12 +281,14 @@ const Profile = ({navigation, params}) => {
                 <Image
                   onLoad={async () => {
                     // path to existing file on filesystem
-                    const pathToFile = filePath.assets[0].uri;
+                    const pathToFile = filePath?.assets[0].uri;
+
                     // uploads file
                     await reference.putFile(pathToFile);
                   }}
                   source={{
-                    uri: filePath.assets[0].uri,
+                    uri: filePath?.assets[0].uri,
+                    // uri: image,
                   }}
                   style={styles.imageStyle}
                 />
@@ -299,7 +298,7 @@ const Profile = ({navigation, params}) => {
                 <TouchableOpacity onPress={() => onChoose()}>
                   <Image
                     source={{
-                      uri: userData?.photoUrl,
+                      uri: image,
                     }}
                     style={styles.imageStyle}
                   />
@@ -319,8 +318,8 @@ const Profile = ({navigation, params}) => {
           <View style={{height: height * 0.2}}>
             <View>
               <TextInput
-                editable={userData?.email == true ? true : false}
-                value={userData?.email}
+                // editable={userData?.email == '' ? true : false}
+                value={email}
                 placeholder="Enter your corporate email ID"
                 placeholderTextColor={'rgb(122,122,122)'}
                 onChangeText={txt => {
@@ -337,8 +336,8 @@ const Profile = ({navigation, params}) => {
               />
               <TextInput
                 placeholder="Full Name"
-                editable={userData?.displayName == null ? true : false}
-                value={userData?.displayName}
+                // editable={userData?.displayName == '' ? true : false}
+                value={name}
                 placeholderTextColor={'rgb(122,122,122)'}
                 // secureTextEntry={true}
                 onChangeText={txt => {
@@ -358,8 +357,8 @@ const Profile = ({navigation, params}) => {
                 placeholder="Phone Number"
                 placeholderTextColor={'rgb(122,122,122)'}
                 maxLength={10}
-                value={userData?.phoneNumber}
-                editable={userData?.phoneNumber == '' ? true : false}
+                value={phone}
+                // editable={userData?.phoneNumber == '' ? true : false}
                 // secureTextEntry={true}
                 onChangeText={txt => {
                   setPhone(txt);
@@ -376,8 +375,9 @@ const Profile = ({navigation, params}) => {
               />
               <TextInput
                 placeholder="Address"
-                value={userData?.address}
-                editable={userData?.address == '' ? true : false}
+                value={address}
+                // defaultValue={userData?.address}
+                // editable={userData?.address == '' ? true : false}
                 placeholderTextColor={'rgb(122,122,122)'}
                 // secureTextEntry={true}
                 onChangeText={txt => {
@@ -396,8 +396,8 @@ const Profile = ({navigation, params}) => {
               <TextInput
                 placeholder="About me"
                 multiline={true}
-                editable={userData?.bio == '' ? true : false}
-                value={userData?.bio}
+                // editable={userData?.bio == '' ? true : false}
+                value={bio}
                 placeholderTextColor={'rgb(122,122,122)'}
                 // secureTextEntry={true}
                 onChangeText={txt => {
@@ -438,7 +438,11 @@ const Profile = ({navigation, params}) => {
               </TouchableOpacity>
             </View>
 
-            <Button title="Sign Out" onPress={() => onSignout()} />
+            <Button
+              style={{marginTop: 20}}
+              title="Sign Out"
+              onPress={() => onSignout()}
+            />
           </View>
         </View>
       </View>

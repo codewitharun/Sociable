@@ -8,8 +8,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-
+import {firebase} from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
 const {height, width} = Dimensions.get('screen');
 const Signup = ({navigation}) => {
@@ -26,15 +28,35 @@ const Signup = ({navigation}) => {
   const [check, setCheck] = useState(false);
   const update = {
     displayName: username,
+    email: email,
   };
   async function EmailSign() {
     try {
-      auth().createUserWithEmailAndPassword(email, password);
       auth()
-        .currentUser.updateProfile(update)
+        .createUserWithEmailAndPassword(email, password)
         .then(() => {
-          console.log('User account created & signed in!');
+          firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+              try {
+                console.log('User account created & signed in!');
+                firestore().collection('Users').doc(user.uid).set(update);
+
+                storage().ref(`${user.uid}/profilePhoto`).putString('hello');
+              } catch (error) {
+                console.log(user);
+              }
+              // It shows the Firebase user
+            }
+          });
         })
+        .then(() => {
+          // navigation.push ('Success');
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'Success'}],
+          });
+        })
+
         .catch(error => {
           if (error.code === 'auth/email-already-in-use') {
             console.log('That email address is already in use!');

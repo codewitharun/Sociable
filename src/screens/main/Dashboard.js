@@ -1,7 +1,7 @@
-import {StyleSheet, Text, View, SafeAreaView} from 'react-native';
-import React from 'react';
+import {StyleSheet, Text, View, SafeAreaView, Image} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {height, width} from '../components/Colors';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const Dashboard = ({navigation}) => {
@@ -18,7 +18,7 @@ const Dashboard = ({navigation}) => {
           style={{
             height: '9%',
             width: '95%',
-            backgroundColor: 'red',
+            // backgroundColor: 'red',
             alignSelf: 'center',
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -41,12 +41,12 @@ const Dashboard = ({navigation}) => {
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <View style={{justifyContent: 'center'}}>
               <TouchableOpacity>
-                <Icon name="rocket" size={30} color="black" />
+                <Icon name="ladder" size={30} color="white" />
               </TouchableOpacity>
             </View>
             <View style={{justifyContent: 'center'}}>
               <TouchableOpacity>
-                <Icon name="rocket" size={30} color="black" />
+                <Icon name="android-messages" size={30} color="white" />
               </TouchableOpacity>
             </View>
           </View>
