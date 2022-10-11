@@ -47,7 +47,7 @@ const Login = ({navigation}) => {
           // navigation.push ('Success');
           navigation.reset({
             index: 0,
-            routes: [{name: 'Success', Storageref: reference}],
+            routes: [{name: 'Success'}],
           });
         })
 

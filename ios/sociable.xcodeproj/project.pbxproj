@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		0078558E2CC44E49A6529FAB /* Nabla-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 16C6ECDD3E73493493EBA58B /* Nabla-Regular.ttf */; };
 		00E356F31AD99517003FC87E /* sociableTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* sociableTests.m */; };
-		02BBBC1F5667465380F66DEF /* (null) in Resources */ = {isa = PBXBuildFile; };
+		02BBBC1F5667465380F66DEF /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 		0D0DE279D1854160ABA44F08 /* Comfortaa-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B19F79F489FA42409D9E2708 /* Comfortaa-Bold.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -393,7 +393,7 @@
 				C3DFD5D428ED585B006F7D9F /* MaterialIcons.ttf in Resources */,
 				C3DFD5CB28ED585B006F7D9F /* AntDesign.ttf in Resources */,
 				0078558E2CC44E49A6529FAB /* Nabla-Regular.ttf in Resources */,
-				02BBBC1F5667465380F66DEF /* (null) in Resources */,
+				02BBBC1F5667465380F66DEF /* BuildFile in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

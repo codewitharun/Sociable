@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import React, {useState, useEffect} from 'react';
+import RNFS from 'react-native-fs';
 
 import {height, width, COLOR} from '../components/Colors';
 import auth from '@react-native-firebase/auth';
@@ -72,6 +73,7 @@ const Profile = ({navigation, params}) => {
         setPhone(userDetails?.phoneNumber?.slice(3));
         setImage(userDetails?.photoUrl);
       });
+
     // uploadDetails();
   }, []);
 
@@ -119,6 +121,7 @@ const Profile = ({navigation, params}) => {
         .ref(`${User.uid}/profilePhoto`)
         .getDownloadURL();
       setImage(urrl);
+
       console.log('url link get after image upload', urrl);
       await firestore()
         .collection('Users')
@@ -126,9 +129,11 @@ const Profile = ({navigation, params}) => {
         .set(update)
         .then(() => {
           console.log('User updated!');
+          navigation.navigate('Dashboard');
         });
     } catch (error) {
-      console.log(' image upload to storage', error);
+      // console.log(' image upload to storage', error);
+      Alert.alert('Please Fill all the fields', error.message);
     }
   }
   const captureImage = async type => {
@@ -160,6 +165,7 @@ const Profile = ({navigation, params}) => {
           alert(response.errorMessage);
           return;
         }
+
         console.log('base64 -> ', response.base64);
         console.log('uri -> ', response.uri);
         console.log('width -> ', response.width);
@@ -266,7 +272,6 @@ const Profile = ({navigation, params}) => {
             alignSelf: 'center',
             // justifyContent: 'center',
           }}>
-          {/* {console.log(filePath.assets[0].uri)} */}
           <View
             style={{
               height: height * 0.16,
@@ -287,8 +292,9 @@ const Profile = ({navigation, params}) => {
                     await reference.putFile(pathToFile);
                   }}
                   source={{
-                    uri: filePath?.assets[0].uri,
-                    // uri: image,
+                    uri: filePath?.assets[0].uri
+                      ? filePath?.assets[0].uri
+                      : image,
                   }}
                   style={styles.imageStyle}
                 />

@@ -83,8 +83,8 @@ export function Afterauth(props) {
             //     justifyContent: 'center',
             //     alignItems: 'center',
             //   }}>
-            <Icon name="home" color="white" size={30} />
             // </View>
+            <Icon name="home" color="white" size={30} />
           ),
         }}
       />

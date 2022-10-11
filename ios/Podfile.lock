@@ -1087,6 +1087,8 @@ PODS:
     - Firebase/Storage (= 9.6.0)
     - React-Core
     - RNFBApp
+  - RNFS (2.20.0):
+    - React-Core
   - RNGestureHandler (2.6.2):
     - React-Core
   - RNGoogleSignin (8.0.0):
@@ -1164,6 +1166,7 @@ DEPENDENCIES:
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - "RNFBStorage (from `../node_modules/@react-native-firebase/storage`)"
+  - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -1278,6 +1281,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/messaging"
   RNFBStorage:
     :path: "../node_modules/@react-native-firebase/storage"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
@@ -1356,6 +1361,7 @@ SPEC CHECKSUMS:
   RNFBFirestore: c2130bd455fee49a50fbad196aec704950d596f1
   RNFBMessaging: a57c9c22d2e0a535e5090fecaa68381f0cb2e784
   RNFBStorage: d27231304f1108c1abfb4e5ee5c54c9119765e77
+  RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: 4defbd70b2faf3d6761b82fa7880285241762cb0
   RNGoogleSignin: b2179ba653c759b936404a7746fc5302f9de6a5a
   RNReanimated: 7faa787e8d4493fbc95fab2ad331fa7625828cfa
