@@ -13,6 +13,8 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import {firebase} from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
 const {height, width} = Dimensions.get('screen');
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -33,7 +35,32 @@ const Login = ({navigation}) => {
             if (user) {
               try {
                 setRefrence(storage().ref(user.uid));
+
                 console.log('createddddd', reference);
+                firestore()
+                  .collection('Users')
+                  .doc(user.uid)
+                  .get()
+                  .then(documentSnapshot => {
+                    /*
+          A DocumentSnapshot belongs to a specific document,
+          With snapshot you can view a documents data,
+          metadata and whether a document actually exists.
+        */
+                    let userDetails = {};
+                    // Document fields
+                    userDetails = documentSnapshot.data();
+                    // All the document related data
+                    // userDetails['id'] = documentSnapshot.id;
+                    console.log(
+                      'user details from Login screen: ' +
+                        JSON.stringify(userDetails),
+                    );
+                    AsyncStorage.setItem(
+                      'LoggedUser',
+                      JSON.stringify(userDetails),
+                    );
+                  });
               } catch (error) {
                 console.log('storage bucket not created', error);
               }

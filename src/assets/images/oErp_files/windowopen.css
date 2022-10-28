@@ -1,0 +1,283 @@
+.ft10{font-family:'trebuchet ms',arial;font-size:10px;}
+.ft11{font-family:'trebuchet ms',arial;font-size:11px;color:#000000}
+.ft11green{font-family:'trebuchet ms',arial;font-size:11px;color:#00FF00}
+.ft11red{font-family:'trebuchet ms',arial;font-size:11px;color:#FF0000}
+.ft11magenta{font-family:'trebuchet ms',arial;font-size:11px;color:#FF3CFF}
+.ft11orange{font-family:'trebuchet ms',arial;font-size:11px;color:#FFAE5A}
+.ft11brown{font-family:'trebuchet ms',arial;font-size:11px;color:#BD5D00}
+.ft11black{font-family:'trebuchet ms',arial;font-size:11px;color:#000000}
+.ftsp11{font-family:arial;font-size:11px;}
+.so{font-family:'trebuchet ms',arial;font-size:11px;background-color: #A81911;color:#FFFFFF;}
+.so_over{font-family:'trebuchet ms',arial;font-size:11px;background-color: #A81911;color:#FFFFFF;text-decoration:underline}
+.hilite{font-family:'trebuchet ms',arial;font-size:11px;color:#FFFFFF;background-color: #003366;font-weight:bold}
+.hilitemail{font-family:'trebuchet ms',arial;font-size:11px;color:#FFFFFF;background-color: #C6DBE7;font-weight:bold}
+.hilitefirstmail{font-family:'trebuchet ms',arial;font-size:11px;color:#FFFFFF;background-color: #F0EDBB;font-weight:bold}
+.hilitemail_over{font-family:'trebuchet ms',arial;font-size:11px;background-color: #FBF8DE;}
+.hilite_over{font-family:'trebuchet ms',arial;font-size:11px;color:#FFFFFF;background-color: #003366;text-decoration:underline}
+BODY {BACKGROUND-COLOR: #FAFAF9; COLOR:#000000;}
+TD.top {BACKGROUND-COLOR: #9AA6B0}
+TD.osrc {BACKGROUND-COLOR: #C4CACF}
+.rtclk {BACKGROUND-COLOR: #FFFFFF;border:1px outset ;}
+a {text-decoration: none;}
+a:hover {text-decoration: underline;}
+a:link  { color:#000099;}
+a:visited { color:#000099;} /* for visited links */
+a:active { color:#8A5031;} /* when link is clicked */
+.txt {width:376px;margin:0 0 0 0;}
+.txt1 {width:188px;margin:0 0 0 0;}
+.src {background-image:url('http://jdelivery.rediff.com/iris/pix/src_tile.gif');border:1px solid #C4CACF}
+input.btn{
+   width:42px;
+   height:22px;
+   color:#000000;
+   font-family:'trebuchet ms',arial,helvetica,sans-serif;
+   font-size:84%;
+   font-weight:bold;
+   background-color:#F7FCE0;
+   border:1px solid;
+   border-top-color:#6A9486;
+   border-left-color:#6A9486;
+   border-right-color:#376153;
+   border-bottom-color:#376153;
+   filter:progid:DXImageTransform.Microsoft.Gradient
+   (GradientType:0,StartColorStr:'#ffffffff',EndColorStr:'#D5EAB9');}
+.white {background-color:#FFFFFF;}
+.extd {border:1px solid #DCC79A;background-image:url('http://jdelivery.rediff.com/iris/pix/expanded_tile.gif');}
+.oextd {background-color:#DCC79A}
+.colps {border:1px solid #B3CEE5;background-image:url('http://jdelivery.rediff.com/iris/pix/collapsed_tile.gif');}
+.ocolps {background-color:#B3CEE5;}
+.lfbot {background-color:#CACACA;}
+.omdl {background-color:#CACACA}
+.mdl {background-color:#EAEAEA}
+.ortbot {background-color: #003366;}
+.ortbot1 {background-color:#FFFFFF;border:3px solid #003366;}
+.detl {background-image:url('http://jdelivery.rediff.com/iris/pix/details_tile.gif');}
+.sb1{font-family:arial;font-size:10px;text-decoration:none}
+.updaddr {background-color:#F8F1E2;}
+/*.tb {padding:7 2 1 2px;cursor:pointer;font-family:'trebuchet ms',arial;font-size:11px;border:1px solid #C9C9C9;text-decoration:none;}*/
+.tb{height:100%;width:100%;padding-top:5;color:#000099;border-bottom:1px solid #C9C9C9;cursor:hand;}
+.tl {text-decoration:none;font-family:'trebuchet ms',arial;font-size:11px; }
+#divwritemenu, #divrhtclkmenu{
+  width:165px;
+  border:1px solid #DCD8D0;
+  background-color:#FFFFFF;
+}
+#divsendmenu, #divsubmenu { 
+  width:197px;
+  border:1px solid #DCD8D0;
+  background-color:#FFFFFF;
+}
+#previewmailfolderlist { 
+border:1px solid #DCD8D0;
+  background-color:#FFFFFF;
+}
+.divsep {background-color:#ABC9DF;}
+
+#divsortsub{
+  width:190px;
+  border:1px solid #DCD8D0;
+  background-color:#FFFFFF;
+}
+#divshowfilter{
+  width:190px;
+  border:1px solid #DCD8D0;
+  background-color:#FFFFFF;
+}
+#divmarkmail{
+  border:1px solid #DCD8D0;
+  background-color:#FFFFFF;
+}
+#divsubjectsort{
+  width:45px;
+  border:1px solid #DCD8D0;
+  background-color:#FFFFFF;
+}
+#divsendersort{
+  width:45px;
+  border:1px solid #DCD8D0;
+  background-color:#FFFFFF;
+}
+#divdatesort{
+  width:80px;
+  border:1px solid #DCD8D0;
+  background-color:#FFFFFF;
+}
+#divsizesort{
+  width:90px;
+  border:1px solid #DCD8D0;
+  background-color:#FFFFFF;
+}
+#divsavemenu{
+  width:90px;
+  border:1px solid #DCD8D0;
+  background-color:#FFFFFF;
+}
+#menuDiv0, #menuDiv1, #menuDiv2{
+  border:1px solid #DCD8D0;
+  background-color:#FFFFFF;
+}
+
+.linkover{background-color:#E2DFD6;}
+.linkselected{background-color:#C4CACF;}
+.linkout{background-color:#FFFFFF;}
+.divsep {background-color:#C9D9EE;}
+
+.ftc11{font-family:'trebuchet ms',arial;font-size:11px;color:#666666;}
+.osrc {background-color: #C4CACF}
+.readmailline  {background-color:#E2E2E2}
+.imgtable {background-color:#E7E7E7}
+.maillink {background-color:#F3F3F4}
+#botbox{width:190;height:70px;border:1px solid #C9C9C9;}
+#panorama{height:24;border:1px solid #B0B4B5;background-color:#FFFFFF}
+#hollowdiv{height:30px;border:1px solid #C9C9C9;}
+#imgdiv{width:303px;background-color:E7E7E7;}
+
+.txt {width:394px;margin:0 0 0 0;}
+.txtarea {width:394px;height:38px;margin:0 0 0 0;}
+.txtarea1 {width:454px;height:31px;margin:0 0 0 0;}
+.lang {background-image:url('http://jdelivery.rediff.com/iris/pix/WmLan_tile.gif');border:1px solid #CACACA}
+
+#details
+{
+overflow:auto;
+border:1px solid #91A7B4;
+background-color:#FFFFFF;
+}
+.grtab {background-color:#509D2E;}
+.mygroup {font-family:arial;font-size:13px;color:#FFFFFF}
+#divcontent{width:370;height:164;border:1px solid #CACACA; overflow:auto;}
+.hrstyle{border-left:0px dashed black; border-right:0px dashed black; border-top:1px dashed black; border-bottom:0px dashed black; height:0}
+.frmcontrol {width:229px;margin:0 0 0 0;font-family:'trebuchet ms',arial;font-size:11px;}
+.maintbl{background-color:#EDEDED;border:1px solid #C6C6C6;}
+.frnds{background-color:#F9F9F9;border:1px solid #C6C6C6;}
+.selgroup{width:235;font-family:'trebuchet ms',arial;font-size:11px;}
+.taborder {background-color:#C9C9C9;}
+.white2 {background-color:#FFFFFF;border-bottom:1px solid #C9C9C9;border-left:0px;border-top:0px;border-right:0px;}
+.white1 {background-color:#FFFFFF;border:1px solid #DCC79A;}
+.white_01 {background-color:#FFFFFF;border:1px solid #000066;}
+#srchbar{width:463px;height:26px;background-color:#FFFFFF;color:#000099;}
+.outertb{border-top:1px solid #C9C9C9;border-left:1px solid #C9C9C9;border-right:1px solid #C9C9C9;}
+.sptb{border-bottom:1px solid #C9C9C9;}
+.tbmail{height:100%;width:100%;padding-top:5;color:#000000;font-weight:bold;}
+.tb{height:100%;width:100%;padding-top:5;color:#000099;border-bottom:1px solid #C9C9C9;cursor:hand;}
+
+.lfbot_1 {background-color:#FFFFFF;border:1px solid #CACACA;}
+.rt_tab{border:1px solid #CACACA;}
+.lt_tab{border:1px solid #525252;}
+.separator {background-color:#DEDBD0;}
+.ftc10{font-family:'trebuchet ms',arial;font-size:10px;color:#666666;}
+#div1, #div5{width:120px;border:1px solid #ABC9DF;background-color:#EAF3FF;}
+#div2, #div3{width:70px;border:1px solid #ABC9DF;background-color:#EAF3FF;}
+#div4{width:150px;border:1px solid #ABC9DF;background-color:#EAF3FF;}
+.txtfrom{width:136px;font-family:'trebuchet ms',arial;font-size:11px;}
+.txtsubject{width:110px;font-family:'trebuchet ms',arial;font-size:11px;}
+table.tblnewfilter{background-color:#FFFFCC;border:1px solid #EAE0E8;}
+table.tblactfilter{background-color:#E3EAEE;border:1px solid #D4DEE5}
+
+#autosave1{background-color:#dde9f3;border:1px solid #CACACA;}
+#autosave2{background-color:#eeeeee;border:1px solid #CACACA;border-top:0px;}
+#divcontent1{width:418px;height:241px;border:1px solid #CACACA;border-top:0px; overflow:auto;}
+.contactsep{ background-color:#EBEAE6;}
+table.tbltop{border-left:1px solid #CACACA; border-right:1px solid #CACACA; border-top:1px solid #CACACA; background-color:#EBEBEB;border-bottom:0px none; }
+.ftg11{font-family:'trebuchet ms',arial;font-size:11px;color:#2C8300;}
+.ftr11{font-family:'trebuchet ms',arial;font-size:11px;color:#993300;}
+.tblhead{background-color:#F0F0F0;border-bottom:1px solid #CACACA}
+.block1{background-color:#FF0000;}
+.block2{background-color:#FF3CFF;}
+.block3{background-color:#FFAE5A;}
+.block4{background-color:#BD5D00;}
+.block_5{background-color:#000000;}
+.ftstar{font-family:Verdana,arial;font-size:11px;color:#CC0000;}
+#newsdiv{width:95;height:15;background-color:#E5E5FF;border:1px solid #C5C5FF;}
+#alldiv{width:95;height:15;}
+.ftpop11{font-family:'trebuchet ms',arial;font-size:11px;background-color:#FFEE92;}
+.ftnote11{font-family:'trebuchet ms',arial;font-size:11px;color:#CC0000;}
+
+.sortcon {background-color:#F1EFE7;border:1px solid #CACACA;border-bottom:0px;}
+.botlink {background-color:#EAEAEA;border:1px solid #CACACA;}
+.srchtxt {background-color:#FFFF33}
+#bottomadd{width:230;height:100px;border:1px solid #C9C9C9;}
+
+.sortslice {background-image:url('http://jdelivery.rediff.com/iris/pix/sortslice.gif');border:1px solid #9BB2BF}
+.previewslice {background-color:#E7E6DC;border:1px solid #9BB2BF;}
+.ftadvt {font-family:'Tahoma',arial;font-size:11px;color:#B2B298}
+.leftmenus {border:1px solid #9BB2BF;background-color:#FFFFFF;}
+
+.hilite_new{font-family:'trebuchet ms',arial;font-size:11px;color:#FFFFFF;background-color: #316ac5;font-weight:bold}
+.block5{background-color:#F7F3EF;}
+.dragmail {background-image:url('http://jdelivery.rediff.com/iris/pix/control.gif');border-left:1px solid #91A7B4;border-right:1px solid #91A7B4}
+.statusbar{background-color:#2D73BE;color:#FFFFFF;font-family:'trebuchet ms',arial;font-size:11px;}
+
+
+
+.addcontact{background-color:#EDEDED;border:1px solid #CACACA;border-bottom:0px}
+.addtabs{background-color:#EDEDED;border:1px solid #CACACA;border-top:0px;border-bottom:0px}
+.tbaddr{height:26px;width:69px;font-family:'trebuchet ms',arial;font-size:11px;color:#000099;background-color:#dcdcdc;border-bottom:1px solid #C9C9C9;cursor:hand;}
+.tbmailaddr{height:26px;width:69px;font-family:'trebuchet ms',arial;font-size:11px;color:#000000;font-weight:bold;}
+.outertbaddr{border-top:1px solid #C9C9C9;border-left:1px solid #C9C9C9;border-right:1px solid #C9C9C9;}
+.sptbaddr{border-bottom:1px solid #C9C9C9;}
+#outertabsaddr{height:120;border:1px solid #C9C9C9;border-top:0px;background-color:#ededed;}
+#d1, #d2, #d3{position:relative;visibility:hidden;display:none;width:500;height:115;border:1px solid #C9C9C9;border-top:0px;background-color:#ededed;}
+#avatar{width:76;height:91;border:1px solid #C9C9C9;}
+
+.altmail {background-color:#FAF9F2;}
+.sepmail {background-color:#EBEAE6;}
+.prevheader{background-color:#e7e7de}
+.backhilitemail{font-family:'trebuchet ms',arial;font-size:11px;color:#FFFFFF;background-color: #DEE7EF;font-weight:bold}
+
+.newsrch {background-color:#C9E0F0;
+   filter:progid:DXImageTransform.Microsoft.Gradient
+   (GradientType:0,StartColorStr:'#FFFFFF',EndColorStr:'#C9E0F0');
+   border:1px solid #91A7B4}
+
+input.srcbtn{
+   width:50px;
+   height:20px;
+   color:#000000;
+   font-family:'trebuchet ms',arial,helvetica,sans-serif;
+   font-size:11px;
+   background-color:#FAF3D7;
+   border:1px solid #91A7B4;
+   filter:progid:DXImageTransform.Microsoft.Gradient
+   (GradientType:0,StartColorStr:'#ffffffff',EndColorStr:'#FAF3D7');}
+
+.newtxt1 {width:190px;margin:0 0 0 0;}
+
+.tabbreak {border-bottom:1px solid #91A7B4;}
+
+.tabchkmail {background-color:#FFFFFF;border-left:1px solid #91A7B4;border-top:1px solid #91A7B4;border-right:1px solid #91A7B4;}
+
+.tabwrtmail {border:1px solid #EBEBEB;
+background-color:#FAFAFA;
+   filter:progid:DXImageTransform.Microsoft.Gradient
+   (GradientType:0,StartColorStr:'#FAFAFA',EndColorStr:'#F5F5F5');
+  }
+
+.tabattch{background-color:#FEFFD3;border:1px solid #F6EAAE;}
+
+.selcontacts {border:1px solid #91A7B4;background-color:#FFFFFF;}
+
+.newlang {background-color:#FFFFFF;
+   filter:progid:DXImageTransform.Microsoft.Gradient
+   (GradientType:0,StartColorStr:'#FFFFFF',EndColorStr:'#FAFAF9');}
+
+ .ft16 {font-family:'trebuchet ms',arial;font-size:16px;color:#0D8200;}
+
+ .attachsep{
+ background-color:#F7F7F7;
+ }
+
+ .imgblock{
+ background-color: #FFFDC9;
+ border: 1px solid #F4F1A3;
+ }
+
+ input.newbtn{
+   height:20px;
+   color:#000000;
+   font-family:'trebuchet ms',arial,helvetica,sans-serif;
+   font-size:11px;
+   background-color:#FAF3D7;
+   border:1px solid #91A7B4;
+   filter:progid:DXImageTransform.Microsoft.Gradient
+   (GradientType:0,StartColorStr:'#ffffffff',EndColorStr:'#FAF3D7');}

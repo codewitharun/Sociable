@@ -29,6 +29,7 @@ const Dashboard = ({navigation}) => {
       title: 'Third Item',
     },
   ];
+  // how to show activityindicators when no data is available ?
 
   const Item = ({title}) => (
     <View style={styles.item}>
@@ -83,14 +84,10 @@ const Dashboard = ({navigation}) => {
             </View>
           </View>
         </View>
-        <View style={{backgroundColor: 'red'}}>
+        <View style={{backgroundColor: 'gray'}}>
           <FlatList
             data={DATA}
-            renderItem={({item}) => (
-              <View>
-                <Text>{item.title}</Text>
-              </View>
-            )}
+            renderItem={renderItem}
             keyExtractor={item => item.id}
           />
         </View>

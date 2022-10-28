@@ -25,6 +25,7 @@ import {showAlert, closeAlert} from 'react-native-customisable-alert';
 import {TextInput} from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
 import {color} from 'react-native-reanimated';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Profile = ({navigation, params}) => {
   const [name, setName] = useState('');
   const [image, setImage] = useState('hejr');
@@ -46,6 +47,7 @@ const Profile = ({navigation, params}) => {
     phoneNumber: '+91' + phone,
     address: address,
     bio: bio,
+    uid: auth().currentUser.uid,
   };
   useEffect(() => {
     firestore()
@@ -63,8 +65,10 @@ const Profile = ({navigation, params}) => {
         userDetails = documentSnapshot.data();
         // All the document related data
         // userDetails['id'] = documentSnapshot.id;
-        console.log('user details: ' + JSON.stringify(userDetails));
-
+        console.log(
+          'user details from profile screen: ' + JSON.stringify(userDetails),
+        );
+        AsyncStorage.setItem('LoggedUser', JSON.stringify(userDetails));
         setUserData(userDetails);
         setEmail(userDetails?.email);
         setName(userDetails?.displayName);
@@ -82,7 +86,15 @@ const Profile = ({navigation, params}) => {
     auth()
       .signOut()
       .then(() => console.log('User signed out!'))
-      .then(() => navigation.navigate('Login'));
+      .then(() => {
+        AsyncStorage.removeItem('userid');
+      })
+      .then(() =>
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Login'}],
+        }),
+      );
   };
 
   const onChoose = () => {
@@ -129,7 +141,8 @@ const Profile = ({navigation, params}) => {
         .set(update)
         .then(() => {
           console.log('User updated!');
-          navigation.navigate('Dashboard');
+          AsyncStorage.setItem('LoggedUser', JSON.stringify(update));
+          navigation.navigate('Success');
         });
     } catch (error) {
       // console.log(' image upload to storage', error);
@@ -444,11 +457,11 @@ const Profile = ({navigation, params}) => {
               </TouchableOpacity>
             </View>
 
-            <Button
+            {/* <Button
               style={{marginTop: 20}}
               title="Sign Out"
               onPress={() => onSignout()}
-            />
+            /> */}
           </View>
         </View>
       </View>

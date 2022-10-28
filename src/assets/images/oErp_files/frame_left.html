@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!-- saved from url=(0048)https://oerp.otssolutions.com/app/frame_left.php -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <title>oErp </title>
+    <meta name="Generator" content="EditPlus">
+    <meta name="Author" content="">
+    <meta name="Keywords" content="">
+    <meta name="Description" content="">
+
+    <!--code for left menu start-->
+    <script src="./prototype.js" type="text/javascript"></script>
+    <script src="./scriptaculous.js" type="text/javascript"></script><script type="text/javascript" src="./builder.js"></script><script type="text/javascript" src="./effects.js"></script><script type="text/javascript" src="./dragdrop.js"></script><script type="text/javascript" src="./controls.js"></script><script type="text/javascript" src="./slider.js"></script>
+    <script src="./unittest.js" type="text/javascript"></script>
+    <!--code for left menu end-->
+    <link href="./Oerp_class_v.css" rel="stylesheet" type="text/css">
+    <link href="./Oerp_id_v_new.css" rel="stylesheet" type="text/css">
+    <!--<script src="js/popup/jquery-1.9.1.js"></script>-->
+    <script language="javascript">
+        var menudrop = false;
+        dropMenu = "";
+
+        function drop_menu(divID) {
+            //  alert(divID);
+            if (dropMenu != divID) {
+                if (menudrop == false) {
+
+                    new Effect.SlideDown(divID, {duration: 0.1});
+                    menudrop = true;
+                    dropMenu = divID;
+
+                } else {
+                    new Effect.SlideUp(dropMenu, {duration: 0.1});
+                    new Effect.SlideDown(divID, {duration: 0.1});
+                    menudrop = true;
+                    dropMenu = divID;
+
+                }
+
+
+            } else {
+                new Effect.SlideUp(divID, {duration: 0.1});
+                menudrop = false;
+                dropMenu = "";
+
+
+            }
+        }
+
+        var showLeft = false;
+        var hideElement = "";
+
+        function displayLeft() {
+            if (showLeft == false) {
+                showLeft = true;
+                //document.getElementById("left").style.display="none";
+                document.getElementById("pulloutSide1").style.left = "0px";
+                document.getElementById("rigth").style.left = "7px";
+                document.getElementById("rigth").style.width = "988px";
+
+            } else {
+                showLeft = false;
+                document.getElementById("left").style.display = "block";
+                document.getElementById("pulloutSide1").style.left = "200px";
+                document.getElementById("rigth").style.left = "207px";
+                document.getElementById("rigth").style.width = "788px";
+            }
+
+
+        }
+
+
+        parent.frames["oerpLeft"].rightGlobal = 42;
+
+        $(document).ready(function () {
+            var h = $(window).height();
+            $("#testModuleDiv").height(h);
+        });
+    </script>
+</head>
+<body style="height:100%">
+
+<div id="left" style="padding-right:0px; height:100%">
+    <div style="margin: 0px; padding-top:0px;padding-right:0px; height:100%">
+        <div id="leftPanelContainer">
+            <div id="leftPanel">
+                <!--div style="overflow:hidden"-->
+                <div id="testModuleDiv" style="overflow-x:scroll; height: 540px">
+                    <ul><li class="tab"><a onclick="drop_menu(&#39;Operations&#39;); return false;">Operations<span></span></a></li></ul><div id="Operations" style="display:none; background:#ffffff;"> <div id="open"><a href="https://oerp.otssolutions.com/app/view_activity.php" target="oerpMiddle">Activities</a></div> <div id="open"><a href="https://oerp.otssolutions.com/app/view_engagment.php" target="oerpMiddle">Engagements</a></div> <div id="open"><a href="https://oerp.otssolutions.com/app/share_resource_list.php" target="oerpMiddle">Shared Resources</a></div></div><ul><li class="tab"><a onclick="drop_menu(&#39;QA&#39;); return false;">QA<span></span></a></li></ul><div id="QA" style="display:none; background:#ffffff;"> <div id="open"><a href="https://oerp.otssolutions.com/app/view_issues.php" target="oerpMiddle">Issues</a></div> <div id="open"><a href="https://oerp.otssolutions.com/app/view_QA_Iteration.php" target="oerpMiddle">QA Iteration</a></div> <div id="open"><a href="https://oerp.otssolutions.com/app/viewTestCases.php" target="oerpMiddle">Test Cases</a></div> <div id="open"><a href="https://oerp.otssolutions.com/app/tcExecution.php" target="oerpMiddle">TC Execution</a></div></div><ul><li class="tab"><a onclick="drop_menu(&#39;HR&#39;); return false;">HR 
+                <span></span></a></li></ul><div id="HR" style="display:none; background:#ffffff;"> <div id="open"><a href="https://oerp.otssolutions.com/app/list_employee.php?list" target="oerpMiddle">Employees</a></div> <div id="open"><a href="https://oerp.otssolutions.com/app/view_leaves.php" target="oerpMiddle">Leaves</a></div> <div id="open"><a href="https://oerp.otssolutions.com/app/view_comfoff.php" target="oerpMiddle">Comp Off</a></div> <div id="open"><a href="https://oerp.otssolutions.com/app/view_imbursement.php" target="oerpMiddle">Imbursement</a></div> <div id="open"><a href="https://oerp.otssolutions.com/app/view_notice.php" target="oerpMiddle">Notices</a></div> <div id="open"><a href="https://oerp.otssolutions.com/app/view_support_issue.php" target="oerpMiddle">Support Issues</a></div> <div id="open"><a href="https://oerp.otssolutions.com/app/view_roomevent.php" target="oerpMiddle">Room Schedule</a></div></div><ul><li class="tab"><a onclick="drop_menu(&#39;CRM&#39;); return false;">CRM 
+                <span></span></a></li></ul><div id="CRM" style="display:none; background:#ffffff;"> <div id="open"><a href="https://oerp.otssolutions.com/app/view_opportunity.php" target="oerpMiddle">Opportunities</a></div> <div id="open"><a href="https://oerp.otssolutions.com/app/frame_left.php" target="oerpMiddle"></a></div></div><ul><li class="tab"><a href="https://oerp.otssolutions.com/app/performance_section.php" target="_blank">Performance<span></span></a></li></ul><div id="Performance" style="display:none; background:#ffffff;"> <div id="open"><a href="https://oerp.otssolutions.com/app/frame_left.php" target="oerpMiddle"></a></div> <div id="open"><a href="https://oerp.otssolutions.com/app/frame_left.php" target="oerpMiddle"></a></div></div><ul><li class="tab"><a onclick="drop_menu(&#39;Training&#39;); return false;">Training<span></span></a></li></ul><div id="Training" style="display:none; background:#ffffff;"> <div id="open"><a href="https://oerp.otssolutions.com/app/training_assignment.php" target="oerpMiddle">Training Assignments</a></div> <div id="open"><a href="https://oerp.otssolutions.com/app/frame_left.php" target="oerpMiddle"></a></div></div></div>
+                        <script language="javascript">
+                            window.parent.frames['mainFrame'].rows = "100,520";
+                            //if(typeof window.parent.frames['mainFrame'] != 'undefined' ){
+                            //	window.parent.frames['mainFrame'].rows="100,520";
+                            //}
+                        </script>
+                                    </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+</body></html>

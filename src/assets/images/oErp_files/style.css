@@ -1,0 +1,643 @@
+.gText {
+	font-family: verdana;
+	font-size: 11px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color:#333333;
+	text-decoration: none;
+}
+
+.gText:hover {
+	font-family: verdana;
+	font-size: 11px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #333333;
+	text-decoration: Underline;
+}
+.gText1 {
+	font-family: verdana;
+	font-size: 11px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	text-decoration: none;
+}
+.fonttext {
+	font-family: verdana;
+	font-size: 11px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color:#000033;
+	text-decoration: none;
+}
+.tBgCOLOR {
+	background-image: url(images/tbg.gif);
+}
+.mRow1 {
+	font-family: verdana;
+	font-size: 10px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #333333;
+	background-color: #ffffff;
+	text-decoration: none;
+	margin: 1px;
+	padding: 1px;
+}
+.mRow2 {
+	font-family: verdana;
+	font-size: 10px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #333333;
+	background-color: #F8FBFA;
+	text-decoration: none;
+	margin: 1px;
+	padding: 1px;
+}
+.mRow2:hover {
+	font-family: verdana;
+	font-size: 10px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #333333;
+	background-color: #F8FBFA;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: dashed;
+	border-left-style: none;
+	border-top-color: #003300;
+	border-right-color: #003300;
+	border-bottom-color: #003300;
+	border-left-color: #003300;
+	text-decoration: none;
+}
+.button33 {
+	font-family: verdana;
+	padding-left:5px;
+	padding-top:2px;
+	padding-bottom:2px;
+	padding-right:5px;
+	font-size: 11px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #447082;
+	text-decoration: none;
+	background-color: #F7F8F9;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-color: #6D9DB2;
+	border-right-color: #6D9DB2;
+	border-bottom-color: #666666;
+	border-left-color: #666666;
+}
+.button {
+	font-family: verdana;
+	font-size: 11px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #447082;
+	text-decoration: none;
+	background-color: #F7F8F9;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-color: #6D9DB2;
+	border-right-color: #6D9DB2;
+	border-bottom-color: #666666;
+	border-left-color: #666666;
+}
+.lHeadLinks {
+	font-family: verdana;
+	font-size: 10px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: bold;
+	font-variant: normal;
+	text-transform: none;
+	color: #666666;
+	text-decoration: none;
+}
+.textbox {
+	font-family: verdana;
+	font-size: 10px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #000033;
+	text-decoration: none;
+	background-color: #E3F2FD;
+	margin: 1px;
+	padding: 1px;
+	clear: both;
+	float: none;
+	
+	width: auto;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-color: #333333;
+	border-right-color: #CCCCCC;
+	border-bottom-color: #CCCCCC;
+	border-left-color: #333333;
+	background-color: #EAF7FD;
+}.lHeadLinkshover {
+
+	font-family: verdana;
+	font-size: 10px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: bold;
+	font-variant: normal;
+	text-transform: none;
+	color: #000066;
+	text-decoration: none;
+}
+.gPanHeadRow {
+	font-family: tahoma;
+	font-size: 11px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #333333;
+	text-decoration: none;
+	background-image: url(images/gPanHeadRowBg.gif);
+	height: 20px;
+	clear: both;
+	float: none;
+}
+.gPanHeadRow:hover{
+	font-family: tahoma;
+	font-size: 11px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #333333;
+	text-decoration: none;
+	background-image: url(images/gPanHeadRowBg_Over.gif);
+	height: 20px;
+	clear: both;
+	float: none;
+}
+.mRow1:hover {
+	font-family: verdana;
+	font-size: 10px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #333333;
+	background-color: #ffffff;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: dashed;
+	border-left-style: none;
+	border-top-color: #003300;
+	border-right-color: #003300;
+	border-bottom-color: #003300;
+	border-left-color: #003300;
+	text-decoration: none;
+}
+
+.dataTableHeadingRow { background-color: #ff7f0d; }
+.dataTableHeadingContent { font-family: Verdana, Arial, sans-serif; font-size: 10px; color: #ffffff; font-weight: bold; }
+.dataTableRow { background-color: #F0F1F1; }
+.dataTableRowSelected { background-color: #DEE4E8; }
+.dataTableRowOver { background-color: #FFFFFF;  cursor: none; }
+.dataTableContent { font-family: Verdana, Arial, sans-serif; font-size: 10px; color: #000000; }
+
+#calendarDiv{
+	position:absolute;
+	width:205px;
+	border:1px solid #317082;
+	padding:1px;
+	background-color: #FFF;
+	font-family:arial;
+	font-size:10px;
+	padding-bottom:20px;
+	visibility:hidden;
+}
+#calendarDiv span,#calendarDiv img{
+	float:left;
+}
+#calendarDiv .selectBox,#calendarDiv .selectBoxOver{
+	
+	line-height:12px;
+	padding:1px;
+	cursor:pointer;
+	padding-left:2px;
+}
+
+#calendarDiv .selectBoxTime,#calendarDiv .selectBoxTimeOver{	
+	line-height:12px;
+	padding:1px;
+	cursor:pointer;
+	padding-left:2px;
+}
+
+#calendarDiv td{
+	padding:3px;
+	margin:0px;
+	font-size:10px;
+}
+
+#calendarDiv .selectBox{
+	border:1px solid #E2EBED;		
+	color: #E2EBED;
+	position:relative;
+}
+#calendarDiv .selectBoxOver{
+	border:1px solid #FFF;
+	background-color: #317082;
+	color: #FFF;
+	position:relative;
+}
+#calendarDiv .selectBoxTime{
+	border:1px solid #317082;		
+	color: #317082;
+	position:relative;
+}
+#calendarDiv .selectBoxTimeOver{
+	border:1px solid #216072;	
+	color: #216072;
+	position:relative;
+}
+
+#calendarDiv .topBar{
+	height:16px;
+	padding:2px;
+	background-color: #317082;
+
+
+}
+#calendarDiv .activeDay{	/* Active day in the calendar */
+	color:#FF0000;
+}
+#calendarDiv .todaysDate{
+	height:17px;
+	line-height:17px;
+	padding:2px;
+	background-color: #E2EBED;
+	text-align:center;
+	position:absolute;
+	bottom:0px;
+	width:201px;
+}
+#calendarDiv .todaysDate div{
+	float:left;
+}
+	
+#calendarDiv .timeBar{
+	height:17px;
+	line-height:17px;
+	background-color: #E2EBED;
+	width:72px;
+	color:#FFF;
+	position:absolute;
+	right:0px;
+}
+
+#calendarDiv .timeBar div{
+	float:left;
+	margin-right:1px;
+}
+
+
+#calendarDiv .monthYearPicker{
+	background-color: #E2EBED;
+	border:1px solid #AAAAAA;
+	position:absolute;
+	color: #317082;
+	left:0px;
+	top:15px;
+	z-index:1000;
+	display:none;
+
+}
+#calendarDiv #monthSelect{
+	width:70px;
+}
+#calendarDiv .monthYearPicker div{
+	float:none;
+	clear:both;	
+	padding:1px;
+	margin:1px;	
+	cursor:pointer;
+}
+#calendarDiv .monthYearActive{
+	background-color:#317082;
+	color: #E2EBED;
+}
+
+#calendarDiv td{
+	text-align:right;
+	cursor:pointer;
+}
+
+#calendarDiv .topBar img{
+	cursor:pointer;
+}
+#calendarDiv .topBar div{
+	float:left;
+	margin-right:1px;
+}
+
+.gButtontype {
+	font-family: verdana;
+	font-size: 10px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: bold;
+	font-variant: normal;
+	text-transform: none;
+	color: #666666;
+	text-decoration: none;
+	background-color: #FFFDF9;
+	margin: 1px;
+	padding: 1px;
+	clear: both;
+	float: none;
+	height: auto;
+	width: auto;
+	border: 1px solid #666666;
+}
+.gTextcol {
+	font-family: verdana;
+	font-size: 11px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #CCCCCC;
+	text-decoration: none;
+}
+.boldgrey {
+	font-family: tahoma;
+	font-size: 9px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: bold;
+	font-variant: normal;
+	text-transform: uppercase;
+	color:#000000;
+	
+}
+.reg_button {
+	BORDER-RIGHT: #6d9db2 1px solid; BORDER-TOP: #6d9db2 1px solid; FONT: 11px verdana; TEXT-TRANSFORM: none; BORDER-LEFT: #666666 1px solid; CURSOR: pointer; COLOR: #447082; BORDER-BOTTOM: #666666 1px solid; BACKGROUND-COLOR: #f7f8f9; TEXT-DECORATION: none
+}
+.lHeadLinkshover {
+	FONT: bold 10px verdana; TEXT-TRANSFORM: none; COLOR: #000066; TEXT-DECORATION: none
+}
+
+.heading_form {
+	FONT: bold 10px verdana; TEXT-TRANSFORM: none; COLOR: #000066; TEXT-DECORATION: none
+}
+.Heading_form {
+	FONT: bold 14px verdana; TEXT-TRANSFORM: none; COLOR: #000066; TEXT-DECORATION: none
+}
+
+.heading_form1 {
+	FONT: bold 9px verdana; TEXT-TRANSFORM: none; COLOR: #000066; TEXT-DECORATION: none
+}
+
+.textarea {
+	font-family: verdana;
+	font-size: 10px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #000033;
+	text-decoration: none;
+	background-color: #E3F2FD;
+	margin: 1px;
+	padding: 1px;
+	clear: both;
+	float: none;
+	
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-color: #333333;
+	border-right-color: #CCCCCC;
+	border-bottom-color: #CCCCCC;
+	border-left-color: #333333;
+	background-color: #EAF7FD;
+}
+
+.headingtabs {
+
+	font-family: verdana;
+	font-size: 10px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: bold;
+	font-variant: normal;
+	text-transform: none;
+	color: #828282;
+	text-decoration: none;
+}
+
+.headindsoring {
+	PADDING-RIGHT: 1px; PADDING-LEFT: 1px; PADDING-BOTTOM: 1px; MARGIN: 1px; FONT: 10px verdana; TEXT-TRANSFORM: none; COLOR: #333333; PADDING-TOP: 1px;  TEXT-DECORATION: none;
+}
+.headindsoring:hover {
+	BORDER-RIGHT: #003300 1px; BORDER-TOP: #003300 1px; FONT: 10px verdana; TEXT-TRANSFORM: none; BORDER-LEFT: #003300 1px; COLOR: #333333; BORDER-BOTTOM: #003300 1px dashed;  TEXT-DECORATION: none;
+}
+
+@charset "utf-8";
+/* CSS Document */
+
+body {
+	margin: 0px;
+}
+td {
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+}
+.main_table {
+	width: 100%;
+}
+.12px_tahoma {
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	color: #000000;
+	font-size: 11px;
+	letter-spacing: 0px;
+	word-spacing: 0px;
+}
+.bold_text {
+	font-weight: normal;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	color: #000000;
+	font-size: 11px;
+}
+.14px_text {
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 8px;
+	font-weight: bold;
+	color: #000000;
+	text-align: right;
+}
+.homeborder1 {
+border-style:solid;
+border-width: 0px 0px 1px 0px;
+border-color:#000000 #000000 #000000 #000000;
+}
+.homeborder2 {
+border-style:solid;
+border-width: 0px 1px 0px 0px;
+border-color:#000000 #000000 #000000 #000000;
+}
+
+.textbox1 {
+	font-family: verdana;
+	font-size: 10px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #000033;
+	text-decoration: none;
+	margin: 1px;
+	padding: 1px;
+	clear: both;
+	float: none;
+	
+	width: auto;
+	border-top-width: 0px;
+	border-right-width: 0px;
+	border-bottom-width: 0px;
+	border-left-width: 0px;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+	border-top-color: #333333;
+	border-right-color: #CCCCCC;
+	border-bottom-color: #CCCCCC;
+	border-left-color: #333333;
+	background-color: #F2F2F2;
+	text-align:center;
+}
+
+.textbox2 {
+	font-family: verdana;
+	font-size: 10px;
+	font-style: normal;
+	line-height: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #000000;
+	text-decoration: none;
+	margin: 1px;
+	padding: 1px;
+	clear: both;
+	float: none;
+	
+	width: auto;
+	border-top-width: 0px;
+	border-right-width: 0px;
+	border-bottom-width: 0px;
+	border-left-width: 0px;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+	border-top-color: #333333;
+	border-right-color: #CCCCCC;
+	border-bottom-color: #CCCCCC;
+	border-left-color: #333333;
+	background-color: white;
+	text-align:left;
+	}
+
+	.nohowerTEXT {
+	font-family: verdana;
+	font-size: 12px;
+	font-style: bold;
+	font-weight: bold;
+	color: #3868bc;
+	text-decoration: none;
+}
+.nohowerTEXT:hover {
+	font-family: verdana;
+	font-size: 12px;
+	font-style: bold;
+	font-weight: bold;
+	color: #3868bc;
+	text-decoration: none;
+}
+/*Style for InterView Scheduled page in Jobopenings OERP*/
+td.mRow1.statusColorIntview {
+	background-color: #96f595;
+}
+/*End Style for InterView Scheduled page in Jobopenings OERP*/

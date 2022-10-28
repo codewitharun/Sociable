@@ -14,11 +14,10 @@ import messaging from '@react-native-firebase/messaging';
 
 import Authscreen from './authscreens/Authscreen';
 import auth, {firebase} from '@react-native-firebase/auth';
-
-import Profile from './authscreens/Profile';
+import asyncStorage from '@react-native-async-storage/async-storage';
 // import Dashboard from './screens/Dashboard';
 
-import {Afterauth} from '../../App';
+import {Afterauth} from './routes/routes';
 const Splash = ({navigation}) => {
   // console.log('Splash data =====>', route);
   const [isVisible, setIsVisible] = useState(false);
@@ -33,11 +32,12 @@ const Splash = ({navigation}) => {
   async function onAuthStateChanged(user) {
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
-        console.log(user); // It shows the Firebase user
+        console.log('user from  splash screen', user); // It shows the Firebase user
+        asyncStorage.setItem('userid', user.uid);
         console.log(firebase.auth().user); // It is still undefined
       }
     });
-    console.log('User state changed', user);
+    // console.log('User state changed', user);
     setUser(user);
 
     const fcmToken = await messaging().getToken();

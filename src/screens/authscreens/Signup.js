@@ -53,7 +53,7 @@ const Signup = ({navigation}) => {
           // navigation.push ('Success');
           navigation.reset({
             index: 0,
-            routes: [{name: 'Success'}],
+            routes: [{name: 'Profile'}],
           });
         })
 
