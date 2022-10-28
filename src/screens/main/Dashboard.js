@@ -14,30 +14,60 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
+import database from '@react-native-firebase/database';
+import asyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 const Dashboard = ({navigation}) => {
-  const DATA = [
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      title: 'First Item',
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      title: 'Second Item',
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: 'Third Item',
-    },
-  ];
+  const [DATA, setDATA] = useState([]);
+  const [useData, setUserData] = useState('');
+  axios
+    .get('https://jsonplaceholder.typicode.com/photos?_limit=10')
+    .then(function (response) {
+      // console.log(response);
+      setDATA(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+  console.log('data from data axios', DATA);
+
   // how to show activityindicators when no data is available ?
 
-  const Item = ({title}) => (
+  const Item = ({title, url, thumbnailUrl}) => (
     <View style={styles.item}>
       <Text style={styles.title}>{title}</Text>
+      <Image
+        source={{uri: useData?.photoUrl}}
+        style={{height: 200, width: 200}}
+      />
+      <View style={{height: 300, width: 300}}>
+        <Image source={{uri: url}} style={{height: 200, width: 200}} />
+        {/* <Image source={{uri: thumbnailUrl}} style={{height: 150, width: 150}} /> */}
+      </View>
     </View>
   );
 
-  const renderItem = ({item}) => <Item title={item.title} />;
+  const renderItem = ({item}) => (
+    <Item title={item.title} url={item.url} thumbnailUrl={item.thumbnailUrl} />
+  );
+  const retrieveData = async () => {
+    try {
+      const userdata = await asyncStorage.getItem('LoggedUser');
+
+      if (userdata !== null) {
+        // We have data!!
+        console.log('value from asyncstoragee parseed', userdata);
+        setUserData(JSON.parse(userdata));
+      }
+    } catch (error) {
+      console.log('no data in async storage', error);
+    }
+  };
+  useEffect(() => {
+    retrieveData();
+  }, []);
+
   return (
     <SafeAreaView style={{backgroundColor: 'black'}}>
       <View
@@ -100,15 +130,15 @@ export default Dashboard;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     marginTop: StatusBar.currentHeight || 0,
   },
   item: {
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+    height: height * 0.4,
+    width: width * 0.95,
+    alignSelf: 'center',
   },
   title: {
-    fontSize: 32,
+    fontSize: 22,
   },
 });

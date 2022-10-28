@@ -21,6 +21,7 @@ import {
 } from '@react-navigation/drawer';
 import {color} from 'react-native-reanimated';
 import {COLOR} from '../components/Colors';
+import database from '@react-native-firebase/database';
 const Drawer = createDrawerNavigator();
 
 function CustomDrawerContent(props, {navigation}) {
@@ -37,6 +38,22 @@ function CustomDrawerContent(props, {navigation}) {
         // We have data!!
         console.log('value from asyncstoragee parseed', userdata);
         setUserData(JSON.parse(userdata));
+
+        database()
+          .ref(`userdata/${useData?.uid}`)
+          .set({
+            name: 'Arun Kumar',
+            age: 22,
+            role: 'admin',
+            post: 'react native developer',
+          })
+          .then(() => console.log('Data set.'));
+        database()
+          .ref(`userdata/${useData?.uid}`)
+          .once('value')
+          .then(snapshot => {
+            console.log('User data: ', snapshot.val());
+          });
         // setName(useData?.displayName);
         // setUImage(useData?.photoUrl);
       }
