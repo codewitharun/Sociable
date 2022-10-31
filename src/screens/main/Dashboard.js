@@ -25,6 +25,7 @@ const Dashboard = ({navigation}) => {
     .then(function (response) {
       // console.log(response);
       setDATA(response.data);
+      //this is only for 
     })
     .catch(function (error) {
       console.log(error);
