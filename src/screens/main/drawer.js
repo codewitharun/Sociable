@@ -30,8 +30,8 @@ import {color} from 'react-native-reanimated';
 import {COLOR} from '../components/Colors';
 import database from '@react-native-firebase/database';
 const Drawer = createDrawerNavigator();
-
-function CustomDrawerContent(props, {navigation}) {
+import {useNavigation} from '@react-navigation/native';
+function CustomDrawerContent(props) {
   const isDrawerOpen = useDrawerStatus() === 'open';
   const [authUser, setauthUser] = useState();
   const [useData, setUserData] = useState('');
@@ -72,20 +72,14 @@ function CustomDrawerContent(props, {navigation}) {
     retrieveData();
   }, []);
   const onSignout = () => {
-    // auth()
-    //   .signOut()
-    //   .then(() => console.log('User signed out!!'))
-    //   .then(() => {
-    //     asyncStorage.clear();
-    //   })
-    //   .then(() =>
-    //     props.navigation.navigate({
-    //       index: 0,
-    //       routes: [{name: 'Login'}],
-    //     }),
-    //   );
-    userSignout();
+    userSignout(() => {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Login'}],
+      });
+    });
   };
+  const navigation = useNavigation();
   return (
     <DrawerContentScrollView {...props}>
       <View

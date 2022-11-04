@@ -15,6 +15,7 @@ import storage from '@react-native-firebase/storage';
 import {firebase} from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
+import {loginUser} from '../../reducer/action';
 const {height, width} = Dimensions.get('screen');
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -22,92 +23,20 @@ const Login = ({navigation}) => {
   const [ErrorPassword, setErrorPassword] = useState('');
   const [password, setPassword] = useState('');
   const [reference, setRefrence] = useState('');
+
   async function EmailSign() {
-    try {
-      auth()
-        .signInWithEmailAndPassword(email, password)
-
-        .then(() => {
-          console.log('signed in!');
-        })
-        .then(() => {
-          firebase.auth().onAuthStateChanged(function (user) {
-            if (user) {
-              try {
-                setRefrence(storage().ref(user.uid));
-
-                console.log('createddddd', reference);
-                firestore()
-                  .collection('Users')
-                  .doc(user.uid)
-                  .get()
-                  .then(documentSnapshot => {
-                    /*
-          A DocumentSnapshot belongs to a specific document,
-          With snapshot you can view a documents data,
-          metadata and whether a document actually exists.
-        */
-                    let userDetails = {};
-                    // Document fields
-                    userDetails = documentSnapshot.data();
-                    // All the document related data
-                    // userDetails['id'] = documentSnapshot.id;
-                    console.log(
-                      'user details from Login screen: ' +
-                        JSON.stringify(userDetails),
-                    );
-                    AsyncStorage.setItem(
-                      'LoggedUser',
-                      JSON.stringify(userDetails),
-                    );
-                  });
-              } catch (error) {
-                console.log('storage bucket not created', error);
-              }
-              console.log(user); // It shows the Firebase user
-
-              console.log(firebase.auth().user); // It is still undefined
-            }
-          });
-        })
-        .then(() => {
-          // navigation.push ('Success');
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'Success'}],
-          });
-        })
-
-        .catch(error => {
-          if (error.code === 'auth/email-already-in-use') {
-            console.log('That email address is already in use!');
-          }
-
-          if (error.code === 'auth/invalid-email') {
-            console.log('That email address is invalid!');
-          }
-
-          console.error(error);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+    const user = {
+      email: email,
+      password: password,
+    };
+    loginUser(user, () => {
+      console.log('on success ');
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Success'}],
+      });
+    });
   }
-
-  async function onGoogleButtonPress() {
-    // Get the users ID token
-    const {idToken} = await GoogleSignin.signIn();
-
-    // Create a Google credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-    // Sign-in the user with the credential
-    return auth().signInWithCredential(googleCredential);
-  }
-  GoogleSignin.configure({
-    webClientId:
-      '783880828424-errl5i9tcucvu8i9bl1643gi7ur1h4km.apps.googleusercontent.com',
-  });
 
   // validation starts here
   const _emailvalidate = mail => {
@@ -304,23 +233,6 @@ const Login = ({navigation}) => {
             borderBottomColor: 'rgb(54,54,54)',
             borderBottomWidth: 0.5,
           }}></View>
-        <TouchableOpacity
-          onPress={() =>
-            onGoogleButtonPress().then(() =>
-              console.log('Signed in with Google!'),
-            )
-          }>
-          <Text
-            style={{
-              fontSize: 18,
-              marginTop: 30,
-              color: 'rgb(28,154,236)',
-              textAlign: 'center',
-              fontFamily: 'Comfortaa-Bold',
-            }}>
-            Log in with Google
-          </Text>
-        </TouchableOpacity>
 
         <View style={{position: 'absolute', bottom: 50}}>
           <View

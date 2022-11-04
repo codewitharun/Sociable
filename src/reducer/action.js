@@ -3,9 +3,11 @@ import auth from '@react-native-firebase/auth';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import {firebase} from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
+import {RectButton} from 'react-native-gesture-handler';
 export const getMovies = () => {
   try {
     return async dispatch => {
@@ -64,27 +66,73 @@ export const getUser = () => {
   }
 };
 
-export const userSignout = navigation => {
+export const loginUser = (user, onsucess) => {
+  console.log(user);
   try {
-    // dispatch({type: LOGOUT_USER, payload: res.data});
+    auth()
+      .signInWithEmailAndPassword(user.email, user.password)
+
+      .then(() => {
+        console.log('signed in!');
+      })
+      .then(() => {
+        firebase.auth().onAuthStateChanged(function (user) {
+          if (user) {
+            try {
+              dispatch({
+                type: GET_USER,
+                payload: user,
+              });
+              setRefrence(storage().ref(user.uid));
+              console.log('createddddd', reference);
+              firestore()
+                .collection('Users')
+                .doc(user.uid)
+                .get()
+                .then(documentSnapshot => {
+                  let userDetails = {};
+                  userDetails = documentSnapshot.data();
+                  console.log(
+                    'user details from Login screen: ' +
+                      JSON.stringify(userDetails),
+                  );
+                  AsyncStorage.setItem(
+                    'LoggedUser',
+                    JSON.stringify(userDetails),
+                  );
+                });
+            } catch (error) {
+              console.log('storage bucket not created', error);
+            }
+          }
+        });
+      })
+      .then(() => {
+        onsucess();
+      })
+
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+        }
+
+        console.error(error);
+      });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const userSignout = onsucess => {
+  try {
     auth().signOut();
     AsyncStorage.clear();
-    navigation.reset({
-      index: 0,
-      routes: [{name: 'Login'}],
-    });
+    onsucess();
   } catch (err) {
     console.log('error while logging out', err);
   }
-  // auth()
-  //   .signOut()
-  //   .then(() => {
-  //     AsyncStorage.clear();
-  //   })
-  //   .then(() =>
-  //     navigation.reset({
-  //       index: 0,
-  //       routes: [{name: 'Login'}],
-  //     }),
-  //   );
 };
