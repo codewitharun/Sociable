@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>783880828424-rnglaorq8t4b0c5re489flbeiq4tr9e5.apps.googleusercontent.com</string>
+	<string>459787963543-glg726ncrrg1pv3e72feajupiovfgqgc.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.783880828424-rnglaorq8t4b0c5re489flbeiq4tr9e5</string>
+	<string>com.googleusercontent.apps.459787963543-glg726ncrrg1pv3e72feajupiovfgqgc</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>783880828424-lm4ods8ql4osrr3hmt1ik1rfqkracauk.apps.googleusercontent.com</string>
+	<string>459787963543-1aut6kqvtd7s3r52t3kmk5anil2aia0t.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCAuNyuITlR42qrh_8t08kUwtYrDSgyY-M</string>
+	<string>AIzaSyDpaQRe-gul7x7cuaRDRu68sMpZlkgI2Go</string>
 	<key>GCM_SENDER_ID</key>
-	<string>783880828424</string>
+	<string>459787963543</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>org.reactjs.native.example.sociable</string>
 	<key>PROJECT_ID</key>
-	<string>sociable-2f985</string>
+	<string>sociable-c403e</string>
 	<key>STORAGE_BUCKET</key>
-	<string>sociable-2f985.appspot.com</string>
+	<string>sociable-c403e.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:783880828424:ios:3ca8200c239b202e9843bd</string>
+	<string>1:459787963543:ios:333c3acf299680d911add2</string>
 </dict>
 </plist>
