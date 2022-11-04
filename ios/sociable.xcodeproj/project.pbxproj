@@ -22,13 +22,13 @@
 		5C20F818FB0B49DC8AE199CC /* Logo-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69F075EC1E354350A568765C /* Logo-Regular.ttf */; };
 		67ABF4FC1CE3AC5E8B7634BE /* Pods_sociable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4998DFB5E5A35960A67F9F /* Pods_sociable.framework */; };
 		6BAD3A0A864645E6BB964DF3 /* InstagramSansCondensed-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0378289B622249FF8F12B749 /* InstagramSansCondensed-Bold.ttf */; };
+		6EF747222912409100930D4C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6EF747212912409100930D4C /* GoogleService-Info.plist */; };
 		73217BA19DAB4D6CA090ADC2 /* InstagramSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18606571E64B413E840A53BC /* InstagramSans-Bold.ttf */; };
 		7B34A0292982499AB313F9DF /* InstagramSansScript-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2505C36084464698E4DCC0 /* InstagramSansScript-Regular.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		991F9007F45A4FD39C8D3D7F /* Comfortaa-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F4502AFA84243889CF0EC2F /* Comfortaa-Regular.ttf */; };
 		B0DC732C0E0D3C4F8D95BD72 /* Pods_sociable_sociableTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8C633332FB0B1A006B5D869 /* Pods_sociable_sociableTests.framework */; };
 		BC7BE60259304C179C1894E2 /* Comfortaa-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 990DA582AF1D4FCC9CBF727B /* Comfortaa-Light.ttf */; };
-		C3B5E9F428E56A3100C381CB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C3B5E9F328E56A3100C381CB /* GoogleService-Info.plist */; };
 		C3DFD5C528ED585B006F7D9F /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C3DFD5B528ED585B006F7D9F /* Fontisto.ttf */; };
 		C3DFD5C628ED585B006F7D9F /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C3DFD5B628ED585B006F7D9F /* Octicons.ttf */; };
 		C3DFD5C728ED585B006F7D9F /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C3DFD5B728ED585B006F7D9F /* Feather.ttf */; };
@@ -80,6 +80,7 @@
 		5B7EB9410499542E8C5724F5 /* Pods-sociable-sociableTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sociable-sociableTests.debug.xcconfig"; path = "Target Support Files/Pods-sociable-sociableTests/Pods-sociable-sociableTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5D2B381FC9584A7596AE2FD5 /* Comfortaa-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Comfortaa-Medium.ttf"; path = "../src/assets/fonts/Comfortaa-Medium.ttf"; sourceTree = "<group>"; };
 		69F075EC1E354350A568765C /* Logo-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Logo-Regular.ttf"; path = "../src/assets/fonts/Logo-Regular.ttf"; sourceTree = "<group>"; };
+		6EF747212912409100930D4C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = sociable/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		88BA0F20C4E340B9B8F7352B /* InstagramSans-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "InstagramSans-Medium.ttf"; path = "../src/assets/fonts/InstagramSans-Medium.ttf"; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-sociable-sociableTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sociable-sociableTests.release.xcconfig"; path = "Target Support Files/Pods-sociable-sociableTests/Pods-sociable-sociableTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -90,7 +91,6 @@
 		B07109731B1841F28A6E4A57 /* InstagramSansCondensed-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "InstagramSansCondensed-Regular.ttf"; path = "../src/assets/fonts/InstagramSansCondensed-Regular.ttf"; sourceTree = "<group>"; };
 		B19F79F489FA42409D9E2708 /* Comfortaa-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Comfortaa-Bold.ttf"; path = "../src/assets/fonts/Comfortaa-Bold.ttf"; sourceTree = "<group>"; };
 		B8C633332FB0B1A006B5D869 /* Pods_sociable_sociableTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_sociable_sociableTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C3B5E9F328E56A3100C381CB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C3DFD5B528ED585B006F7D9F /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
 		C3DFD5B628ED585B006F7D9F /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
 		C3DFD5B728ED585B006F7D9F /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
@@ -206,8 +206,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				6EF747212912409100930D4C /* GoogleService-Info.plist */,
 				C3DFD5B428ED585B006F7D9F /* Fonts */,
-				C3B5E9F328E56A3100C381CB /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* sociable */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* sociableTests */,
@@ -380,7 +380,6 @@
 				D7DC33B2A72441989FB5E9C0 /* InstagramSans-Regular.ttf in Resources */,
 				C3DFD5C828ED585B006F7D9F /* Entypo.ttf in Resources */,
 				C3DFD5D028ED585B006F7D9F /* FontAwesome.ttf in Resources */,
-				C3B5E9F428E56A3100C381CB /* GoogleService-Info.plist in Resources */,
 				6BAD3A0A864645E6BB964DF3 /* InstagramSansCondensed-Bold.ttf in Resources */,
 				C3DFD5CD28ED585B006F7D9F /* Ionicons.ttf in Resources */,
 				C3DFD5C728ED585B006F7D9F /* Feather.ttf in Resources */,
@@ -388,6 +387,7 @@
 				D0F351C631724078BEBE8B8C /* InstagramSansHeadline-Regular.ttf in Resources */,
 				3689A143EFDB47BA9F6EE575 /* InstagramSansScript-Bold.ttf in Resources */,
 				7B34A0292982499AB313F9DF /* InstagramSansScript-Regular.ttf in Resources */,
+				6EF747222912409100930D4C /* GoogleService-Info.plist in Resources */,
 				C3DFD5D128ED585B006F7D9F /* Zocial.ttf in Resources */,
 				5C20F818FB0B49DC8AE199CC /* Logo-Regular.ttf in Resources */,
 				C3DFD5D428ED585B006F7D9F /* MaterialIcons.ttf in Resources */,

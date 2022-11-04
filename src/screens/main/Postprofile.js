@@ -26,7 +26,8 @@ import {TextInput} from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
 import {color} from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const Profile = ({navigation, params}) => {
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+const Postprofile = ({navigation, params}) => {
   const [name, setName] = useState('');
   const [image, setImage] = useState('hejr');
   const [phone, setPhone] = useState('');
@@ -74,7 +75,7 @@ const Profile = ({navigation, params}) => {
         setName(userDetails?.displayName);
         setAddress(userDetails?.address);
         setBio(userDetails?.bio);
-        setPhone(userDetails?.phoneNumber);
+        setPhone(userDetails?.phoneNumber?.slice(3));
         setImage(userDetails?.photoUrl);
       });
 
@@ -82,6 +83,20 @@ const Profile = ({navigation, params}) => {
   }, []);
 
   console.log(User);
+  const onSignout = () => {
+    auth()
+      .signOut()
+      .then(() => console.log('User signed out!'))
+      .then(() => {
+        AsyncStorage.removeItem('userid');
+      })
+      .then(() =>
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Login'}],
+        }),
+      );
+  };
 
   const onChoose = () => {
     try {
@@ -259,193 +274,93 @@ const Profile = ({navigation, params}) => {
       <View
         style={{
           height: height * 1,
-          justifyContent: 'center',
+          // justifyContent: 'center',
           width: width * 1,
           backgroundColor: 'black',
         }}>
         <View
           style={{
-            height: height * 1,
-            marginTop: 70,
+            height: height * 0.2,
+            width: width * 1,
+            // backgroundColor: 'red',
+            alignSelf: 'center',
+            justifyContent: 'center',
+            flexDirection: 'row',
+            borderRadius: 8,
+            borderWidth: 1,
+            borderColor: COLOR.BUTTON,
+          }}>
+          <View style={{justifyContent: 'center'}}>
+            <Image
+              source={{uri: image}}
+              style={{
+                height: 100,
+                width: 100,
+                borderRadius: 100 / 2,
+              }}
+            />
+          </View>
+          <View style={{justifyContent: 'center', marginLeft: 20}}>
+            <Text
+              style={{
+                color: 'white',
+                fontSize: 20,
+                fontFamily: 'Comfortaa-bold',
+              }}>
+              {name}
+            </Text>
+            <Text
+              style={{
+                color: 'white',
+                fontSize: 20,
+                fontFamily: 'Comfortaa-bold',
+              }}>
+              {email}
+            </Text>
+            <TouchableOpacity
+              style={{
+                height: 35,
+                marginTop: 10,
+
+                width: 150,
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: COLOR.BUTTON,
+
+                justifyContent: 'center',
+              }}
+              onPress={() => navigation.navigate('Profile')}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  color: 'white',
+                  fontWeight: '700',
+                }}>
+                Edit Profile
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View
+          style={{
+            height: height * 0.65,
             width: width * 0.95,
             alignSelf: 'center',
-            // justifyContent: 'center',
+            backgroundColor: 'black',
           }}>
           <View
             style={{
-              height: height * 0.16,
-              // backgroundColor: 'red',
-
+              height: height * 0.1,
+              width: width * 0.95,
               alignSelf: 'center',
-              alignItems: 'center',
-              width: width * 0.9,
+              justifyContent: 'center',
+              // backgroundColor: COLOR.TABCARD,
             }}>
-            {filePath ? (
-              vgf(
-                <TouchableOpacity onPress={() => onChoose()}>
-                  <Image
-                    onLoad={async () => {
-                      // path to existing file on filesystem
-                      const pathToFile = filePath?.assets[0].uri;
-
-                      // uploads file
-                      await reference.putFile(pathToFile);
-                    }}
-                    source={{
-                      uri: filePath?.assets[0].uri ? image : image,
-                    }}
-                    style={styles.imageStyle}
-                  />
-                </TouchableOpacity>,
-              )
-            ) : (
-              <View>
-                <TouchableOpacity onPress={() => onChoose()}>
-                  <Image
-                    source={require('../../assets/images/upload.png')}
-                    style={styles.imageStyle}
-                  />
-                </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Upload')}>
+              <View style={{justifyContent: 'center', alignSelf: 'center'}}>
+                <Icon name="plus" size={50} color={'white'} />
               </View>
-            )}
-          </View>
-
-          {/* <View>
-            <TouchableOpacity
-              activeOpacity={0.5}
-              style={styles.buttonStyle}
-              onPress={() => onChoose()}>
-              <Text style={styles.textStyle}>Choose Image</Text>
             </TouchableOpacity>
-          </View> */}
-          <View style={{height: height * 0.2}}>
-            <View>
-              <TextInput
-                // editable={userData?.email == '' ? true : false}
-                value={email}
-                placeholder="Enter your corporate email ID"
-                placeholderTextColor={'rgb(122,122,122)'}
-                onChangeText={txt => {
-                  setEmail(txt);
-                }}
-                style={{
-                  height: height * 0.06,
-                  backgroundColor: 'rgb(54,54,54)',
-                  borderRadius: 3,
-                  paddingHorizontal: 10,
-                  color: '#fff',
-                  fontFamily: 'InstagramSans-Medium',
-                }}
-              />
-              <TextInput
-                placeholder="Full Name"
-                // editable={userData?.displayName == '' ? true : false}
-                value={name}
-                placeholderTextColor={'rgb(122,122,122)'}
-                // secureTextEntry={true}
-                onChangeText={txt => {
-                  setName(txt);
-                }}
-                style={{
-                  height: height * 0.06,
-                  backgroundColor: 'rgb(54,54,54)',
-                  borderRadius: 3,
-                  paddingHorizontal: 10,
-                  color: '#fff',
-                  marginTop: 20,
-                  fontFamily: 'InstagramSans-Medium',
-                }}
-              />
-              <TextInput
-                placeholder="Phone Number"
-                placeholderTextColor={'rgb(122,122,122)'}
-                maxLength={10}
-                value={phone}
-                // editable={userData?.phoneNumber == '' ? true : false}
-                // secureTextEntry={true}
-                onChangeText={txt => {
-                  setPhone(txt);
-                }}
-                style={{
-                  height: height * 0.06,
-                  backgroundColor: 'rgb(54,54,54)',
-                  borderRadius: 3,
-                  paddingHorizontal: 10,
-                  color: '#fff',
-                  marginTop: 20,
-                  fontFamily: 'InstagramSans-Medium',
-                }}
-              />
-              <TextInput
-                placeholder="Address"
-                value={address}
-                // defaultValue={userData?.address}
-                // editable={userData?.address == '' ? true : false}
-                placeholderTextColor={'rgb(122,122,122)'}
-                // secureTextEntry={true}
-                onChangeText={txt => {
-                  setAddress(txt);
-                }}
-                style={{
-                  height: height * 0.06,
-                  backgroundColor: 'rgb(54,54,54)',
-                  borderRadius: 3,
-                  paddingHorizontal: 10,
-                  color: '#fff',
-                  marginTop: 20,
-                  fontFamily: 'InstagramSans-Medium',
-                }}
-              />
-              <TextInput
-                placeholder="About me"
-                multiline={true}
-                // editable={userData?.bio == '' ? true : false}
-                value={bio}
-                placeholderTextColor={'rgb(122,122,122)'}
-                // secureTextEntry={true}
-                onChangeText={txt => {
-                  setBio(txt);
-                }}
-                style={{
-                  height: height * 0.1,
-                  backgroundColor: 'rgb(54,54,54)',
-                  borderRadius: 3,
-                  paddingHorizontal: 10,
-                  color: '#fff',
-                  marginTop: 20,
-                  fontFamily: 'InstagramSans-Medium',
-                }}
-              />
-            </View>
-
-            <View>
-              <TouchableOpacity
-                onPress={() => uploadDetails()}
-                style={{
-                  height: height * 0.06,
-                  backgroundColor: 'rgb(28,154,236)',
-                  borderRadius: 3,
-                  justifyContent: 'center',
-
-                  marginTop: 20,
-                }}>
-                <Text
-                  style={{
-                    color: '#fff',
-                    textAlign: 'center',
-                    fontSize: 18,
-                    fontFamily: 'InstagramSans-Medium',
-                  }}>
-                  Upload details
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            {/* <Button
-              style={{marginTop: 20}}
-              title="Sign Out"
-              onPress={() => onSignout()}
-            /> */}
           </View>
         </View>
       </View>
@@ -453,7 +368,7 @@ const Profile = ({navigation, params}) => {
   );
 };
 
-export default Profile;
+export default Postprofile;
 
 const styles = StyleSheet.create({
   container: {
@@ -486,7 +401,7 @@ const styles = StyleSheet.create({
   imageStyle: {
     width: 100,
     height: 100,
-    resizeMode: 'contain',
+
     // backgroundColor: 'red',
     borderWidth: 1,
     borderStyle: 'solid',

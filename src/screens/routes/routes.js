@@ -22,7 +22,9 @@ import Profile from '../authscreens/Profile';
 import Dashboard from '../main/Dashboard';
 import Splash from '../Splash';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Postprofile from '../main/Postprofile';
 import {COLOR} from '../components/Colors';
+import Upload from '../main/upload';
 
 const Drawer = createDrawerNavigator();
 
@@ -142,12 +144,10 @@ export function Afterauth(props) {
         }}
       />
       <bottom.Screen
-        name="Chat"
-        component={Profile}
+        name="Upload"
+        component={Upload}
         options={{
-          tabBarIcon: ({}) => (
-            <Icon name="android-messages" color="white" size={30} />
-          ),
+          tabBarIcon: ({}) => <Icon name="plus" color="white" size={40} />,
         }}
       />
       <bottom.Screen
@@ -197,6 +197,7 @@ function Routes() {
         <Auth.Screen name="Signup" component={Signup} />
         <Auth.Screen name="Forgot" component={Forgot} />
         <Auth.Screen name="Profile" component={Profile} />
+        <Auth.Screen name="Upload" component={Upload} />
       </Auth.Navigator>
     </NavigationContainer>
   );

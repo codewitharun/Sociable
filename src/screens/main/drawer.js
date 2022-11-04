@@ -1,16 +1,23 @@
-import {StyleSheet, Text, View, Image, ActivityIndicator} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
 import React from 'react';
 
 import {useState, useEffect} from 'react';
 import Dashboard from './Dashboard';
-import Profile from '../authscreens/Profile';
+import Postprofile from './Postprofile';
 import {NavigationContainer, DrawerActions} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
-
+import {userSignout} from '../../reducer/action';
 import asyncStorage from '@react-native-async-storage/async-storage';
 import {
   createDrawerNavigator,
@@ -65,49 +72,80 @@ function CustomDrawerContent(props, {navigation}) {
     retrieveData();
   }, []);
   const onSignout = () => {
-    auth()
-      .signOut()
-      .then(() => console.log('User signed out!!'))
-      .then(() => {
-        asyncStorage.clear();
-      })
-      .then(() =>
-        props.navigation.navigate({
-          index: 0,
-          routes: [{name: 'Login'}],
-        }),
-      );
+    // auth()
+    //   .signOut()
+    //   .then(() => console.log('User signed out!!'))
+    //   .then(() => {
+    //     asyncStorage.clear();
+    //   })
+    //   .then(() =>
+    //     props.navigation.navigate({
+    //       index: 0,
+    //       routes: [{name: 'Login'}],
+    //     }),
+    //   );
+    userSignout();
   };
   return (
     <DrawerContentScrollView {...props}>
       <View
-        style={{height: 200, width: '100%', backgroundColor: COLOR.TABCARD}}>
+        style={{
+          height: 230,
+          width: '100%',
+          backgroundColor: 'black',
+          marginLeft: 15,
+        }}>
         <Image
           source={{uri: useData.photoUrl}}
           style={{height: 100, width: 100, borderRadius: 100 / 2}}
         />
 
-        <Text style={{fontSize: 30, color: 'black'}}>
+        <Text style={{fontSize: 30, color: 'white'}}>
           {useData.displayName}
         </Text>
-        <Text>{useData.bio}</Text>
+        <Text style={{color: 'white'}}>{useData.bio}</Text>
+        <View
+          style={{
+            height: 30,
+            // backgroundColor: COLOR.TABCARD,
+            width: 100,
+            justifyContent: 'center',
+            borderColor: COLOR.BUTTON,
+            borderWidth: 1,
+            borderRadius: 7,
+            marginTop: 20,
+          }}>
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate('Postprofile')}>
+            <Text
+              style={{
+                textAlign: 'center',
+                fontSize: 16,
+                // fontWeight: '700',
+                color: 'white',
+                fontFamily: 'Comfortaa-bold',
+              }}>
+              Profile
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
-      <DrawerItem
+      {/* <DrawerItem
         label="Close drawer"
         onPress={() => props.navigation.dispatch(DrawerActions.closeDrawer())}
       />
       <DrawerItem
         label="Toggle drawer"
         onPress={() => props.navigation.dispatch(DrawerActions.toggleDrawer())}
-      />
+      /> */}
 
       <DrawerItemList {...props} />
       <DrawerItem
         label="Sign Out"
-        labelStyle={{color: 'Red'}}
+        labelStyle={{color: 'white'}}
         onPress={() => onSignout()}
-        style={{backgroundColor: COLOR.TABCARD}}
+        // style={{backgroundColor: COLOR.TABCARD}}
       />
     </DrawerContentScrollView>
   );
@@ -119,12 +157,15 @@ function MyDrawer(props, {navigation}) {
       drawerContent={props => <CustomDrawerContent {...props} />}
       screenOptions={{
         headerShown: false,
-        drawerActiveTintColor: 'red',
+        drawerActiveTintColor: COLOR.TABCARD,
+        // drawerActiveBackgroundColor: COLOR.TABCARD,
         drawerPosition: 'right',
         drawerType: 'back',
+        drawerStyle: {backgroundColor: 'black'},
+        drawerLabelStyle: {color: 'white'},
       }}>
       <Drawer.Screen name="Home" component={Dashboard} />
-      <Drawer.Screen name="Profile" component={Profile} />
+      <Drawer.Screen name="Postprofile" component={Postprofile} />
     </Drawer.Navigator>
   );
 }

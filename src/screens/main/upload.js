@@ -21,64 +21,51 @@ import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import {showAlert, closeAlert} from 'react-native-customisable-alert';
 // import ImagePicker from 'react-native-image-picker';
-
+import asyncStorage from '@react-native-async-storage/async-storage';
 import {TextInput} from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
 import {color} from 'react-native-reanimated';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-const Profile = ({navigation, params}) => {
-  const [name, setName] = useState('');
-  const [image, setImage] = useState('hejr');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [address, setAddress] = useState('');
-  const [bio, setBio] = useState('');
+
+const Upload = ({navigation, params}) => {
+  // const [name, setName] = useState('');
+  const [image, setImage] = useState('');
+
+  const [caption, setcaption] = useState('');
   const User = auth().currentUser;
   const [filePath, setFilePath] = useState('');
-
+  const [ImageName, setImagename] = useState('');
   const [userData, setUserData] = useState();
   // const parsedUserData = JSON.stringify(JSON.parse(userData));
   // console.log('User data is after' + userData.displayName);
+  console.log('IMageNAme ', ImageName);
   const update = {
     photoUrl: image,
-    // displayName: userData?.displayName == '' ? name : userData?.displayName,
-    displayName: name,
-    email: email,
-    phoneNumber: '+91' + phone,
-    address: address,
-    bio: bio,
-    uid: auth().currentUser.uid,
+    userPhoto: userData?.photoUrl,
+    email: userData?.email,
+    caption: caption,
+    uid: userData?.uid,
+    name: userData?.displayName,
+    like: [],
+    comment: [],
   };
-  useEffect(() => {
-    firestore()
-      .collection('Users')
-      .doc(User.uid)
-      .get()
-      .then(documentSnapshot => {
-        /*
-          A DocumentSnapshot belongs to a specific document,
-          With snapshot you can view a documents data,
-          metadata and whether a document actually exists.
-        */
-        let userDetails = {};
-        // Document fields
-        userDetails = documentSnapshot.data();
-        // All the document related data
-        // userDetails['id'] = documentSnapshot.id;
-        console.log(
-          'user details from profile screen: ' + JSON.stringify(userDetails),
-        );
-        AsyncStorage.setItem('LoggedUser', JSON.stringify(userDetails));
-        setUserData(userDetails);
-        setEmail(userDetails?.email);
-        setName(userDetails?.displayName);
-        setAddress(userDetails?.address);
-        setBio(userDetails?.bio);
-        setPhone(userDetails?.phoneNumber);
-        setImage(userDetails?.photoUrl);
-      });
 
-    // uploadDetails();
+  const retrieveData = async () => {
+    try {
+      const userdata = await asyncStorage.getItem('LoggedUser');
+
+      if (userdata !== null) {
+        // We have data!!
+        console.log('value from asyncstoragee parseed', userdata);
+        setUserData(JSON.parse(userdata));
+        console.log(' data in async storageeeeeeee', userData);
+      }
+    } catch (error) {
+      console.log('no data in async storage', error);
+    }
+  };
+
+  useEffect(() => {
+    retrieveData();
   }, []);
 
   console.log(User);
@@ -112,24 +99,25 @@ const Profile = ({navigation, params}) => {
       console.log(error);
     }
   };
-  const reference = storage().ref(`${User.uid}/profilePhoto`);
+  const reference = storage().ref(ImageName);
   async function uploadDetails() {
     try {
-      const urrl = await storage()
-        .ref(`${User.uid}/profilePhoto`)
-        .getDownloadURL();
-      setImage(urrl);
+      const urrl = await storage().ref(ImageName).getDownloadURL();
+      try {
+        setImage(urrl);
+        console.log('url link get after image upload', urrl);
+        await firestore()
+          .collection('Upload')
+          .doc(User.uid)
+          .update(update)
+          .then(() => {
+            console.log('User updated!');
 
-      console.log('url link get after image upload', urrl);
-      await firestore()
-        .collection('Users')
-        .doc(User.uid)
-        .set(update)
-        .then(() => {
-          console.log('User updated!');
-          AsyncStorage.setItem('LoggedUser', JSON.stringify(update));
-          navigation.navigate('Success');
-        });
+            navigation.navigate('Success');
+          });
+      } catch (error) {
+        console.log('error while uploading post', error);
+      }
     } catch (error) {
       // console.log(' image upload to storage', error);
       Alert.alert('Please Fill all the fields', error.message);
@@ -172,7 +160,7 @@ const Profile = ({navigation, params}) => {
         console.log('fileSize -> ', response.fileSize);
         console.log('type -> ', response.type);
         // console.log('response assets response -> ', response.assets[0].uri);
-
+        setImagename(response.assets[0].fileName);
         setFilePath(response);
       });
     }
@@ -251,6 +239,7 @@ const Profile = ({navigation, params}) => {
       // console.log('response assets response -> ', response.assets[0].uri);
 
       setFilePath(response);
+      setImagename(response.assets[0].fileName);
     });
   };
 
@@ -273,31 +262,29 @@ const Profile = ({navigation, params}) => {
           }}>
           <View
             style={{
-              height: height * 0.16,
-              // backgroundColor: 'red',
+              height: height * 0.47,
+              //   backgroundColor: 'red',
 
               alignSelf: 'center',
               alignItems: 'center',
               width: width * 0.9,
             }}>
             {filePath ? (
-              vgf(
-                <TouchableOpacity onPress={() => onChoose()}>
-                  <Image
-                    onLoad={async () => {
-                      // path to existing file on filesystem
-                      const pathToFile = filePath?.assets[0].uri;
+              <TouchableOpacity onPress={() => onChoose()}>
+                <Image
+                  onLoad={async () => {
+                    // path to existing file on filesystem
+                    const pathToFile = filePath?.assets[0].uri;
 
-                      // uploads file
-                      await reference.putFile(pathToFile);
-                    }}
-                    source={{
-                      uri: filePath?.assets[0].uri ? image : image,
-                    }}
-                    style={styles.imageStyle}
-                  />
-                </TouchableOpacity>,
-              )
+                    // uploads file
+                    await reference.putFile(pathToFile);
+                  }}
+                  source={{
+                    uri: filePath?.assets[0].uri,
+                  }}
+                  style={styles.imageStyle1}
+                />
+              </TouchableOpacity>
             ) : (
               <View>
                 <TouchableOpacity onPress={() => onChoose()}>
@@ -310,110 +297,24 @@ const Profile = ({navigation, params}) => {
             )}
           </View>
 
-          {/* <View>
-            <TouchableOpacity
-              activeOpacity={0.5}
-              style={styles.buttonStyle}
-              onPress={() => onChoose()}>
-              <Text style={styles.textStyle}>Choose Image</Text>
-            </TouchableOpacity>
-          </View> */}
           <View style={{height: height * 0.2}}>
             <View>
               <TextInput
-                // editable={userData?.email == '' ? true : false}
-                value={email}
-                placeholder="Enter your corporate email ID"
-                placeholderTextColor={'rgb(122,122,122)'}
-                onChangeText={txt => {
-                  setEmail(txt);
-                }}
-                style={{
-                  height: height * 0.06,
-                  backgroundColor: 'rgb(54,54,54)',
-                  borderRadius: 3,
-                  paddingHorizontal: 10,
-                  color: '#fff',
-                  fontFamily: 'InstagramSans-Medium',
-                }}
-              />
-              <TextInput
-                placeholder="Full Name"
-                // editable={userData?.displayName == '' ? true : false}
-                value={name}
-                placeholderTextColor={'rgb(122,122,122)'}
-                // secureTextEntry={true}
-                onChangeText={txt => {
-                  setName(txt);
-                }}
-                style={{
-                  height: height * 0.06,
-                  backgroundColor: 'rgb(54,54,54)',
-                  borderRadius: 3,
-                  paddingHorizontal: 10,
-                  color: '#fff',
-                  marginTop: 20,
-                  fontFamily: 'InstagramSans-Medium',
-                }}
-              />
-              <TextInput
-                placeholder="Phone Number"
-                placeholderTextColor={'rgb(122,122,122)'}
-                maxLength={10}
-                value={phone}
-                // editable={userData?.phoneNumber == '' ? true : false}
-                // secureTextEntry={true}
-                onChangeText={txt => {
-                  setPhone(txt);
-                }}
-                style={{
-                  height: height * 0.06,
-                  backgroundColor: 'rgb(54,54,54)',
-                  borderRadius: 3,
-                  paddingHorizontal: 10,
-                  color: '#fff',
-                  marginTop: 20,
-                  fontFamily: 'InstagramSans-Medium',
-                }}
-              />
-              <TextInput
-                placeholder="Address"
-                value={address}
-                // defaultValue={userData?.address}
-                // editable={userData?.address == '' ? true : false}
-                placeholderTextColor={'rgb(122,122,122)'}
-                // secureTextEntry={true}
-                onChangeText={txt => {
-                  setAddress(txt);
-                }}
-                style={{
-                  height: height * 0.06,
-                  backgroundColor: 'rgb(54,54,54)',
-                  borderRadius: 3,
-                  paddingHorizontal: 10,
-                  color: '#fff',
-                  marginTop: 20,
-                  fontFamily: 'InstagramSans-Medium',
-                }}
-              />
-              <TextInput
-                placeholder="About me"
+                placeholder="Caption "
                 multiline={true}
-                // editable={userData?.bio == '' ? true : false}
-                value={bio}
                 placeholderTextColor={'rgb(122,122,122)'}
-                // secureTextEntry={true}
                 onChangeText={txt => {
-                  setBio(txt);
+                  setcaption(txt);
                 }}
                 style={{
-                  height: height * 0.1,
+                  height: height * 0.2,
                   backgroundColor: 'rgb(54,54,54)',
                   borderRadius: 3,
                   paddingHorizontal: 10,
                   color: '#fff',
-                  marginTop: 20,
+                  // marginTop: 20,
                   fontFamily: 'InstagramSans-Medium',
+                  //   justifyContent: 'flex-start',
                 }}
               />
             </View>
@@ -442,10 +343,10 @@ const Profile = ({navigation, params}) => {
             </View>
 
             {/* <Button
-              style={{marginTop: 20}}
-              title="Sign Out"
-              onPress={() => onSignout()}
-            /> */}
+                style={{marginTop: 20}}
+                title="Sign Out"
+                onPress={() => onSignout()}
+              /> */}
           </View>
         </View>
       </View>
@@ -453,7 +354,7 @@ const Profile = ({navigation, params}) => {
   );
 };
 
-export default Profile;
+export default Upload;
 
 const styles = StyleSheet.create({
   container: {
@@ -484,23 +385,26 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   imageStyle: {
-    width: 100,
-    height: 100,
+    width: width * 1,
+    height: height * 0.3,
     resizeMode: 'contain',
     // backgroundColor: 'red',
     borderWidth: 1,
     borderStyle: 'solid',
     borderColor: COLOR.BUTTON,
-    borderRadius: 200 / 2,
+    // borderRadius: 200 / 2,
   },
   imageStyle1: {
-    width: 1,
-    height: 1,
+    width: width * 1,
+    height: height * 0.4,
     margin: 5,
     // backgroundColor: 'red',
     borderWidth: 1,
     borderStyle: 'solid',
     borderColor: COLOR.BUTTON,
-    borderRadius: 200 / 2,
+    borderRadius: 10,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    resizeMode: 'contain',
   },
 });

@@ -376,24 +376,6 @@ const Signup = ({navigation}) => {
             borderBottomColor: 'rgb(54,54,54)',
             borderBottomWidth: 0.5,
           }}></View>
-        <TouchableOpacity
-          onPress={() =>
-            onGoogleButtonPress().then(() =>
-              console.log('Signed in with Google!'),
-            )
-          }>
-          <Text
-            style={{
-              fontSize: 18,
-              marginTop: 30,
-              color: 'rgb(28,154,236)',
-              textAlign: 'center',
-              fontFamily: 'Comfortaa-Bold',
-            }}>
-            Sign up with Google
-          </Text>
-        </TouchableOpacity>
-
         <View style={{position: 'absolute', bottom: 50}}>
           <View
             style={{

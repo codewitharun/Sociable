@@ -1,20 +1,20 @@
 {
   "project_info": {
-    "project_number": "783880828424",
-    "project_id": "sociable-2f985",
-    "storage_bucket": "sociable-2f985.appspot.com"
+    "project_number": "459787963543",
+    "project_id": "sociable-c403e",
+    "storage_bucket": "sociable-c403e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:783880828424:android:695bdc200369186b9843bd",
+        "mobilesdk_app_id": "1:459787963543:android:e5e8ea15950f06de11add2",
         "android_client_info": {
           "package_name": "com.sociable"
         }
       },
       "oauth_client": [
         {
-          "client_id": "783880828424-lm4ods8ql4osrr3hmt1ik1rfqkracauk.apps.googleusercontent.com",
+          "client_id": "459787963543-1aut6kqvtd7s3r52t3kmk5anil2aia0t.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.sociable",
@@ -22,24 +22,24 @@
           }
         },
         {
-          "client_id": "783880828424-errl5i9tcucvu8i9bl1643gi7ur1h4km.apps.googleusercontent.com",
+          "client_id": "459787963543-2mrklfcpl19b16e3c3j95ivug95ia8om.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCWJKpp1X3UzMap86X0EKB-47pXBUhRHIg"
+          "current_key": "AIzaSyA_i9hyCfw50pdnwqmEmD96z4KyK92c-hg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "783880828424-errl5i9tcucvu8i9bl1643gi7ur1h4km.apps.googleusercontent.com",
+              "client_id": "459787963543-2mrklfcpl19b16e3c3j95ivug95ia8om.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "783880828424-rnglaorq8t4b0c5re489flbeiq4tr9e5.apps.googleusercontent.com",
+              "client_id": "459787963543-glg726ncrrg1pv3e72feajupiovfgqgc.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "org.reactjs.native.example.sociable"
