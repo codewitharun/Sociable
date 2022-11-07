@@ -1,207 +1,168 @@
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
+import React from 'react';
 
+import {useState, useEffect} from 'react';
+import Dashboard from './Dashboard';
+import Postprofile from './Postprofile';
+import {NavigationContainer, DrawerActions} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
+import firestore from '@react-native-firebase/firestore';
+import {userSignout} from '../../redux/action/firebaseActions';
+import asyncStorage from '@react-native-async-storage/async-storage';
+import {
+  createDrawerNavigator,
+  useDrawerStatus,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from '@react-navigation/drawer';
+import {color} from 'react-native-reanimated';
+import {COLOR} from '../components/Colors';
+import database from '@react-native-firebase/database';
+const Drawer = createDrawerNavigator();
+import {useNavigation} from '@react-navigation/native';
+function CustomDrawerContent(props) {
+  const isDrawerOpen = useDrawerStatus() === 'open';
+  const [authUser, setauthUser] = useState();
+  const [useData, setUserData] = useState('');
+  const [name, setName] = useState('');
+  const [UImage, setUImage] = useState('');
+  const retrieveData = async () => {
+    try {
+      const userdata = await asyncStorage.getItem('LoggedUser');
 
-import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import Clipboard from '@react-native-community/clipboard'
-import { navigation, goBack, navigate } from '../../navigations/rootNavigation'
-import { SCREEN_WIDTH } from '../../constants'
-import { SuperRootStackParamList } from '../../navigations'
-import { RouteProp } from '@react-navigation/native'
-import { useDispatch } from 'react-redux'
-import { UnfollowRequest, AddPostArchiveRequest, RemovePostArchiveRequest } from '../../actions/userActions'
-import { store } from '../../store'
-import { UpdatePostRequest } from '../../actions/postActions'
-import { sharePost } from '../../utils'
-import { firestore } from 'firebase'
-import { Post } from '../../reducers/postReducer'
-import { useSelector } from '../../reducers'
-import { PostArchive } from '../../reducers/userReducer'
-type PostOptionsRouteProp = RouteProp<SuperRootStackParamList, 'PostOptions'>
-type PostOptionsProps = {
-    route: PostOptionsRouteProp
-}
-const PostOptions = ({ route }: PostOptionsProps) => {
-    const user = store.getState().user.user.userInfo
-    const item = route.params.item
-    const setPost = route.params.setPost
-    const archivePosts = useSelector(state => state.user.archive?.posts || [])
-    const post = setPost ? item : useSelector(state => state.postList).filter(post => post.uid === item.uid)[0] || {}
-    const dispatch = useDis patch()
-    const _onUnfollow = () => {
-        dispatch(UnfollowRequest(post.ownUser?.username || ``))
-    }
-    const _toggleNotification = async () => {
-        const rq = await firestore().collection('posts')
-            .doc(`${post.uid}`).get()
-        const onlinePost: Post = rq.data() || {}
-        const notifications: string[] = onlinePost.notificationUsers || []
-        const index = notifications.indexOf(user?.username || '')
-        if (index > -1) {
-            notifications.splice(index, 1)
-        } else notifications.push(user?.username || '')
-        if (setPost) {
-            rq.ref.update({
-                notificationUsers: [...notifications]
-            })
-            const temp = { ...post }
-            temp.notificationUsers = [...notifications]
-            setPost(temp)
-        } else dispatch(UpdatePostRequest(post.uid || 0, {
-            notificationUsers: [...notifications]
-        }))
-        goBack()
-    }
-    const _onArchive = async () => {
-        const postArchive: PostArchive = {
-            uid: item.uid as number,
-            create_at: new Date().getTime(),
-            previewUri: (item.source || [])[0]?.uri as string,
-            multiple: !!item.source && item.source.length > 1
-        }
-        await dispatch(AddPostArchiveRequest([postArchive]))
-        goBack()
-    }
-    const _onRemoveBoth = async () => {
-        navigate('AccountIndex')
-        await dispatch(RemovePostArchiveRequest(item.uid as number))
-    }
-    const _onRemoveArchive = async () => {
-        navigate('AccountIndex')
-        await dispatch(RemovePostArchiveRequest(item.uid as number))
-    }
-    return (
-        <TouchableOpacity
-            activeOpacity={1}
-            onPress={() => navigation.goBack()}
-            style={{
-                ...styles.container,
-            }}>
-            <View style={styles.mainOptions}>
-                {!!archivePosts.find(x => x.uid === item.uid) ? (
-                    <>
-                        <View style={{ backgroundColor: "#000" }}>
-                            <TouchableOpacity
-                                onPress={_onRemoveArchive}
-                                activeOpacity={0.8}
-                                style={styles.optionItem}>
-                                <Text>Show on Profile</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ backgroundColor: "#000" }}>
-                            <TouchableOpacity
-                                onPress={_onRemoveBoth}
-                                activeOpacity={0.8}
-                                style={styles.optionItem}>
-                                <Text>Delete</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </>
-                ) : (
-                        <>
-                            {user?.username !== item.userId &&
-                                <View style={{ backgroundColor: "#000" }}>
-                                    <TouchableOpacity
-                                        activeOpacity={0.8}
-                                        style={styles.optionItem}>
-                                        <Text>Report...</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            }
-                            <View style={{ backgroundColor: "#000" }}>
-                                <TouchableOpacity
-                                    onPress={_toggleNotification}
-                                    activeOpacity={0.8}
-                                    style={styles.optionItem}>
-                                    <Text>Turn {(post.notificationUsers
-                                        && post.notificationUsers?.indexOf(user?.username || '')
-                                        > -1) ? 'Off' : 'On'
-                                    } Post Notifications</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={{ backgroundColor: "#000" }}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        Clipboard.setString('https://instagram.com/' + item.uid)
-                                    }}
-                                    activeOpacity={0.8}
-                                    style={styles.optionItem}>
-                                    <Text>Copy Link</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={{ backgroundColor: "#000" }}>
-                                <TouchableOpacity
-                                    onPress={() => sharePost(post)}
-                                    activeOpacity={0.8}
-                                    style={styles.optionItem}>
-                                    <Text>Share to...</Text>
-                                </TouchableOpacity>
-                            </View>
-                            {user?.username === item.userId &&
-                                <View style={{ backgroundColor: "#000" }}>
-                                    <TouchableOpacity
-                                        onPress={_onArchive}
-                                        activeOpacity={0.8}
-                                        style={styles.optionItem}>
-                                        <Text>Archive</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            }
-                            {user?.username !== item.userId &&
-                                <View style={{ backgroundColor: "#000" }}>
-                                    <TouchableOpacity
-                                        onPress={_onUnfollow}
-                                        activeOpacity={0.8}
-                                        style={styles.optionItem}>
-                                        <Text>Unfollow</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            }
+      if (userdata !== null) {
+        // We have data!!
+        console.log('value from asyncstoragee parseed', userdata);
+        setUserData(JSON.parse(userdata));
 
-                            {user?.username !== item.userId &&
-                                <View style={{ backgroundColor: "#000" }}>
-                                    <TouchableOpacity
-                                        activeOpacity={0.8}
-                                        style={styles.optionItem}>
-                                        <Text>Mute</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            }
-                        </>
-                    )}
-            </View>
-        </TouchableOpacity>
-    )
+        database()
+          .ref(`userdata/${useData?.uid}`)
+          .set({
+            name: 'Arun Kumar',
+            age: 22,
+            role: 'admin',
+            post: 'react native developer',
+          })
+          .then(() => console.log('Data set.'));
+        database()
+          .ref(`userdata/${useData?.uid}`)
+          .once('value')
+          .then(snapshot => {
+            console.log('User data: ', snapshot.val());
+          });
+        // setName(useData?.displayName);
+        // setUImage(useData?.photoUrl);
+      }
+    } catch (error) {
+      console.log('no data in async storage', error);
+    }
+  };
+  useEffect(() => {
+    retrieveData();
+  }, []);
+  const onSignout = () => {
+    userSignout(() => {
+      props.navigation.reset({
+        index: 0,
+        routes: [{name: 'Login'}],
+      });
+    });
+  };
+  const navigation = useNavigation();
+  return (
+    <DrawerContentScrollView {...props}>
+      <View
+        style={{
+          height: 230,
+          width: '100%',
+          backgroundColor: 'black',
+          marginLeft: 15,
+        }}>
+        <Image
+          source={{uri: useData.photoUrl}}
+          style={{height: 100, width: 100, borderRadius: 100 / 2}}
+        />
+
+        <Text style={{fontSize: 30, color: 'white'}}>
+          {useData.displayName}
+        </Text>
+        <Text style={{color: 'white'}}>{useData.bio}</Text>
+        <View
+          style={{
+            height: 30,
+            // backgroundColor: COLOR.TABCARD,
+            width: 100,
+            justifyContent: 'center',
+            borderColor: COLOR.BUTTON,
+            borderWidth: 1,
+            borderRadius: 7,
+            marginTop: 20,
+          }}>
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate('Postprofile')}>
+            <Text
+              style={{
+                textAlign: 'center',
+                fontSize: 16,
+                // fontWeight: '700',
+                color: 'white',
+                fontFamily: 'Comfortaa-bold',
+              }}>
+              Profile
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* <DrawerItem
+          label="Close drawer"
+          onPress={() => props.navigation.dispatch(DrawerActions.closeDrawer())}
+        />
+        <DrawerItem
+          label="Toggle drawer"
+          onPress={() => props.navigation.dispatch(DrawerActions.toggleDrawer())}
+        /> */}
+
+      <DrawerItemList {...props} />
+      <DrawerItem
+        label="Sign Out"
+        labelStyle={{color: 'white'}}
+        onPress={() => onSignout()}
+        // style={{backgroundColor: COLOR.TABCARD}}
+      />
+    </DrawerContentScrollView>
+  );
 }
 
-export default PostOptions
+function MyDrawer(props) {
+  return (
+    <Drawer.Navigator
+      drawerContent={props => <CustomDrawerContent {...props} />}
+      screenOptions={{
+        headerShown: false,
+        drawerActiveTintColor: COLOR.TABCARD,
+        // drawerActiveBackgroundColor: COLOR.TABCARD,
+        drawerPosition: 'right',
+        drawerType: 'back',
+        drawerStyle: {backgroundColor: 'black'},
+        drawerLabelStyle: {color: 'white'},
+      }}>
+      <Drawer.Screen name="Home" component={Dashboard} />
+      <Drawer.Screen name="Postprofile" component={Postprofile} />
+      {/* <Drawer.Screen name="Postp" component={Postprofile} /> */}
+    </Drawer.Navigator>
+  );
+}
 
-const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        height: "100%",
-        justifyContent: "center",
-        alignItems: 'center'
-    },
-    mainOptions: {
-        width: SCREEN_WIDTH * 0.6,
-        borderRadius: 5,
-        padding: 5,
-        backgroundColor: "#fff",
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 0.29,
-        shadowRadius: 20,
-
-        elevation: 7,
-    },
-    optionItem: {
-        backgroundColor: '#fff',
-        height: 44,
-        width: '100%',
-        justifyContent: 'center',
-        paddingHorizontal: 10
-    }
-})
+export default MyDrawer;

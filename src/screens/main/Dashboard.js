@@ -12,14 +12,11 @@ import React, {useEffect, useState} from 'react';
 import {height, width} from '../components/Colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useSelector, useDispatch} from 'react-redux';
-import auth from '@react-native-firebase/auth';
-import storage from '@react-native-firebase/storage';
-import firestore from '@react-native-firebase/firestore';
-import database from '@react-native-firebase/database';
+
 import asyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import {getMovies, getUser} from '../../reducer/action';
-import Upload from './upload';
+
+import {getPosts, getUser} from '../../redux/action/firebaseActions';
+
 const Dashboard = ({navigation}) => {
   const [DATA, setDATA] = useState([]);
   {
@@ -29,11 +26,11 @@ const Dashboard = ({navigation}) => {
   const [useData, setUserData] = useState('');
   const [liked, setLiked] = useState(false);
 
-  const {users} = useSelector(state => state.fromReducer);
+  const {posts} = useSelector(state => state.fromReducer);
   const dispatch = useDispatch();
-  const fetchUser = () => dispatch(getUser());
+  const fetchPosts = () => dispatch(getPosts());
   useEffect(() => {
-    fetchUser();
+    fetchPosts();
   }, []);
   const Item = ({title, url, thumbnailUrl, username, email, postId}) => (
     <View style={styles.item}>
@@ -241,7 +238,7 @@ const Dashboard = ({navigation}) => {
             alignSelf: 'center',
           }}>
           <FlatList
-            data={users}
+            data={posts}
             renderItem={renderItem}
             keyExtractor={item => item.id}
           />

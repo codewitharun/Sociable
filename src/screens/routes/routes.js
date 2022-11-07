@@ -118,20 +118,7 @@ export function Afterauth(props) {
         name="Dashboard"
         component={Dashboard}
         options={{
-          tabBarIcon: ({}) => (
-            // <View
-            //   style={{
-            //     position: 'absolute',
-            //     bottom: 0, // space from bottombar
-            //     height: 68,
-            //     width: 68,
-            //     borderRadius: 68,
-            //     justifyContent: 'center',
-            //     alignItems: 'center',
-            //   }}>
-            // </View>
-            <Icon name="home" color="white" size={30} />
-          ),
+          tabBarIcon: ({}) => <Icon name="home" color="white" size={30} />,
         }}
       />
       <bottom.Screen
@@ -162,11 +149,6 @@ export function Afterauth(props) {
       <bottom.Screen
         name="More"
         component={MyDrawer}
-        listeners={({navigation}) => ({
-          tabPress: () => {
-            props.navigation.dispatch(DrawerActions.toggleDrawer());
-          },
-        })}
         options={{
           tabBarIcon: ({}) => (
             <Icon
@@ -198,6 +180,7 @@ function Routes() {
         <Auth.Screen name="Forgot" component={Forgot} />
         <Auth.Screen name="Profile" component={Profile} />
         <Auth.Screen name="Upload" component={Upload} />
+        <Auth.Screen name="Postprofile" component={Postprofile} />
       </Auth.Navigator>
     </NavigationContainer>
   );

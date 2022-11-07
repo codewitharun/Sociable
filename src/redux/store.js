@@ -6,7 +6,7 @@ import {
 } from 'redux';
 // import {configureStore} from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
-import fromReducer from './reducer';
+import fromReducer from './reducer/reducer';
 const rootReducer = combineReducers({
   fromReducer,
 });

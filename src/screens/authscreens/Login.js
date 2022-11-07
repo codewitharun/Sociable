@@ -9,13 +9,7 @@ import {
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import auth from '@react-native-firebase/auth';
-import storage from '@react-native-firebase/storage';
-import {firebase} from '@react-native-firebase/auth';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import firestore from '@react-native-firebase/firestore';
-import {loginUser} from '../../reducer/action';
+import {loginUser} from '../../redux/action/firebaseActions';
 const {height, width} = Dimensions.get('screen');
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');

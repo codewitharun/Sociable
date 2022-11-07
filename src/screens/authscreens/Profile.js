@@ -281,7 +281,7 @@ const Profile = ({navigation, params}) => {
               width: width * 0.9,
             }}>
             {filePath ? (
-              vgf(
+              <View>
                 <TouchableOpacity onPress={() => onChoose()}>
                   <Image
                     onLoad={async () => {
@@ -292,12 +292,14 @@ const Profile = ({navigation, params}) => {
                       await reference.putFile(pathToFile);
                     }}
                     source={{
-                      uri: filePath?.assets[0].uri ? image : image,
+                      uri: filePath?.assets[0].uri
+                        ? filePath?.assets[0].uri
+                        : image,
                     }}
                     style={styles.imageStyle}
                   />
-                </TouchableOpacity>,
-              )
+                </TouchableOpacity>
+              </View>
             ) : (
               <View>
                 <TouchableOpacity onPress={() => onChoose()}>

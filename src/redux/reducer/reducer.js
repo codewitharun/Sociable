@@ -1,19 +1,25 @@
-import {GET_MOVIES, GET_USER, LOGOUT_USER} from './type';
+import {GET_POSTS, GET_USER, LOGOUT_USER, CURRENT_USER} from '../type/type';
 
 const initialState = {
-  movies: [],
+  posts: [],
   favorites: [],
   users: [],
   logout: [],
+  currentUser: [],
 };
 function fromReducer(state = initialState, action) {
   switch (action.type) {
-    case GET_MOVIES:
-      return {...state, movies: action.payload};
+    case GET_POSTS:
+      return {...state, posts: action.payload};
     case GET_USER:
       return {...state, users: action.payload};
     case LOGOUT_USER:
       return {...state, logout: action.payload};
+    case CURRENT_USER:
+      return {...state, currentUser: action.payload};
+    case LOGOUT_USER:
+      return {...state, logout: action.payload};
+
     default:
       return state;
   }
