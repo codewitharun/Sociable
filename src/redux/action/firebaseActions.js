@@ -7,6 +7,7 @@ import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
 import {GET_USER, GET_POSTS, LOGOUT_USER} from '../type/type';
+import {useState} from 'react';
 export const getPosts = () => {
   try {
     return async dispatch => {
@@ -46,38 +47,31 @@ export const getPosts = () => {
 export const getUser = () => {
   try {
     return async dispatch => {
-      firestore()
-        .collection('Users')
-        .get()
-        .then(querySnapshot => {
-          let temp = [];
-          console.log('Total users: ', querySnapshot.size);
-          querySnapshot.forEach(documentSnapshot => {
-            let userDetails = {};
+      try {
+        const userdata = await AsyncStorage.getItem('LoggedUser');
 
-            userDetails = documentSnapshot.data();
+        if (userdata !== null) {
+          // We have data!!
+          const usernow = JSON.parse(userdata);
+          console.log(
+            'value from asyncstoragee  redux before parsed',
+            userdata,
+          );
+          console.log(
+            'value from asyncstoragee redux after parseed ',
+            usernow.uid,
+          );
 
-            userDetails['id'] = documentSnapshot.id;
-            temp.push(userDetails);
-
-            if (temp) {
-              dispatch({
-                type: GET_USER,
-                payload: temp,
-              });
-              // console.log('Post data from redux', temp);
-            } else {
-              console.log('Unable to fetch');
-            }
+          dispatch({
+            type: GET_USER,
+            payload: usernow,
           });
-        });
+        }
+      } catch (error) {
+        console.log('no data in async storage', error);
+      }
     };
-  } catch (error) {
-    console.log(
-      'Error while getting POST data from firestore refer to redux action',
-      error,
-    );
-  }
+  } catch {}
 };
 
 export const loginUser = (user, onsucess) => {
@@ -93,30 +87,31 @@ export const loginUser = (user, onsucess) => {
         firebase.auth().onAuthStateChanged(function (user) {
           if (user) {
             try {
-              return async dispatch => {
-                dispatch({
-                  type: CURRENT_USER,
-                  payload: user,
-                });
-                setRefrence(storage().ref(user.uid));
-                console.log('createddddd', reference);
-                firestore()
-                  .collection('Users')
-                  .doc(user.uid)
-                  .get()
-                  .then(documentSnapshot => {
-                    let userDetails = {};
-                    userDetails = documentSnapshot.data();
-                    console.log(
-                      'user details from Login screen: ' +
-                        JSON.stringify(userDetails),
-                    );
-                    AsyncStorage.setItem(
-                      'LoggedUser',
+              // return async dispatch => {
+              setRefrence(storage().ref(user.uid));
+              console.log('createddddd', reference);
+              firestore()
+                .collection('Users')
+                .doc(user.uid)
+                .get()
+                .then(documentSnapshot => {
+                  let userDetails = {};
+                  userDetails = documentSnapshot.data();
+
+                  console.log(
+                    'user details from Login screen: ' +
                       JSON.stringify(userDetails),
-                    );
-                  });
-              };
+                  );
+                  // dispatch({
+                  //   type: CURRENT_USER,
+                  //   payload: userDetails,
+                  // });
+                  AsyncStorage.setItem(
+                    'LoggedUser',
+                    JSON.stringify(userDetails),
+                  );
+                });
+              // };
             } catch (error) {
               console.log('storage bucket not created', error);
             }
@@ -148,6 +143,7 @@ export const userSignout = onsucess => {
     auth().signOut();
     AsyncStorage.clear();
     onsucess();
+    console.log('User successfully SignOut');
   } catch (err) {
     console.log('error while logging out', err);
   }

@@ -154,35 +154,6 @@ const Dashboard = ({navigation}) => {
   };
   useEffect(() => {
     retrieveData();
-
-    // firestore()
-    //   .collection('Upload')
-    //   .get()
-    //   .then(querySnapshot => {
-    //     /*
-    //             A QuerySnapshot allows you to inspect the collection,
-    //             such as how many documents exist within it,
-    //             access to the documents within the collection,
-    //             any changes since the last query and more.
-    //         */
-    //     let temp = [];
-    //     console.log('Total users: ', querySnapshot.size);
-    //     querySnapshot.forEach(documentSnapshot => {
-    //       // console.log('user Id: ', documentSnapshot.id);
-    //       /*
-    //             A DocumentSnapshot belongs to a specific document,
-    //             With snapshot you can view a documents data,
-    //             metadata and whether a document actually exists.
-    //           */
-    //       let userDetails = {};
-    //       // Document fields
-    //       userDetails = documentSnapshot.data();
-    //       // All the document related data
-    //       userDetails['id'] = documentSnapshot.id;
-    //       temp.push(userDetails);
-    //       setDATA(temp);
-    //     });
-    // });
   }, []);
 
   return (

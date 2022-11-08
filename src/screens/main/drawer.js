@@ -1,67 +1,33 @@
 import {
-  SafeAreaView,
-  StatusBar,
   StyleSheet,
   Text,
   View,
+  SafeAreaView,
   Image,
+  FlatList,
+  StatusBar,
   TouchableOpacity,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {COLOR, height, width} from '../components/Colors';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useSelector, useDispatch} from 'react-redux';
-
-import asyncStorage from '@react-native-async-storage/async-storage';
 import {userSignout} from '../../redux/action/firebaseActions';
-import {getPosts, getUser, loginUser} from '../../redux/action/firebaseActions';
+import asyncStorage from '@react-native-async-storage/async-storage';
+
+import {getPosts, getUser} from '../../redux/action/firebaseActions';
+
 const Drawer = ({navigation}) => {
-  // const {currentusers} = useSelector(state => state.fromReducer);
-  // console.log(currentusers);
+  const {users} = useSelector(state => state.fromReducer);
+  console.log('users from drawer screen', users.displayName);
   const dispatch = useDispatch();
-  // const useSelect = useSelector();
-  // const fetchUser = () => dispatch(loginUser());
-
-  const [authUser, setauthUser] = useState();
-  const [useData, setUserData] = useState('');
-  const [name, setName] = useState('');
-  const [UImage, setUImage] = useState('');
-  const retrieveData = async () => {
-    try {
-      const userdata = await asyncStorage.getItem('LoggedUser');
-
-      if (userdata !== null) {
-        // We have data!!
-        console.log('value from asyncstoragee parseed', userdata);
-        setUserData(JSON.parse(userdata));
-
-        database()
-          .ref(`userdata/${useData?.uid}`)
-          .set({
-            name: 'Arun Kumar',
-            age: 22,
-            role: 'admin',
-            post: 'react native developer',
-          })
-          .then(() => console.log('Data set.'));
-        database()
-          .ref(`userdata/${useData?.uid}`)
-          .once('value')
-          .then(snapshot => {
-            console.log('User data: ', snapshot.val());
-          });
-        // setName(useData?.displayName);
-        // setUImage(useData?.photoUrl);
-      }
-    } catch (error) {
-      console.log('no data in async storage', error);
-    }
-  };
+  const fetchPosts = () => dispatch(getUser());
   useEffect(() => {
-    // retrieveData();
-    // fetchUser();
+    fetchPosts();
   }, []);
-  const onSignout = () => {
+  const onSignOut = () => {
     userSignout(() => {
+      console.log('on success ');
       navigation.reset({
         index: 0,
         routes: [{name: 'Login'}],
@@ -74,63 +40,85 @@ const Drawer = ({navigation}) => {
       <View
         style={{
           height: height * 1,
+          // justifyContent: 'flex-start',
           width: width * 1,
-          backgroundColor: COLOR.BACKGROUND_COLOR,
+          backgroundColor: 'black',
         }}>
-        <View>
+        <View
+          style={{
+            height: height * 0.2,
+            width: width * 0.95,
+            alignSelf: 'center',
+            borderRadius: 8,
+            borderColor: COLOR.BUTTON,
+            borderWidth: 1,
+            flexDirection: 'row',
+          }}>
           <View
             style={{
-              height: 230,
-              width: '100%',
-              backgroundColor: 'black',
-              marginLeft: 15,
+              justifyContent: 'center',
+              width: width * 0.3,
+              // backgroundColor: 'red',
             }}>
             <Image
-              source={{uri: useData.photoUrl}}
               style={{height: 100, width: 100, borderRadius: 100 / 2}}
+              source={{uri: users.photoUrl}}
             />
-
-            <Text style={{fontSize: 30, color: 'white'}}>
-              {useData.displayName}
+          </View>
+          <View
+            style={{
+              justifyContent: 'center',
+              flexDirection: 'column',
+              width: width * 0.6,
+              // backgroundColor: 'red',
+              alignItems: 'center',
+            }}>
+            <Text style={{color: 'white', fontSize: 20}}>
+              {users.displayName}
             </Text>
-            <Text style={{color: 'white'}}>{useData.bio}</Text>
+            <Text style={{color: 'white', fontSize: 15}}>{users.email}</Text>
             <View
               style={{
-                height: 30,
-                // backgroundColor: COLOR.TABCARD,
-                width: 100,
-                justifyContent: 'center',
-                borderColor: COLOR.BUTTON,
-                borderWidth: 1,
-                borderRadius: 7,
-                marginTop: 20,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                width: width * 0.6,
+                // backgroundColor: 'red',
               }}>
               <TouchableOpacity
+                style={{
+                  // backgroundColor: 'red',
+                  marginTop: 10,
+                  borderWidth: 2,
+                  borderColor: COLOR.BUTTON,
+                  height: 35,
+                  width: 100,
+                  justifyContent: 'center',
+                  borderRadius: 7,
+                }}
                 onPress={() => navigation.navigate('Postprofile')}>
                 <Text
-                  style={{
-                    textAlign: 'center',
-                    fontSize: 16,
-                    // fontWeight: '700',
-                    color: 'white',
-                    fontFamily: 'Comfortaa-bold',
-                  }}>
-                  Profile
+                  style={{color: 'white', fontSize: 15, textAlign: 'center'}}>
+                  Edit Profile
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  // backgroundColor: 'red',
+                  marginTop: 10,
+                  borderWidth: 2,
+                  borderColor: COLOR.BUTTON,
+                  height: 35,
+                  width: 100,
+                  justifyContent: 'center',
+                  borderRadius: 7,
+                }}
+                onPress={() => onSignOut()}>
+                <Text
+                  style={{color: 'white', fontSize: 15, textAlign: 'center'}}>
+                  Sign Out
                 </Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={() => onSignout()}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  fontSize: 16,
-                  // fontWeight: '700',
-                  color: 'white',
-                  fontFamily: 'Comfortaa-bold',
-                }}>
-                signOut
-              </Text>
-            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -140,4 +128,18 @@ const Drawer = ({navigation}) => {
 
 export default Drawer;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    // flex: 1,
+    marginTop: StatusBar.currentHeight || 0,
+  },
+  item: {
+    height: height * 0.7,
+    width: width * 0.95,
+    alignSelf: 'center',
+    backgroundColor: 'black',
+  },
+  title: {
+    fontSize: 22,
+  },
+});
