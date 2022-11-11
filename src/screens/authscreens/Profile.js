@@ -11,6 +11,8 @@ import {
   PermissionsAndroid,
   Alert,
   ActivityIndicator,
+  RefreshControl,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import React, {useState, useEffect} from 'react';
@@ -22,7 +24,7 @@ import storage from '@react-native-firebase/storage';
 import {showAlert, closeAlert} from 'react-native-customisable-alert';
 // import ImagePicker from 'react-native-image-picker';
 
-import {TextInput} from 'react-native-gesture-handler';
+import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
 import {color} from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -35,7 +37,7 @@ const Profile = ({navigation, params}) => {
   const [bio, setBio] = useState('');
   const User = auth().currentUser;
   const [filePath, setFilePath] = useState('');
-
+  const [refreshing, setRefreshing] = useState(false);
   const [userData, setUserData] = useState();
   // const parsedUserData = JSON.stringify(JSON.parse(userData));
   // console.log('User data is after' + userData.displayName);
@@ -50,6 +52,15 @@ const Profile = ({navigation, params}) => {
     uid: auth().currentUser.uid,
   };
   useEffect(() => {
+    setRefreshing(true);
+
+    fetchUsers();
+    setRefreshing(false);
+  }, [refreshing]);
+
+  console.log(User);
+  function fetchUsers(params) {
+    setRefreshing(true);
     firestore()
       .collection('Users')
       .doc(User.uid)
@@ -77,11 +88,8 @@ const Profile = ({navigation, params}) => {
         setPhone(userDetails?.phoneNumber);
         setImage(userDetails?.photoUrl);
       });
-
-    // uploadDetails();
-  }, []);
-
-  console.log(User);
+    setRefreshing(false);
+  }
 
   const onChoose = () => {
     try {
@@ -256,63 +264,74 @@ const Profile = ({navigation, params}) => {
 
   return (
     <SafeAreaView style={{backgroundColor: 'black'}}>
-      <View
-        style={{
-          height: height * 1,
-          justifyContent: 'center',
-          width: width * 1,
-          backgroundColor: 'black',
-        }}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            title="Referesing Data..."
+            tintColor={COLOR.BUTTON}
+            titleColor="#fff"
+            refreshing={refreshing}
+            onRefresh={fetchUsers}
+          />
+        }>
         <View
           style={{
             height: height * 1,
-            marginTop: 70,
-            width: width * 0.95,
-            alignSelf: 'center',
-            // justifyContent: 'center',
+            justifyContent: 'center',
+            width: width * 1,
+            backgroundColor: 'black',
           }}>
-          <View
-            style={{
-              height: height * 0.16,
-              // backgroundColor: 'red',
+          <KeyboardAvoidingView>
+            <View
+              style={{
+                height: height * 1,
+                marginTop: 70,
+                width: width * 0.95,
+                alignSelf: 'center',
+                // justifyContent: 'center',
+              }}>
+              <View
+                style={{
+                  height: height * 0.16,
+                  // backgroundColor: 'red',
 
-              alignSelf: 'center',
-              alignItems: 'center',
-              width: width * 0.9,
-            }}>
-            {filePath ? (
-              <View>
-                <TouchableOpacity onPress={() => onChoose()}>
-                  <Image
-                    onLoad={async () => {
-                      // path to existing file on filesystem
-                      const pathToFile = filePath?.assets[0].uri;
+                  alignSelf: 'center',
+                  alignItems: 'center',
+                  width: width * 0.9,
+                }}>
+                {filePath ? (
+                  <View>
+                    <TouchableOpacity onPress={() => onChoose()}>
+                      <Image
+                        onLoad={async () => {
+                          // path to existing file on filesystem
+                          const pathToFile = filePath?.assets[0].uri;
 
-                      // uploads file
-                      await reference.putFile(pathToFile);
-                    }}
-                    source={{
-                      uri: filePath?.assets[0].uri
-                        ? filePath?.assets[0].uri
-                        : image,
-                    }}
-                    style={styles.imageStyle}
-                  />
-                </TouchableOpacity>
+                          // uploads file
+                          await reference.putFile(pathToFile);
+                        }}
+                        source={{
+                          uri: filePath?.assets[0].uri
+                            ? filePath?.assets[0].uri
+                            : image,
+                        }}
+                        style={styles.imageStyle}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <View>
+                    <TouchableOpacity onPress={() => onChoose()}>
+                      <Image
+                        source={require('../../assets/images/upload.png')}
+                        style={styles.imageStyle}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                )}
               </View>
-            ) : (
-              <View>
-                <TouchableOpacity onPress={() => onChoose()}>
-                  <Image
-                    source={require('../../assets/images/upload.png')}
-                    style={styles.imageStyle}
-                  />
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
 
-          {/* <View>
+              {/* <View>
             <TouchableOpacity
               activeOpacity={0.5}
               style={styles.buttonStyle}
@@ -320,137 +339,139 @@ const Profile = ({navigation, params}) => {
               <Text style={styles.textStyle}>Choose Image</Text>
             </TouchableOpacity>
           </View> */}
-          <View style={{height: height * 0.2}}>
-            <View>
-              <TextInput
-                // editable={userData?.email == '' ? true : false}
-                value={email}
-                placeholder="Enter your corporate email ID"
-                placeholderTextColor={'rgb(122,122,122)'}
-                onChangeText={txt => {
-                  setEmail(txt);
-                }}
-                style={{
-                  height: height * 0.06,
-                  backgroundColor: 'rgb(54,54,54)',
-                  borderRadius: 3,
-                  paddingHorizontal: 10,
-                  color: '#fff',
-                  fontFamily: 'InstagramSans-Medium',
-                }}
-              />
-              <TextInput
-                placeholder="Full Name"
-                // editable={userData?.displayName == '' ? true : false}
-                value={name}
-                placeholderTextColor={'rgb(122,122,122)'}
-                // secureTextEntry={true}
-                onChangeText={txt => {
-                  setName(txt);
-                }}
-                style={{
-                  height: height * 0.06,
-                  backgroundColor: 'rgb(54,54,54)',
-                  borderRadius: 3,
-                  paddingHorizontal: 10,
-                  color: '#fff',
-                  marginTop: 20,
-                  fontFamily: 'InstagramSans-Medium',
-                }}
-              />
-              <TextInput
-                placeholder="Phone Number"
-                placeholderTextColor={'rgb(122,122,122)'}
-                maxLength={10}
-                value={phone}
-                // editable={userData?.phoneNumber == '' ? true : false}
-                // secureTextEntry={true}
-                onChangeText={txt => {
-                  setPhone(txt);
-                }}
-                style={{
-                  height: height * 0.06,
-                  backgroundColor: 'rgb(54,54,54)',
-                  borderRadius: 3,
-                  paddingHorizontal: 10,
-                  color: '#fff',
-                  marginTop: 20,
-                  fontFamily: 'InstagramSans-Medium',
-                }}
-              />
-              <TextInput
-                placeholder="Address"
-                value={address}
-                // defaultValue={userData?.address}
-                // editable={userData?.address == '' ? true : false}
-                placeholderTextColor={'rgb(122,122,122)'}
-                // secureTextEntry={true}
-                onChangeText={txt => {
-                  setAddress(txt);
-                }}
-                style={{
-                  height: height * 0.06,
-                  backgroundColor: 'rgb(54,54,54)',
-                  borderRadius: 3,
-                  paddingHorizontal: 10,
-                  color: '#fff',
-                  marginTop: 20,
-                  fontFamily: 'InstagramSans-Medium',
-                }}
-              />
-              <TextInput
-                placeholder="About me"
-                multiline={true}
-                // editable={userData?.bio == '' ? true : false}
-                value={bio}
-                placeholderTextColor={'rgb(122,122,122)'}
-                // secureTextEntry={true}
-                onChangeText={txt => {
-                  setBio(txt);
-                }}
-                style={{
-                  height: height * 0.1,
-                  backgroundColor: 'rgb(54,54,54)',
-                  borderRadius: 3,
-                  paddingHorizontal: 10,
-                  color: '#fff',
-                  marginTop: 20,
-                  fontFamily: 'InstagramSans-Medium',
-                }}
-              />
-            </View>
+              <View style={{height: height * 0.2}}>
+                <View>
+                  <TextInput
+                    // editable={userData?.email == '' ? true : false}
+                    value={email}
+                    placeholder="Enter your corporate email ID"
+                    placeholderTextColor={'rgb(122,122,122)'}
+                    onChangeText={txt => {
+                      setEmail(txt);
+                    }}
+                    style={{
+                      height: height * 0.06,
+                      backgroundColor: 'rgb(54,54,54)',
+                      borderRadius: 3,
+                      paddingHorizontal: 10,
+                      color: '#fff',
+                      fontFamily: 'InstagramSans-Medium',
+                    }}
+                  />
+                  <TextInput
+                    placeholder="Full Name"
+                    // editable={userData?.displayName == '' ? true : false}
+                    value={name}
+                    placeholderTextColor={'rgb(122,122,122)'}
+                    // secureTextEntry={true}
+                    onChangeText={txt => {
+                      setName(txt);
+                    }}
+                    style={{
+                      height: height * 0.06,
+                      backgroundColor: 'rgb(54,54,54)',
+                      borderRadius: 3,
+                      paddingHorizontal: 10,
+                      color: '#fff',
+                      marginTop: 20,
+                      fontFamily: 'InstagramSans-Medium',
+                    }}
+                  />
+                  <TextInput
+                    placeholder="Phone Number"
+                    placeholderTextColor={'rgb(122,122,122)'}
+                    maxLength={10}
+                    value={phone}
+                    // editable={userData?.phoneNumber == '' ? true : false}
+                    // secureTextEntry={true}
+                    onChangeText={txt => {
+                      setPhone(txt);
+                    }}
+                    style={{
+                      height: height * 0.06,
+                      backgroundColor: 'rgb(54,54,54)',
+                      borderRadius: 3,
+                      paddingHorizontal: 10,
+                      color: '#fff',
+                      marginTop: 20,
+                      fontFamily: 'InstagramSans-Medium',
+                    }}
+                  />
+                  <TextInput
+                    placeholder="Address"
+                    value={address}
+                    // defaultValue={userData?.address}
+                    // editable={userData?.address == '' ? true : false}
+                    placeholderTextColor={'rgb(122,122,122)'}
+                    // secureTextEntry={true}
+                    onChangeText={txt => {
+                      setAddress(txt);
+                    }}
+                    style={{
+                      height: height * 0.06,
+                      backgroundColor: 'rgb(54,54,54)',
+                      borderRadius: 3,
+                      paddingHorizontal: 10,
+                      color: '#fff',
+                      marginTop: 20,
+                      fontFamily: 'InstagramSans-Medium',
+                    }}
+                  />
+                  <TextInput
+                    placeholder="About me"
+                    multiline={true}
+                    // editable={userData?.bio == '' ? true : false}
+                    value={bio}
+                    placeholderTextColor={'rgb(122,122,122)'}
+                    // secureTextEntry={true}
+                    onChangeText={txt => {
+                      setBio(txt);
+                    }}
+                    style={{
+                      height: height * 0.1,
+                      backgroundColor: 'rgb(54,54,54)',
+                      borderRadius: 3,
+                      paddingHorizontal: 10,
+                      color: '#fff',
+                      marginTop: 20,
+                      fontFamily: 'InstagramSans-Medium',
+                    }}
+                  />
+                </View>
 
-            <View>
-              <TouchableOpacity
-                onPress={() => uploadDetails()}
-                style={{
-                  height: height * 0.06,
-                  backgroundColor: 'rgb(28,154,236)',
-                  borderRadius: 3,
-                  justifyContent: 'center',
+                <View>
+                  <TouchableOpacity
+                    onPress={() => uploadDetails()}
+                    style={{
+                      height: height * 0.06,
+                      backgroundColor: 'rgb(28,154,236)',
+                      borderRadius: 3,
+                      justifyContent: 'center',
 
-                  marginTop: 20,
-                }}>
-                <Text
-                  style={{
-                    color: '#fff',
-                    textAlign: 'center',
-                    fontSize: 18,
-                    fontFamily: 'InstagramSans-Medium',
-                  }}>
-                  Upload details
-                </Text>
-              </TouchableOpacity>
-            </View>
+                      marginTop: 20,
+                    }}>
+                    <Text
+                      style={{
+                        color: '#fff',
+                        textAlign: 'center',
+                        fontSize: 18,
+                        fontFamily: 'InstagramSans-Medium',
+                      }}>
+                      Upload details
+                    </Text>
+                  </TouchableOpacity>
+                </View>
 
-            {/* <Button
+                {/* <Button
               style={{marginTop: 20}}
               title="Sign Out"
               onPress={() => onSignout()}
             /> */}
-          </View>
+              </View>
+            </View>
+          </KeyboardAvoidingView>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

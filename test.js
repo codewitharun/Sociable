@@ -1,38 +1,33 @@
-let string = '';
-for (let i = 1; i <= 6; i++) {
-  for (let j = 1; j < i; j++) {
-    if (j !== 2) {
-      string += '*';
-    } else {
-      string += j;
-    }
-  }
-  string += '\n';
-}
-console.log(string);
+// // const users = [
+// //   {firstName: 'Akshay', lastName: 'Khurana', age: 27},
+// //   {firstName: 'Salman', lastName: 'Khan', age: 55},
+// //   {firstName: 'Riya', lastName: 'Rajput', age: 34},
+// //   {firstName: 'Simran', lastName: 'Kapoor', age: 27},
+// // ];
 
-let n = 5;
-let string1 = '';
+// // const newUser = users.reduce((accumulator, currentIteration) => {
+// //   if (currentIteration.age > 27) {
+// //     accumulator.push(
+// //       currentIteration.firstName + ' ' + currentIteration.lastName,
+// //     );
+// //   }
+// //   return accumulator;
+// // }, []);
+// // console.log('answer=', newUser);
 
-for (let i = 1; i <= n; i++) {
-  for (let j = n; j > i; j--) {
-    string1 += ' ';
-  }
-
-  for (let k = 0; k < i * 2 - 1; k++) {
-    string1 += '*';
-  }
-  string1 += '\n';
-}
-
-for (let i = 1; i <= n - 1; i++) {
-  for (let j = 0; j < i; j++) {
-    string1 += ' ';
-  }
-
-  for (let k = (n - i) * 2 - 1; k > 0; k--) {
-    string1 += '*';
-  }
-  string1 += '\n';
-}
-console.log(string1);
+// const users = [
+//   {firstName: 'Akshay', lastName: 'Khurana', age: 27, gender: 'male'},
+//   {firstName: 'Salman', lastName: 'Khan', age: 55, gender: 'male'},
+//   {firstName: 'Riya', lastName: 'Rajput', age: 34, gender: 'female'},
+//   {firstName: 'Simran', lastName: 'Kapoor', age: 27, gender: 'female'},
+// ];
+// const ad= users•filter ((item) => {
+// if (item.firstName=="Salman"return item;
+// item.firstName
+// H)
+// .map((e)
+// => f
+// return { fullName: e.firstName
+// 3):
+// •lastName, age: e.age };
+// console.log(ab);

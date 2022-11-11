@@ -7,6 +7,9 @@ import {
   FlatList,
   StatusBar,
   TouchableOpacity,
+  ScrollView,
+  RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {COLOR, height, width} from '../components/Colors';
@@ -19,11 +22,17 @@ import {getPosts, getUser} from '../../redux/action/firebaseActions';
 
 const Drawer = ({navigation}) => {
   const {users} = useSelector(state => state.fromReducer);
-  console.log('users from drawer screen', users.displayName);
+  console.log('user in drawer screen', users);
+  const [refreshing, setRefreshing] = useState(false);
+  // console.log('users from drawer screen', users.displayName);
   const dispatch = useDispatch();
-  const fetchPosts = () => dispatch(getUser());
+  const fetchUser = () => dispatch(getUser());
   useEffect(() => {
-    fetchPosts();
+    setTimeout(() => {
+      setRefreshing(true);
+      fetchUser();
+      setRefreshing(false);
+    }, 2000);
   }, []);
   const onSignOut = () => {
     userSignout(() => {
@@ -40,48 +49,61 @@ const Drawer = ({navigation}) => {
       <View
         style={{
           height: height * 1,
+          // flex: 1,
           // justifyContent: 'flex-start',
           width: width * 1,
           backgroundColor: 'black',
         }}>
         <View
           style={{
-            height: height * 0.2,
+            height: height * 0.25,
             width: width * 0.95,
             alignSelf: 'center',
-            borderRadius: 8,
-            borderColor: COLOR.BUTTON,
+            borderRadius: 20,
+            // borderColor: COLOR.BUTTON,
             borderWidth: 1,
-            flexDirection: 'row',
+            // flexDirection: 'row',
+            justifyContent: 'center',
           }}>
           <View
             style={{
               justifyContent: 'center',
               width: width * 0.3,
+              // height: height * 0.3,
+              alignSelf: 'center',
               // backgroundColor: 'red',
             }}>
             <Image
-              style={{height: 100, width: 100, borderRadius: 100 / 2}}
-              source={{uri: users.photoUrl}}
+              style={{
+                height: 90,
+                width: 90,
+                borderRadius: 100 / 2,
+                borderColor: COLOR.BACKGROUND_COLOR,
+              }}
+              source={{uri: users?.photoUrl}}
             />
           </View>
           <View
             style={{
               justifyContent: 'center',
               flexDirection: 'column',
+              alignSelf: 'center',
               width: width * 0.6,
               // backgroundColor: 'red',
               alignItems: 'center',
             }}>
-            <Text style={{color: 'white', fontSize: 20}}>
-              {users.displayName}
+            <Text style={{color: 'white', fontSize: 20, marginTop: 10}}>
+              {users?.displayName}
             </Text>
-            <Text style={{color: 'white', fontSize: 15}}>{users.email}</Text>
+            <Text style={{color: 'white', fontSize: 15, marginBottom: 10}}>
+              {users?.email}
+            </Text>
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 width: width * 0.6,
+
                 // backgroundColor: 'red',
               }}>
               <TouchableOpacity
@@ -95,7 +117,7 @@ const Drawer = ({navigation}) => {
                   justifyContent: 'center',
                   borderRadius: 7,
                 }}
-                onPress={() => navigation.navigate('Postprofile')}>
+                onPress={() => navigation.navigate('Profile')}>
                 <Text
                   style={{color: 'white', fontSize: 15, textAlign: 'center'}}>
                   Edit Profile
@@ -120,6 +142,164 @@ const Drawer = ({navigation}) => {
               </TouchableOpacity>
             </View>
           </View>
+        </View>
+
+        <View
+          style={{
+            backgroundColor: '#171717',
+
+            height: height * 0.67,
+            // height: 200,
+            width: width * 0.95,
+            alignSelf: 'center',
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+            marginTop: 20,
+          }}>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                title="Referesing Data..."
+                tintColor={COLOR.BUTTON}
+                titleColor="#fff"
+                refreshing={refreshing}
+                onRefresh={console.log('reference')}
+              />
+            }>
+            <View>
+              <View style={{paddingLeft: 10, paddingTop: 20}}>
+                <TouchableOpacity
+                  style={{
+                    flexDirection: 'row',
+                    // justifyContent: 'space-between',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  onPress={() => navigation.navigate('Postprofile')}>
+                  <Icon
+                    name="badge-account-outline"
+                    size={20}
+                    color={'white'}
+                    style={{width: width * 0.1}}
+                  />
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontFamily: 'Comfortaa-Bold',
+                      fontSize: 15,
+                      width: width * 0.75,
+                    }}>
+                    Profile
+                  </Text>
+                  <Icon name="arrow-right-thin" color={'white'} size={20} />
+                </TouchableOpacity>
+              </View>
+              <View style={{paddingLeft: 10, paddingTop: 20}}>
+                <TouchableOpacity
+                  style={{
+                    flexDirection: 'row',
+                    // justifyContent: 'space-between',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Icon
+                    name="account-supervisor-outline"
+                    size={20}
+                    color={'white'}
+                    style={{width: width * 0.1}}
+                  />
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontFamily: 'Comfortaa-Bold',
+                      fontSize: 15,
+                      width: width * 0.75,
+                    }}>
+                    My Friends
+                  </Text>
+                  <Icon name="arrow-right-thin" color={'white'} size={20} />
+                </TouchableOpacity>
+              </View>
+              <View style={{paddingLeft: 10, paddingTop: 20}}>
+                <TouchableOpacity
+                  style={{
+                    flexDirection: 'row',
+                    // justifyContent: 'space-between',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Icon
+                    name="lock-outline"
+                    size={20}
+                    color={'white'}
+                    style={{width: width * 0.1}}
+                  />
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontFamily: 'Comfortaa-Bold',
+                      fontSize: 15,
+                      width: width * 0.75,
+                    }}>
+                    Privacy Policy
+                  </Text>
+                  <Icon name="arrow-right-thin" color={'white'} size={20} />
+                </TouchableOpacity>
+              </View>
+              <View style={{paddingLeft: 10, paddingTop: 20}}>
+                <TouchableOpacity
+                  style={{
+                    flexDirection: 'row',
+                    // justifyContent: 'space-between',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Icon
+                    name="checkbox-intermediate"
+                    size={20}
+                    color={'white'}
+                    style={{width: width * 0.1}}
+                  />
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontFamily: 'Comfortaa-Bold',
+                      fontSize: 15,
+                      width: width * 0.75,
+                    }}>
+                    Term & Conditions
+                  </Text>
+                  <Icon name="arrow-right-thin" color={'white'} size={20} />
+                </TouchableOpacity>
+              </View>
+              <View style={{paddingLeft: 10, paddingTop: 20}}>
+                <TouchableOpacity
+                  style={{
+                    flexDirection: 'row',
+                    // justifyContent: 'space-between',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Icon
+                    name="application-settings"
+                    size={20}
+                    color={'white'}
+                    style={{width: width * 0.1}}
+                  />
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontFamily: 'Comfortaa-Bold',
+                      fontSize: 15,
+                      width: width * 0.75,
+                    }}>
+                    Settings
+                  </Text>
+                  <Icon name="arrow-right-thin" color={'white'} size={20} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
         </View>
       </View>
     </SafeAreaView>

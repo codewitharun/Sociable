@@ -7,7 +7,7 @@ import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
 import {GET_USER, GET_POSTS, LOGOUT_USER} from '../type/type';
-import {useState} from 'react';
+
 export const getPosts = () => {
   try {
     return async dispatch => {
@@ -16,7 +16,7 @@ export const getPosts = () => {
         .get()
         .then(querySnapshot => {
           let temp = [];
-          console.log('Total users: ', querySnapshot.size);
+          console.log('Total Post: ', querySnapshot.size);
           querySnapshot.forEach(documentSnapshot => {
             let userDetails = {};
 
@@ -71,7 +71,11 @@ export const getUser = () => {
         console.log('no data in async storage', error);
       }
     };
-  } catch {}
+  } catch (error) {
+    console.log(
+      'Error while getting user data from firestore refer to redux action',
+    );
+  }
 };
 
 export const loginUser = (user, onsucess) => {

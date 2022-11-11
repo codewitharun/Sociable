@@ -7,9 +7,10 @@ import {
   FlatList,
   StatusBar,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {height, width} from '../components/Colors';
+import {COLOR, height, width} from '../components/Colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -19,19 +20,22 @@ import {getPosts, getUser} from '../../redux/action/firebaseActions';
 
 const Dashboard = ({navigation}) => {
   const [DATA, setDATA] = useState([]);
-  {
-    DATA && console.log('dasdsajfkhfjkhfkj', DATA);
-  }
+  // {
+  //   DATA && console.log('dasdsajfkhfjkhfkj', DATA);
+  // }
 
   const [useData, setUserData] = useState('');
   const [liked, setLiked] = useState(false);
-
+  const [refreshing, setRefreshing] = useState(false);
   const {posts} = useSelector(state => state.fromReducer);
+
   const dispatch = useDispatch();
   const fetchPosts = () => dispatch(getPosts());
   useEffect(() => {
+    setRefreshing(true);
     fetchPosts();
-  }, []);
+    setRefreshing(false);
+  }, [refreshing]);
   const Item = ({title, url, thumbnailUrl, username, email, postId}) => (
     <View style={styles.item}>
       <View
@@ -130,8 +134,8 @@ const Dashboard = ({navigation}) => {
   const renderItem = ({item}) => (
     <Item
       title={item.caption}
-      url={item.url}
-      thumbnailUrl={item.thumbnailUrl}
+      url={item.photoUrl}
+      thumbnailUrl={item.userPhoto}
       username={item.name}
       email={item.email}
       postId={item.id}
@@ -212,6 +216,15 @@ const Dashboard = ({navigation}) => {
             data={posts}
             renderItem={renderItem}
             keyExtractor={item => item.id}
+            refreshControl={
+              <RefreshControl
+                title="Referesing Data..."
+                tintColor={COLOR.BUTTON}
+                titleColor="#fff"
+                refreshing={refreshing}
+                onRefresh={fetchPosts}
+              />
+            }
           />
         </View>
       </View>

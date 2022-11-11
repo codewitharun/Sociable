@@ -1,4 +1,10 @@
-import {GET_POSTS, GET_USER, LOGOUT_USER, CURRENT_USER} from '../type/type';
+import {
+  GET_POSTS,
+  GET_USER,
+  LOGOUT_USER,
+  CURRENT_USER,
+  POST_USER,
+} from '../type/type';
 
 const initialState = {
   posts: [],
@@ -6,6 +12,8 @@ const initialState = {
   users: [],
   logout: [],
   currentUser: [],
+  postUser: [],
+  post: [653],
 };
 function fromReducer(state = initialState, action) {
   switch (action.type) {
@@ -19,6 +27,8 @@ function fromReducer(state = initialState, action) {
       return {...state, currentUser: action.payload};
     case LOGOUT_USER:
       return {...state, logout: action.payload};
+    case POST_USER:
+      return {...state, postUser: action.payload};
 
     default:
       return state;

@@ -19,33 +19,28 @@ import asyncStorage from '@react-native-async-storage/async-storage';
 
 import {Afterauth} from './routes/routes';
 const Splash = ({navigation}) => {
-  // console.log('Splash data =====>', route);
-  const [isVisible, setIsVisible] = useState(false);
-
-  // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState('');
   const [fuser, setFuser] = useState('');
   const [token, setToken] = useState();
-  console.log('firebase user changed', fuser);
-  // Handle user state changes
   async function onAuthStateChanged(user) {
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
-        console.log('user from  splash screen', user); // It shows the Firebase user
+        // console.log('user from  splash screen', user); // It shows the Firebase user
         asyncStorage.setItem('userid', user.uid);
-        console.log(firebase.auth().user); // It is still undefined
+        // console.log(firebase.auth().user); // It is still undefined
       }
     });
     // console.log('User state changed', user);
     setUser(user);
+    if (initializing) {
+      setInitializing(false);
 
-    const fcmToken = await messaging().getToken();
-    setToken(fcmToken);
-    console.log('Device FcmToken: ========>>>>>', fcmToken);
-    if (initializing);
+      // const fcmToken = await messaging().getToken();
+      // setToken(fcmToken);
 
-    setInitializing(false);
+      // console.log('Device FcmToken: ========>>>>>', fcmToken);
+    }
   }
 
   useEffect(() => {
@@ -53,16 +48,27 @@ const Splash = ({navigation}) => {
       const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
 
       return subscriber;
-    }, 3000);
+    }, 2000);
   }, []);
 
   if (initializing)
     return (
-      <ActivityIndicator
-        color={'red'}
-        size={40}
-        style={{height: height * 1, justifyContent: 'center'}}
-      />
+      <View
+        style={{
+          backgroundColor: 'black',
+          height: height * 1,
+          width: width * 1,
+          justifyContent: 'center',
+        }}>
+        <ActivityIndicator
+          color={COLOR.BUTTON}
+          size={40}
+          style={{justifyContent: 'center'}}
+        />
+        <Text style={{textAlign: 'center', color: COLOR.WTEXT}}>
+          Loading please Wait ...
+        </Text>
+      </View>
     );
 
   if (!user) {

@@ -103,24 +103,20 @@ const Upload = ({navigation, params}) => {
   async function uploadDetails() {
     try {
       const urrl = await storage().ref(ImageName).getDownloadURL();
-      try {
-        setImage(urrl);
-        console.log('url link get after image upload', urrl);
+      setImage(urrl);
+      console.log('url link get after Post upload ', urrl);
+      setTimeout(async () => {
         await firestore()
           .collection('Upload')
           .doc(User.uid)
-          .update(update)
+          .set(update)
           .then(() => {
+            // navigation.navigate('Success');
             console.log('User updated!');
-
-            navigation.navigate('Success');
           });
-      } catch (error) {
-        console.log('error while uploading post', error);
-      }
+      }, 2000);
     } catch (error) {
-      // console.log(' image upload to storage', error);
-      Alert.alert('Please Fill all the fields', error.message);
+      console.log('error while uploading post', error);
     }
   }
   const captureImage = async type => {

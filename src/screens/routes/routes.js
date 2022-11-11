@@ -25,7 +25,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Postprofile from '../main/Postprofile';
 import {COLOR} from '../components/Colors';
 import Upload from '../main/upload';
-
+import Notifications from '../main/notification';
 const Drawer = createDrawerNavigator();
 
 // function CustomDrawerContent(props) {
@@ -139,7 +139,7 @@ export function Afterauth(props) {
       />
       <bottom.Screen
         name="Notifications"
-        component={Profile}
+        component={Notifications}
         options={{
           tabBarIcon: ({}) => (
             <Icon name="bell-badge-outline" color="white" size={30} />
