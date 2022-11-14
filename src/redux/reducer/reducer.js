@@ -9,7 +9,7 @@ import {
 const initialState = {
   posts: [],
   favorites: [],
-  users: [],
+  user: [],
   logout: [],
   currentUser: [],
   postUser: [],
@@ -20,7 +20,7 @@ function fromReducer(state = initialState, action) {
     case GET_POSTS:
       return {...state, posts: action.payload};
     case GET_USER:
-      return {...state, users: action.payload};
+      return {...state, user: action.payload};
     case LOGOUT_USER:
       return {...state, logout: action.payload};
     case CURRENT_USER:

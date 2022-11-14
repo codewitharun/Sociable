@@ -123,12 +123,6 @@ const Profile = ({navigation, params}) => {
   const reference = storage().ref(`${User.uid}/profilePhoto`);
   async function uploadDetails() {
     try {
-      const urrl = await storage()
-        .ref(`${User.uid}/profilePhoto`)
-        .getDownloadURL();
-      setImage(urrl);
-
-      console.log('url link get after image upload', urrl);
       await firestore()
         .collection('Users')
         .doc(User.uid)
@@ -309,6 +303,12 @@ const Profile = ({navigation, params}) => {
 
                           // uploads file
                           await reference.putFile(pathToFile);
+                          const urrl = await storage()
+                            .ref(`${User.uid}/profilePhoto`)
+                            .getDownloadURL();
+                          setImage(urrl);
+
+                          console.log('url link get after image upload', urrl);
                         }}
                         source={{
                           uri: filePath?.assets[0].uri
@@ -323,7 +323,8 @@ const Profile = ({navigation, params}) => {
                   <View>
                     <TouchableOpacity onPress={() => onChoose()}>
                       <Image
-                        source={require('../../assets/images/upload.png')}
+                        // source={require('../../assets/images/upload.png')}
+                        source={{uri: image}}
                         style={styles.imageStyle}
                       />
                     </TouchableOpacity>

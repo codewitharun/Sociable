@@ -8,12 +8,13 @@ import {
   StatusBar,
   TouchableOpacity,
   RefreshControl,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {COLOR, height, width} from '../components/Colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useSelector, useDispatch} from 'react-redux';
-
+import firestore from '@react-native-firebase/firestore';
 import asyncStorage from '@react-native-async-storage/async-storage';
 
 import {getPosts, getUser} from '../../redux/action/firebaseActions';
@@ -66,7 +67,8 @@ const Dashboard = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => deleteSelectedElement(title, postId)}>
             <Icon name="dots-vertical" size={20} color={'white'} />
           </TouchableOpacity>
         </View>
@@ -75,9 +77,11 @@ const Dashboard = ({navigation}) => {
         style={{
           height: height * 0.5,
           alignSelf: 'center',
-          width: width * 0.9,
+          width: width * 0.95,
           // backgroundColor: 'green',
           borderRadius: 20,
+          alignItems: 'center',
+          justifyContent: 'center',
         }}>
         <Image
           source={{uri: url}}
@@ -105,8 +109,9 @@ const Dashboard = ({navigation}) => {
           <TouchableOpacity>
             <Icon name="comment-outline" color={'white'} size={30} />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Icon name="share-outline" color={'white'} size={30} />
+          <TouchableOpacity
+            onPress={() => deleteSelectedElement(title, postId)}>
+            <Icon name="delete-outline" color={'white'} size={30} />
           </TouchableOpacity>
         </View>
       </View>
@@ -159,7 +164,27 @@ const Dashboard = ({navigation}) => {
   useEffect(() => {
     retrieveData();
   }, []);
+  const deleteSelectedElement = (title, postId) => {
+    console.log(title);
+    Alert.alert(
+      'Are You Sure Want To Delete Item = ' + postId,
+      'Select Below Options',
+      [
+        {text: 'Cancel', onPress: () => {}, style: 'cancel'},
+        {
+          text: 'OK',
+          onPress: () => {
+            // // Filter Data
 
+            // const filteredData = Item.filter(item => item.id !== title);
+            // //Updating List Data State with NEW Data.
+            // setTEMP_DATA(filteredData);
+            firestore().collection('Upload').doc(postId).delete();
+          },
+        },
+      ],
+    );
+  };
   return (
     <SafeAreaView style={{backgroundColor: 'black'}}>
       <View

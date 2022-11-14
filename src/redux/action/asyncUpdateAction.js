@@ -1,13 +1,12 @@
 import {POST_USER} from '../type/type';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export async function getASync(value) {
+export const getASync = () => {
   //   console.log('allKey', value);
-  const allKey = await AsyncStorage.setItem('named', value);
 
   try {
     return async dispatch => {
-      const getKey = await AsyncStorage.getItem('named');
+      const getKey = await AsyncStorage.getItem('LoggedUser');
       if (getKey) {
         dispatch({
           type: POST_USER,
@@ -21,4 +20,4 @@ export async function getASync(value) {
   } catch (error) {
     // Add custom logic to handle errors
   }
-}
+};

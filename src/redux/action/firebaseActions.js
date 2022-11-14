@@ -13,6 +13,7 @@ export const getPosts = () => {
     return async dispatch => {
       firestore()
         .collection('Upload')
+        // .doc('Posts')
         .get()
         .then(querySnapshot => {
           let temp = [];
@@ -53,14 +54,14 @@ export const getUser = () => {
         if (userdata !== null) {
           // We have data!!
           const usernow = JSON.parse(userdata);
-          console.log(
-            'value from asyncstoragee  redux before parsed',
-            userdata,
-          );
-          console.log(
-            'value from asyncstoragee redux after parseed ',
-            usernow.uid,
-          );
+          // console.log(
+          //   'value from asyncstoragee  redux before parsed',
+          //   userdata,
+          // );
+          // console.log(
+          //   'value from asyncstoragee redux after parseed ',
+          //   usernow.uid,
+          // );
 
           dispatch({
             type: GET_USER,
@@ -92,8 +93,6 @@ export const loginUser = (user, onsucess) => {
           if (user) {
             try {
               // return async dispatch => {
-              setRefrence(storage().ref(user.uid));
-              console.log('createddddd', reference);
               firestore()
                 .collection('Users')
                 .doc(user.uid)
@@ -101,23 +100,21 @@ export const loginUser = (user, onsucess) => {
                 .then(documentSnapshot => {
                   let userDetails = {};
                   userDetails = documentSnapshot.data();
-
+                  const userData = JSON.stringify(userDetails);
+                  getLoggedUser(userData);
                   console.log(
                     'user details from Login screen: ' +
                       JSON.stringify(userDetails),
                   );
+
                   // dispatch({
                   //   type: CURRENT_USER,
                   //   payload: userDetails,
                   // });
-                  AsyncStorage.setItem(
-                    'LoggedUser',
-                    JSON.stringify(userDetails),
-                  );
                 });
               // };
             } catch (error) {
-              console.log('storage bucket not created', error);
+              console.log('error while loggin', error);
             }
           }
         });
@@ -141,6 +138,15 @@ export const loginUser = (user, onsucess) => {
     console.log(error);
   }
 };
+
+export async function getLoggedUser(userData) {
+  try {
+    const getKey = await AsyncStorage.setItem('LoggedUser', userData);
+    console.log('my call back function is working correctly', userData);
+  } catch (error) {
+    // Add custom logic to handle errors
+  }
+}
 
 export const userSignout = onsucess => {
   try {

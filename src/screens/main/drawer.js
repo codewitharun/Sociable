@@ -21,8 +21,8 @@ import asyncStorage from '@react-native-async-storage/async-storage';
 import {getPosts, getUser} from '../../redux/action/firebaseActions';
 
 const Drawer = ({navigation}) => {
-  const {users} = useSelector(state => state.fromReducer);
-  console.log('user in drawer screen', users);
+  const {user} = useSelector(state => state.fromReducer);
+  console.log('user in drawer screen', user);
   const [refreshing, setRefreshing] = useState(false);
   // console.log('users from drawer screen', users.displayName);
   const dispatch = useDispatch();
@@ -80,7 +80,7 @@ const Drawer = ({navigation}) => {
                 borderRadius: 100 / 2,
                 borderColor: COLOR.BACKGROUND_COLOR,
               }}
-              source={{uri: users?.photoUrl}}
+              source={{uri: user?.photoUrl}}
             />
           </View>
           <View
@@ -93,10 +93,10 @@ const Drawer = ({navigation}) => {
               alignItems: 'center',
             }}>
             <Text style={{color: 'white', fontSize: 20, marginTop: 10}}>
-              {users?.displayName}
+              {user?.displayName}
             </Text>
             <Text style={{color: 'white', fontSize: 15, marginBottom: 10}}>
-              {users?.email}
+              {user?.email}
             </Text>
             <View
               style={{
@@ -163,7 +163,9 @@ const Drawer = ({navigation}) => {
                 tintColor={COLOR.BUTTON}
                 titleColor="#fff"
                 refreshing={refreshing}
-                onRefresh={console.log('reference')}
+                onRefresh={console.log(
+                  'this is just testing for refreshing drawer screen data',
+                )}
               />
             }>
             <View>
@@ -174,7 +176,7 @@ const Drawer = ({navigation}) => {
                     // justifyContent: 'space-between',
                     justifyContent: 'center',
                     alignItems: 'center',
-                  }}
+                  }}   
                   onPress={() => navigation.navigate('Postprofile')}>
                   <Icon
                     name="badge-account-outline"

@@ -5,18 +5,30 @@ import {TextInput} from 'react-native';
 import {Button} from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getASync} from '../../redux/action/asyncUpdateAction';
+
 import {useSelector, useDispatch} from 'react-redux';
+import {getUser} from '../../redux/action/firebaseActions';
 
 const Notifications = ({navigation}) => {
-  const {postUser} = useSelector(state => state.fromReducer);
-  console.log('users in redux async storage', postUser);
-  //   const dispatch = useDispatch();
-  //   const fetchPosts = () => dispatch(getASync());
-  const [names, setNames] = useState('');
+  const {user} = useSelector(state => state.fromReducer);
+  console.log('user in notifications screen', user);
+  const [refreshing, setRefreshing] = useState(false);
+  // console.log('users from drawer screen', users.displayName);
+  const dispatch = useDispatch();
+  const fetchUser = () => dispatch(getUser());
   useEffect(() => {
-    // fetchPosts;
+    setTimeout(() => {
+      setRefreshing(true);
+      fetchUser();
+      apapa();
+      setRefreshing(false);
+    }, 2000);
   }, []);
-
+  function apapa() {
+    // const data = AsyncStorage.getItem('LoggedUser');
+    const data = AsyncStorage.getItem('LoggedUser');
+    console.log('hjksdfhkjdsfddd', data);
+  }
   return (
     <SafeAreaView>
       <View>

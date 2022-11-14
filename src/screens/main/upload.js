@@ -15,7 +15,7 @@ import {
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import React, {useState, useEffect} from 'react';
 import RNFS from 'react-native-fs';
-
+import {useSelector, useDispatch} from 'react-redux';
 import {height, width, COLOR} from '../components/Colors';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
@@ -25,8 +25,23 @@ import asyncStorage from '@react-native-async-storage/async-storage';
 import {TextInput} from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
 import {color} from 'react-native-reanimated';
-
+import {getUser} from '../../redux/action/firebaseActions';
 const Upload = ({navigation, params}) => {
+  const {user} = useSelector(state => state.fromReducer);
+  console.log('user in upload screen', user);
+  const [refreshing, setRefreshing] = useState(false);
+  // console.log('users from drawer screen', users.displayName);
+  const dispatch = useDispatch();
+  const fetchUser = () => dispatch(getUser());
+  useEffect(() => {
+    setTimeout(() => {
+      setRefreshing(true);
+      fetchUser();
+      setUserData(user);
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   // const [name, setName] = useState('');
   const [image, setImage] = useState('');
 
@@ -35,40 +50,26 @@ const Upload = ({navigation, params}) => {
   const [filePath, setFilePath] = useState('');
   const [ImageName, setImagename] = useState('');
   const [userData, setUserData] = useState();
+
   // const parsedUserData = JSON.stringify(JSON.parse(userData));
   // console.log('User data is after' + userData.displayName);
   console.log('IMageNAme ', ImageName);
   const update = {
     photoUrl: image,
-    userPhoto: userData?.photoUrl,
-    email: userData?.email,
+    userPhoto: user?.photoUrl,
+    email: user?.email,
     caption: caption,
-    uid: userData?.uid,
-    name: userData?.displayName,
+    uid: user?.uid,
+    name: user?.displayName,
     like: [],
     comment: [],
   };
-
-  const retrieveData = async () => {
-    try {
-      const userdata = await asyncStorage.getItem('LoggedUser');
-
-      if (userdata !== null) {
-        // We have data!!
-        console.log('value from asyncstoragee parseed', userdata);
-        setUserData(JSON.parse(userdata));
-        console.log(' data in async storageeeeeeee', userData);
-      }
-    } catch (error) {
-      console.log('no data in async storage', error);
-    }
+  const removeItem = id => {
+    let arr = data.filter(function (item) {
+      return item.id !== id;
+    });
+    setData(arr);
   };
-
-  useEffect(() => {
-    retrieveData();
-  }, []);
-
-  console.log(User);
 
   const onChoose = () => {
     try {
@@ -102,19 +103,14 @@ const Upload = ({navigation, params}) => {
   const reference = storage().ref(ImageName);
   async function uploadDetails() {
     try {
-      const urrl = await storage().ref(ImageName).getDownloadURL();
-      setImage(urrl);
-      console.log('url link get after Post upload ', urrl);
-      setTimeout(async () => {
-        await firestore()
-          .collection('Upload')
-          .doc(User.uid)
-          .set(update)
-          .then(() => {
-            // navigation.navigate('Success');
-            console.log('User updated!');
-          });
-      }, 2000);
+      await firestore()
+        .collection('Upload')
+        .doc()
+        .set(update)
+        .then(() => {
+          Alert.alert('Post Uploaded');
+          navigation.navigate('Success');
+        });
     } catch (error) {
       console.log('error while uploading post', error);
     }
@@ -149,12 +145,12 @@ const Upload = ({navigation, params}) => {
           return;
         }
 
-        console.log('base64 -> ', response.base64);
-        console.log('uri -> ', response.uri);
-        console.log('width -> ', response.width);
-        console.log('height -> ', response.height);
-        console.log('fileSize -> ', response.fileSize);
-        console.log('type -> ', response.type);
+        // console.log('base64 -> ', response.base64);
+        // console.log('uri -> ', response.uri);
+        // console.log('width -> ', response.width);
+        // console.log('height -> ', response.height);
+        // console.log('fileSize -> ', response.fileSize);
+        // console.log('type -> ', response.type);
         // console.log('response assets response -> ', response.assets[0].uri);
         setImagename(response.assets[0].fileName);
         setFilePath(response);
@@ -225,17 +221,18 @@ const Upload = ({navigation, params}) => {
         alert(response.errorMessage);
         return;
       }
-      console.log('base64 -> ', response.base64);
-      // console.log('base64 -> ', response?.assets?.width);
-      console.log('uri -> ', response.uri);
-      console.log('width -> ', response.width);
-      console.log('height -> ', response.height);
-      console.log('fileSize -> ', response.fileSize);
-      console.log('type -> ', response.type);
+      // console.log('base64 -> ', response.base64);
+      // // console.log('base64 -> ', response?.assets?.width);
+      // console.log('uri -> ', response.uri);
+      // console.log('width -> ', response.width);
+      // console.log('height -> ', response.height);
+      // console.log('fileSize -> ', response.fileSize);
+      // console.log('type -> ', response.type);
       // console.log('response assets response -> ', response.assets[0].uri);
 
       setFilePath(response);
       setImagename(response.assets[0].fileName);
+      console.log(response);
     });
   };
 
@@ -274,6 +271,13 @@ const Upload = ({navigation, params}) => {
 
                     // uploads file
                     await reference.putFile(pathToFile);
+                    const urrl = await storage()
+                      .ref(ImageName)
+                      .getDownloadURL();
+
+                    console.log('url link get after Post upload ', urrl);
+                    setImage(urrl);
+                    console.log('setImaage', image);
                   }}
                   source={{
                     uri: filePath?.assets[0].uri,
