@@ -4,11 +4,12 @@ import {
   LOGOUT_USER,
   CURRENT_USER,
   POST_USER,
+  GET_CURRENT_UPOSTS,
 } from '../type/type';
 
 const initialState = {
   posts: [],
-  favorites: [],
+  currentUserPosts: [],
   user: [],
   logout: [],
   currentUser: [],
@@ -29,7 +30,8 @@ function fromReducer(state = initialState, action) {
       return {...state, logout: action.payload};
     case POST_USER:
       return {...state, postUser: action.payload};
-
+    case GET_CURRENT_UPOSTS:
+      return {...state, currentUserPosts: action.payload};
     default:
       return state;
   }

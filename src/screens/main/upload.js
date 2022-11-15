@@ -50,7 +50,7 @@ const Upload = ({navigation, params}) => {
   const [filePath, setFilePath] = useState('');
   const [ImageName, setImagename] = useState('');
   const [userData, setUserData] = useState();
-
+  const [date, setDate] = useState();
   // const parsedUserData = JSON.stringify(JSON.parse(userData));
   // console.log('User data is after' + userData.displayName);
   console.log('IMageNAme ', ImageName);
@@ -63,12 +63,18 @@ const Upload = ({navigation, params}) => {
     name: user?.displayName,
     like: [],
     comment: [],
+    createdAt: date,
   };
   const removeItem = id => {
     let arr = data.filter(function (item) {
       return item.id !== id;
     });
-    setData(arr);
+    setDat(arr);
+  };
+
+  const findDate = () => {
+    const date = new Date();
+    setDate(date);
   };
 
   const onChoose = () => {
@@ -277,6 +283,7 @@ const Upload = ({navigation, params}) => {
 
                     console.log('url link get after Post upload ', urrl);
                     setImage(urrl);
+                    findDate();
                     console.log('setImaage', image);
                   }}
                   source={{

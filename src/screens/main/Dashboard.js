@@ -18,26 +18,42 @@ import firestore from '@react-native-firebase/firestore';
 import asyncStorage from '@react-native-async-storage/async-storage';
 
 import {getPosts, getUser} from '../../redux/action/firebaseActions';
+import {clockRunning} from 'react-native-reanimated';
+import {firebase} from '@react-native-firebase/auth';
 
 const Dashboard = ({navigation}) => {
-  const [DATA, setDATA] = useState([]);
-  // {
-  //   DATA && console.log('dasdsajfkhfjkhfkj', DATA);
-  // }
+  const {user} = useSelector(state => state.fromReducer);
 
+  const getCurrentUser = () => dispatch(getUser());
   const [useData, setUserData] = useState('');
   const [liked, setLiked] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const {posts} = useSelector(state => state.fromReducer);
+  // console.log('user in drawer screen', posts);
 
   const dispatch = useDispatch();
   const fetchPosts = () => dispatch(getPosts());
   useEffect(() => {
     setRefreshing(true);
     fetchPosts();
+    getCurrentUser();
     setRefreshing(false);
   }, [refreshing]);
-  const Item = ({title, url, thumbnailUrl, username, email, postId}) => (
+
+  const likeeed = e => {
+    console.log(e);
+  };
+
+  const Item = ({
+    title,
+    url,
+    thumbnailUrl,
+    username,
+    email,
+    postId,
+    like,
+    uid,
+  }) => (
     <View style={styles.item}>
       <View
         style={{
@@ -67,8 +83,7 @@ const Dashboard = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity
-            onPress={() => deleteSelectedElement(title, postId)}>
+          <TouchableOpacity>
             <Icon name="dots-vertical" size={20} color={'white'} />
           </TouchableOpacity>
         </View>
@@ -82,10 +97,15 @@ const Dashboard = ({navigation}) => {
           borderRadius: 20,
           alignItems: 'center',
           justifyContent: 'center',
+          // borderRadius: 20,
         }}>
         <Image
           source={{uri: url}}
-          style={{height: 400, width: 400, resizeMode: 'contain'}}
+          style={{
+            height: 400,
+            width: 400,
+            resizeMode: 'contain',
+          }}
         />
         {/* <Text style={{color: 'white'}}>{title}</Text> */}
       </View>
@@ -98,21 +118,34 @@ const Dashboard = ({navigation}) => {
         <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <TouchableOpacity>
             <Icon
-              name={liked == true ? 'heart' : 'heart-outline'}
-              color={liked == true ? 'red' : 'white'}
+              name={liked == false ? 'heart' : 'heart-outline'}
+              color={liked == false ? 'red' : 'white'}
               size={30}
-              onPress={() => {
-                setLiked(isLiked => !isLiked);
+              // onPress={likeeed}
+              onPress={(title, uid, postId) => {
+                {
+                  liked == true ? console.log('unliked') : console.log('liked');
+                  // likeByUser(title, uid, postId);
+                  const findifLiked = () => {
+                    var myObject = like;
+
+                    Object.keys(myObject).forEach(function (key, index) {
+                      myObject[key] == postId;
+                    });
+
+                    console.log('my object ', myObject[0].like);
+                  };
+                  findifLiked();
+                }
               }}
             />
           </TouchableOpacity>
           <TouchableOpacity>
             <Icon name="comment-outline" color={'white'} size={30} />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => deleteSelectedElement(title, postId)}>
+          {/* <TouchableOpacity>
             <Icon name="delete-outline" color={'white'} size={30} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
 
@@ -145,6 +178,7 @@ const Dashboard = ({navigation}) => {
       email={item.email}
       postId={item.id}
       like={item.like}
+      uid={item.uid}
     />
   );
 
@@ -167,7 +201,7 @@ const Dashboard = ({navigation}) => {
   const deleteSelectedElement = (title, postId) => {
     console.log(title);
     Alert.alert(
-      'Are You Sure Want To Delete Item = ' + postId,
+      'Are You Sure Want To like this post = ' + title,
       'Select Below Options',
       [
         {text: 'Cancel', onPress: () => {}, style: 'cancel'},
@@ -184,6 +218,27 @@ const Dashboard = ({navigation}) => {
         },
       ],
     );
+  };
+
+  const likeByUser = (postId, title, uid) => {
+    const update = {
+      like: liked,
+      postId: uid,
+      userId: user.uid,
+    };
+    console.log(title);
+    setLiked(!liked);
+    if (liked) {
+      firestore()
+        .collection('Upload')
+        .doc(uid)
+        .update({like: firestore.FieldValue.arrayUnion(update)});
+    } else {
+      firestore()
+        .collection('Upload')
+        .doc(uid)
+        .update({like: firestore.FieldValue.arrayRemove(update)});
+    }
   };
   return (
     <SafeAreaView style={{backgroundColor: 'black'}}>

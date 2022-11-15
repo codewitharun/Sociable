@@ -11,6 +11,8 @@ import {
   PermissionsAndroid,
   Alert,
   ActivityIndicator,
+  FlatList,
+  RefreshControl,
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import React, {useState, useEffect} from 'react';
@@ -27,62 +29,41 @@ import firestore from '@react-native-firebase/firestore';
 import {color} from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useSelector, useDispatch} from 'react-redux';
+import {userSignout} from '../../redux/action/firebaseActions';
+import asyncStorage from '@react-native-async-storage/async-storage';
+
+import {
+  getPosts,
+  getUser,
+  getCurrentUsersPosts,
+} from '../../redux/action/firebaseActions';
+
 const Postprofile = ({navigation, params}) => {
-  const [name, setName] = useState('');
-  const [image, setImage] = useState('hejr');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [address, setAddress] = useState('');
-  const [bio, setBio] = useState('');
-  const User = auth().currentUser;
-  const [filePath, setFilePath] = useState('');
+  const [liked, setLiked] = useState(false);
+  const [User, setUser] = useState('');
 
-  const [userData, setUserData] = useState();
-  // const parsedUserData = JSON.stringify(JSON.parse(userData));
-  // console.log('User data is after' + userData.displayName);
-  const update = {
-    photoUrl: image,
-    // displayName: userData?.displayName == '' ? name : userData?.displayName,
-    displayName: name,
-    email: email,
-    phoneNumber: '+91' + phone,
-    address: address,
-    bio: bio,
-    uid: auth().currentUser.uid,
-  };
+  const {user} = useSelector(state => state.fromReducer);
+  const {currentUserPosts} = useSelector(state => state.fromReducer);
+  // console.log('user in PostProfile screen', currentUserPosts);
+  const [refreshing, setRefreshing] = useState(false);
+  // console.log('users from drawer screen', users.displayName);
+  const dispatch = useDispatch();
+  const fetchUser = () => dispatch(getUser());
+  const fetchUserPosts = () => dispatch(getCurrentUsersPosts());
   useEffect(() => {
-    firestore()
-      .collection('Users')
-      .doc(User.uid)
-      .get()
-      .then(documentSnapshot => {
-        /*
-          A DocumentSnapshot belongs to a specific document,
-          With snapshot you can view a documents data,
-          metadata and whether a document actually exists.
-        */
-        let userDetails = {};
-        // Document fields
-        userDetails = documentSnapshot.data();
-        // All the document related data
-        // userDetails['id'] = documentSnapshot.id;
-        console.log(
-          'user details from profile screen: ' + JSON.stringify(userDetails),
-        );
-        AsyncStorage.setItem('LoggedUser', JSON.stringify(userDetails));
-        setUserData(userDetails);
-        setEmail(userDetails?.email);
-        setName(userDetails?.displayName);
-        setAddress(userDetails?.address);
-        setBio(userDetails?.bio);
-        setPhone(userDetails?.phoneNumber?.slice(3));
-        setImage(userDetails?.photoUrl);
-      });
-
-    // uploadDetails();
+    setTimeout(() => {
+      setRefreshing(true);
+      fetchUser();
+      getuserPost();
+      setRefreshing(false);
+    }, 2000);
   }, []);
 
-  console.log(User);
+  const getuserPost = () => {
+    fetchUserPosts();
+  };
+
   const onSignout = () => {
     auth()
       .signOut()
@@ -268,6 +249,142 @@ const Postprofile = ({navigation, params}) => {
       setFilePath(response);
     });
   };
+  const deleteSelectedElement = (title, postId) => {
+    console.log(title);
+    Alert.alert(
+      'Are You Sure Want To Delete Item = ' + postId,
+      'Select Below Options',
+      [
+        {text: 'Cancel', onPress: () => {}, style: 'cancel'},
+        {
+          text: 'OK',
+          onPress: () => {
+            // // Filter Data
+
+            // const filteredData = Item.filter(item => item.id !== title);
+            // //Updating List Data State with NEW Data.
+            // setTEMP_DATA(filteredData);
+            firestore().collection('Upload').doc(postId).delete();
+          },
+        },
+      ],
+    );
+  };
+  const renderItem = ({item}) => (
+    <Item
+      title={item.caption}
+      url={item.photoUrl}
+      thumbnailUrl={item.userPhoto}
+      username={item.name}
+      email={item.email}
+      postId={item.id}
+      like={item.like}
+    />
+  );
+  const Item = ({title, url, thumbnailUrl, username, email, postId}) => (
+    <View style={styles.item}>
+      <View
+        style={{
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          alignItems: 'center',
+          // backgroundColor: 'red',
+          borderColor: 'grey',
+          borderWidth: 0.2,
+          height: height * 0.07,
+        }}>
+        <View>
+          <TouchableOpacity>
+            <Image
+              source={{uri: thumbnailUrl}}
+              style={{height: 50, width: 50, borderRadius: 100 / 2}}
+            />
+          </TouchableOpacity>
+        </View>
+        <View>
+          <TouchableOpacity>
+            <Text
+              style={{color: 'white', marginRight: 190, fontWeight: 'bold'}}>
+              {/* {useData?.displayName} */}
+              {username}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <TouchableOpacity
+            onPress={() => deleteSelectedElement(title, postId)}>
+            <Icon name="dots-vertical" size={20} color={'white'} />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View
+        style={{
+          height: height * 0.5,
+          alignSelf: 'center',
+          width: width * 0.95,
+          // backgroundColor: 'green',
+          borderRadius: 20,
+          alignItems: 'center',
+          justifyContent: 'center',
+          // borderRadius: 20,
+        }}>
+        <Image
+          source={{uri: url}}
+          style={{
+            height: 400,
+            width: 400,
+            resizeMode: 'contain',
+          }}
+        />
+        {/* <Text style={{color: 'white'}}>{title}</Text> */}
+      </View>
+      <View
+        style={{
+          height: height * 0.035,
+          // backgroundColor: 'red',
+          width: width * 0.4,
+        }}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
+          <TouchableOpacity>
+            <Icon
+              name={liked == true ? 'heart' : 'heart-outline'}
+              color={liked == true ? 'red' : 'white'}
+              size={30}
+              onPress={() => {
+                setLiked(isLiked => !isLiked);
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Icon name="comment-outline" color={'white'} size={30} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => deleteSelectedElement(title, postId)}>
+            <Icon name="delete-outline" color={'white'} size={30} />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* username and caption portion starts here  */}
+      <View
+        style={{
+          height: height * 0.05,
+          // backgroundColor: 'red',
+          width: width * 0.9,
+        }}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
+          <TouchableOpacity>
+            <Text style={{color: 'white', fontWeight: 'bold'}}>
+              {email?.split('.com')}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{width: width * 0.5}}>
+            <Text style={{color: 'white'}}>{title}</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
+  );
 
   return (
     <SafeAreaView style={{backgroundColor: 'black'}}>
@@ -292,7 +409,7 @@ const Postprofile = ({navigation, params}) => {
           }}>
           <View style={{justifyContent: 'center'}}>
             <Image
-              source={{uri: image}}
+              source={{uri: user.photoUrl}}
               style={{
                 height: 100,
                 width: 100,
@@ -307,7 +424,7 @@ const Postprofile = ({navigation, params}) => {
                 fontSize: 20,
                 fontFamily: 'Comfortaa-bold',
               }}>
-              {name}
+              {user.displayName}
             </Text>
             <Text
               style={{
@@ -315,7 +432,7 @@ const Postprofile = ({navigation, params}) => {
                 fontSize: 20,
                 fontFamily: 'Comfortaa-bold',
               }}>
-              {email}
+              {user.email}
             </Text>
             <TouchableOpacity
               style={{
@@ -361,6 +478,22 @@ const Postprofile = ({navigation, params}) => {
                 <Icon name="plus" size={50} color={'white'} />
               </View>
             </TouchableOpacity>
+          </View>
+          <View>
+            <FlatList
+              data={currentUserPosts}
+              renderItem={renderItem}
+              keyExtractor={item => item.id}
+              refreshControl={
+                <RefreshControl
+                  title="Referesing Data..."
+                  tintColor={COLOR.BUTTON}
+                  titleColor="#fff"
+                  refreshing={refreshing}
+                  onRefresh={fetchUserPosts}
+                />
+              }
+            />
           </View>
         </View>
       </View>

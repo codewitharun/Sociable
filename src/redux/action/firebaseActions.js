@@ -6,13 +6,20 @@ import {firebase} from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
-import {GET_USER, GET_POSTS, LOGOUT_USER} from '../type/type';
+import {
+  GET_USER,
+  GET_POSTS,
+  LOGOUT_USER,
+  GET_CURRENT_UPOSTS,
+} from '../type/type';
 
 export const getPosts = () => {
   try {
     return async dispatch => {
       firestore()
         .collection('Upload')
+        // .where('uid', '==', '9PuCW7G1nUQUPfdD62yGnvXL2303')
+        .orderBy('createdAt', 'desc')
         // .doc('Posts')
         .get()
         .then(querySnapshot => {
@@ -156,5 +163,46 @@ export const userSignout = onsucess => {
     console.log('User successfully SignOut');
   } catch (err) {
     console.log('error while logging out', err);
+  }
+};
+
+export const getCurrentUsersPosts = () => {
+  const user = auth().currentUser.uid;
+  try {
+    return async dispatch => {
+      firestore()
+        .collection('Upload')
+        .where('uid', '==', user)
+        // .orderBy('createdAt', 'desc')
+        // .doc('Posts')
+        .get()
+        .then(querySnapshot => {
+          let temp = [];
+          console.log('Total Post: ', querySnapshot.size);
+          querySnapshot.forEach(documentSnapshot => {
+            let userDetails = {};
+
+            userDetails = documentSnapshot.data();
+
+            userDetails['id'] = documentSnapshot.id;
+            temp.push(userDetails);
+
+            if (temp) {
+              dispatch({
+                type: GET_CURRENT_UPOSTS,
+                payload: temp,
+              });
+              // console.log('Post data from redux', temp);
+            } else {
+              console.log('Unable to fetch');
+            }
+          });
+        });
+    };
+  } catch (error) {
+    console.log(
+      'Error while getting POST data from firestore refer to redux action',
+      error,
+    );
   }
 };

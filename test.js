@@ -31,3 +31,5 @@
 // 3):
 // •lastName, age: e.age };
 // console.log(ab);
+
+// memoised cube function
