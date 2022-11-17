@@ -42,11 +42,20 @@ const Splash = ({navigation}) => {
       // console.log('Device FcmToken: ========>>>>>', fcmToken);
     }
   }
+  async function requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  }
   useEffect(() => {
     setTimeout(() => {
       const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-
+      requestUserPermission();
       return subscriber;
     }, 2000);
   }, []);

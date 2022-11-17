@@ -33,3 +33,37 @@
 // console.log(ab);
 
 // memoised cube function
+//promise function using setTimeout
+// const awaitTimeout = delay =>
+//   new Promise(resolve => setTimeout(resolve, delay));
+
+// awaitTimeout(300).then(() => console.log('Hi'));
+
+// const f = async () => {
+//   await awaitTimeout(300);
+//   console.log('Hi'); // Logs 'Hi' after 300ms
+// };
+
+// function fetchData() {
+//   const fetchData = fetch('https://restcountries.com/v2/alpha/india')
+//     .then(response => response.json())
+//     .then(data => console.log(data))
+//     .catch(error => {
+//       console.log(error);
+//     });
+// }
+// fetchData();
+
+fetch('https://restcountries.com/v2/namde/india')
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    }
+    throw new Error('Something went wrong');
+  })
+  .then(responseJson => {
+    console.log(responseJson);
+  })
+  .catch(error => {
+    console.log(error);
+  });

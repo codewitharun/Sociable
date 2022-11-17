@@ -26,48 +26,10 @@ import Postprofile from '../main/Postprofile';
 import {COLOR} from '../components/Colors';
 import Upload from '../main/upload';
 import Notifications from '../main/notification';
+import Termandcon from '../main/termandcon';
+import Privacy from '../main/privacy';
 const Drawer = createDrawerNavigator();
 
-// function CustomDrawerContent(props) {
-//   const isDrawerOpen = useDrawerStatus() === 'open';
-//   const [name, setName] = useState();
-//   const [UImage, setUImage] = useState();
-//   //   useEffect(() => {
-//   //     setInterval(() => {
-//   //       {
-//   //         firestore()
-//   //           .collection('Users')
-//   //           .doc('all')
-//   //           .get()
-//   //           .then(documentSnapshot => {
-//   //             /*
-//   //       A DocumentSnapshot belongs to a specific document,
-//   //       With snapshot you can view a documents data,
-//   //       metadata and whether a document actually exists.
-//   //      */
-//   //             let userDetails = {};
-//   //             // Document fields
-//   //             userDetails = documentSnapshot.data();
-//   //             // All the document related data
-//   //             // userDetails['id'] = documentSnapshot.id;
-//   //             console.log('user details: ' + JSON.stringify(userDetails));
-//   //             setName(userDetails?.displayName);
-//   //             setUImage(userDetails?.photoUrl);
-
-//   //             {
-//   //               /* setUserData(userDetails);
-//   //           setEmail(userDetails?.email);
-//   //           setAddress(userDetails?.address);
-//   //           setBio(userDetails?.bio);
-//   //           setPhone(userDetails?.phoneNumber?.slice(3));
-//   //           setImage(userDetails?.photoUrl); */
-//   //             }
-//   //           });
-//   //       }
-//   //     }, 3000);
-//   //   }, []);
-
-//   return (
 //     <DrawerContentScrollView {...props}>
 //       <View style={{height: 200, width: '70%', backgroundColor: 'green'}}>
 //         <Image source={{uri: UImage}} style={{height: 100, width: 100}} />
@@ -181,6 +143,8 @@ function Routes() {
         <Auth.Screen name="Profile" component={Profile} />
         <Auth.Screen name="Upload" component={Upload} />
         <Auth.Screen name="Postprofile" component={Postprofile} />
+        <Auth.Screen name="TandC" component={Termandcon} />
+        <Auth.Screen name="Privacy" component={Privacy} />
       </Auth.Navigator>
     </NavigationContainer>
   );

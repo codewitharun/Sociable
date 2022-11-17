@@ -46,7 +46,7 @@ const Profile = ({navigation, params}) => {
     // displayName: userData?.displayName == '' ? name : userData?.displayName,
     displayName: name,
     email: email,
-    phoneNumber: '+91' + phone,
+    phoneNumber: phone,
     address: address,
     bio: bio,
     uid: auth().currentUser.uid,
@@ -415,6 +415,7 @@ const Profile = ({navigation, params}) => {
                       paddingHorizontal: 10,
                       color: '#fff',
                       marginTop: 20,
+
                       fontFamily: 'InstagramSans-Medium',
                     }}
                   />
@@ -458,7 +459,7 @@ const Profile = ({navigation, params}) => {
                         fontSize: 18,
                         fontFamily: 'InstagramSans-Medium',
                       }}>
-                      Upload details
+                      Update details
                     </Text>
                   </TouchableOpacity>
                 </View>
