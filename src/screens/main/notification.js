@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Alert} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {SafeAreaView} from 'react-native';
 import {TextInput} from 'react-native';
@@ -8,6 +8,7 @@ import {getASync} from '../../redux/action/asyncUpdateAction';
 
 import {useSelector, useDispatch} from 'react-redux';
 import {getUser} from '../../redux/action/firebaseActions';
+import messaging from '@react-native-firebase/messaging';
 
 const Notifications = ({navigation}) => {
   const {user} = useSelector(state => state.fromReducer);
@@ -20,15 +21,18 @@ const Notifications = ({navigation}) => {
     setTimeout(() => {
       setRefreshing(true);
       fetchUser();
-      apapa();
+
       setRefreshing(false);
     }, 2000);
   }, []);
-  function apapa() {
-    // const data = AsyncStorage.getItem('LoggedUser');
-    const data = AsyncStorage.getItem('LoggedUser');
-    console.log('hjksdfhkjdsfddd', data);
-  }
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <SafeAreaView>
       <View>

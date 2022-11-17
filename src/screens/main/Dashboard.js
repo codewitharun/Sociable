@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   RefreshControl,
   Alert,
+  Platform,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {COLOR, height, width} from '../components/Colors';
@@ -39,10 +40,6 @@ const Dashboard = ({navigation}) => {
     getCurrentUser();
     setRefreshing(false);
   }, [refreshing]);
-
-  const likeeed = e => {
-    console.log(e);
-  };
 
   const Item = ({
     title,
@@ -198,29 +195,8 @@ const Dashboard = ({navigation}) => {
   useEffect(() => {
     retrieveData();
   }, []);
-  const deleteSelectedElement = (title, postId) => {
-    console.log(title);
-    Alert.alert(
-      'Are You Sure Want To like this post = ' + title,
-      'Select Below Options',
-      [
-        {text: 'Cancel', onPress: () => {}, style: 'cancel'},
-        {
-          text: 'OK',
-          onPress: () => {
-            // // Filter Data
 
-            // const filteredData = Item.filter(item => item.id !== title);
-            // //Updating List Data State with NEW Data.
-            // setTEMP_DATA(filteredData);
-            firestore().collection('Upload').doc(postId).delete();
-          },
-        },
-      ],
-    );
-  };
-
-  const likeByUser = (postId, title, uid) => {
+  const likebyuser = (postId, title, uid) => {
     const update = {
       like: liked,
       postId: uid,

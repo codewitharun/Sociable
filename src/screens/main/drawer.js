@@ -176,7 +176,7 @@ const Drawer = ({navigation}) => {
                     // justifyContent: 'space-between',
                     justifyContent: 'center',
                     alignItems: 'center',
-                  }}   
+                  }}
                   onPress={() => navigation.navigate('Postprofile')}>
                   <Icon
                     name="badge-account-outline"
@@ -224,6 +224,7 @@ const Drawer = ({navigation}) => {
               </View>
               <View style={{paddingLeft: 10, paddingTop: 20}}>
                 <TouchableOpacity
+                  onPress={() => navigation.navigate('Privacy')}
                   style={{
                     flexDirection: 'row',
                     // justifyContent: 'space-between',
@@ -250,6 +251,7 @@ const Drawer = ({navigation}) => {
               </View>
               <View style={{paddingLeft: 10, paddingTop: 20}}>
                 <TouchableOpacity
+                  onPress={() => navigation.navigate('TandC')}
                   style={{
                     flexDirection: 'row',
                     // justifyContent: 'space-between',

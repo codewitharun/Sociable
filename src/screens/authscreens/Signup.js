@@ -6,7 +6,10 @@ import {
   Dimensions,
   TextInput,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
 import React, {useState, useEffect} from 'react';
 import {firebase} from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
@@ -169,214 +172,153 @@ const Signup = ({navigation}) => {
 
   return (
     <SafeAreaView style={{backgroundColor: 'black'}}>
-      <View
-        style={{
-          height: height * 1,
-          justifyContent: 'center',
-          width: width * 1,
-          backgroundColor: 'black',
-        }}>
-        <View style={{height: '12%', width: '90%', alignSelf: 'center'}}>
-          <Text
-            style={{
-              fontFamily:
-                Platform.OS == 'android'
-                  ? 'Logo-Regular'
-                  : 'FONTSPRINGDEMO-BlueVinylRegular',
-              fontSize: 35,
-              textAlign: 'center',
-              // lineHeight: 29,
-              color: 'white',
-            }}>
-            Sociable
-          </Text>
-        </View>
-        <View style={{alignSelf: 'center', width: width * 0.9}}>
-          <TextInput
-            placeholder="Enter your corporate email ID"
-            placeholderTextColor={'rgb(122,122,122)'}
-            onChangeText={txt => {
-              setEmail(txt), _emailvalidate(txt);
-            }}
-            style={{
-              height: height * 0.06,
-              backgroundColor: 'rgb(54,54,54)',
-              borderRadius: 3,
-              paddingHorizontal: 10,
-              color: '#fff',
-              fontFamily: 'InstagramSans-Medium',
-            }}
-          />
-          {errorEmail != null ? (
-            <View
-              style={{
-                height: height * 0.02,
-                width: width / 1.3,
-                justifyContent: 'center',
-                // backgroundColor: "grey"
-              }}>
-              <Text
-                style={{
-                  color: 'red',
-                  fontSize: 15,
-                }}>
-                {errorEmail}
-              </Text>
-            </View>
-          ) : null}
-          <TextInput
-            placeholder="Full Name"
-            placeholderTextColor={'rgb(122,122,122)'}
-            // secureTextEntry={true}
-            onChangeText={txt => {
-              setUsername(txt), _validateName(txt);
-            }}
-            style={{
-              height: height * 0.06,
-              backgroundColor: 'rgb(54,54,54)',
-              borderRadius: 3,
-              paddingHorizontal: 10,
-              color: '#fff',
-              marginTop: 20,
-              fontFamily: 'InstagramSans-Medium',
-            }}
-          />
-          {ErroUsername != null ? (
-            <View
-              style={{
-                height: height * 0.02,
-                width: width / 1.3,
-                justifyContent: 'center',
-                // backgroundColor: "grey"
-              }}>
-              <Text
-                style={{
-                  color: 'red',
-                  fontSize: 15,
-                }}>
-                {ErroUsername}
-              </Text>
-            </View>
-          ) : null}
-          <TextInput
-            placeholder="Password"
-            placeholderTextColor={'rgb(122,122,122)'}
-            secureTextEntry={true}
-            onChangeText={txt => {
-              setPassword(txt), _passwordvalidate(txt);
-            }}
-            style={{
-              height: height * 0.06,
-              backgroundColor: 'rgb(54,54,54)',
-              borderRadius: 3,
-              paddingHorizontal: 10,
-              color: '#fff',
-              marginTop: 20,
-              fontFamily: 'InstagramSans-Medium',
-            }}
-          />
-          {ErrorPassword != null ? (
-            <View
-              style={{
-                height: height * 0.02,
-                width: width / 1.3,
-                justifyContent: 'center',
-                // backgroundColor: "grey"
-              }}>
-              <Text
-                style={{
-                  color: 'red',
-                  fontSize: 15,
-                }}>
-                {ErrorPassword}
-              </Text>
-            </View>
-          ) : null}
-          {/* <TextInput
-            placeholder="Password"
-            placeholderTextColor={'rgb(122,122,122)'}
-            secureTextEntry={true}
-            onChangeText={txt => {
-              setConfirm(txt), _Confirmpassword(txt);
-            }}
-            style={{
-              height: height * 0.06,
-              backgroundColor: 'rgb(54,54,54)',
-              borderRadius: 3,
-              paddingHorizontal: 10,
-              color: '#fff',
-              marginTop: 20,
-              fontFamily: 'InstagramSans-Medium',
-            }}
-          />
-          {errorConfirm != null ? (
-            <View
-              style={{
-                height: height * 0.02,
-                width: width / 1.3,
-                justifyContent: 'center',
-                // backgroundColor: "grey"
-              }}>
-              <Text
-                style={{
-                  color: 'red',
-                  fontSize: 15,
-                }}>
-                {errorConfirm}
-              </Text>
-            </View>
-          ) : null} */}
-          <TouchableOpacity
-            onPress={() => onSubmit()}
-            style={{
-              height: height * 0.06,
-              backgroundColor: 'rgb(28,154,236)',
-              borderRadius: 3,
-              justifyContent: 'center',
-
-              marginTop: 20,
-            }}>
-            <Text
-              style={{
-                color: '#fff',
-                textAlign: 'center',
-                fontSize: 18,
-                fontFamily: 'InstagramSans-Medium',
-              }}>
-              Sign up
-            </Text>
-          </TouchableOpacity>
-          {/* <TouchableOpacity
-            style={{
-              height: height * 0.06,
-              //   backgroundColor: 'rgb(28,154,236)',
-              borderRadius: 3,
-              justifyContent: 'center',
-
-              marginTop: 10,
-            }}>
-            <Text
-              style={{
-                textAlign: 'center',
-                fontFamily: 'InstagramSans-Medium',
-                color: 'rgb(54,54,54)',
-              }}>
-              Forgot your login details?
-              <Text style={{color: '#fff', fontFamily: 'InstagramSans-Bold'}}>
-                Get Help logging in
-              </Text>
-            </Text>
-          </TouchableOpacity> */}
-        </View>
+      <KeyboardAwareScrollView>
         <View
           style={{
-            flexDirection: 'row',
+            height: height * 1,
             justifyContent: 'center',
             width: width * 1,
-            borderBottomColor: 'rgb(54,54,54)',
-            borderBottomWidth: 0.5,
-          }}></View>
-        <View style={{position: 'absolute', bottom: 50}}>
+            backgroundColor: 'black',
+          }}>
+          <View style={{height: '12%', width: '90%', alignSelf: 'center'}}>
+            <Text
+              style={{
+                fontFamily:
+                  Platform.OS == 'android'
+                    ? 'Logo-Regular'
+                    : 'FONTSPRINGDEMO-BlueVinylRegular',
+                fontSize: 35,
+                textAlign: 'center',
+                // lineHeight: 29,
+                color: 'white',
+              }}>
+              Sociable
+            </Text>
+          </View>
+          <View style={{alignSelf: 'center', width: width * 0.9}}>
+            <TextInput
+              placeholder="Enter your corporate email ID"
+              placeholderTextColor={'rgb(122,122,122)'}
+              onChangeText={txt => {
+                setEmail(txt), _emailvalidate(txt);
+              }}
+              style={{
+                height: height * 0.06,
+                backgroundColor: 'rgb(54,54,54)',
+                borderRadius: 3,
+                paddingHorizontal: 10,
+                color: '#fff',
+                fontFamily: 'InstagramSans-Medium',
+              }}
+            />
+            {errorEmail != null ? (
+              <View
+                style={{
+                  height: height * 0.02,
+                  width: width / 1.3,
+                  justifyContent: 'center',
+                  // backgroundColor: "grey"
+                }}>
+                <Text
+                  style={{
+                    color: 'red',
+                    fontSize: 15,
+                  }}>
+                  {errorEmail}
+                </Text>
+              </View>
+            ) : null}
+            <TextInput
+              placeholder="Full Name"
+              placeholderTextColor={'rgb(122,122,122)'}
+              // secureTextEntry={true}
+              onChangeText={txt => {
+                setUsername(txt), _validateName(txt);
+              }}
+              style={{
+                height: height * 0.06,
+                backgroundColor: 'rgb(54,54,54)',
+                borderRadius: 3,
+                paddingHorizontal: 10,
+                color: '#fff',
+                marginTop: 20,
+                fontFamily: 'InstagramSans-Medium',
+              }}
+            />
+            {ErroUsername != null ? (
+              <View
+                style={{
+                  height: height * 0.02,
+                  width: width / 1.3,
+                  justifyContent: 'center',
+                  // backgroundColor: "grey"
+                }}>
+                <Text
+                  style={{
+                    color: 'red',
+                    fontSize: 15,
+                  }}>
+                  {ErroUsername}
+                </Text>
+              </View>
+            ) : null}
+            <TextInput
+              placeholder="Password"
+              placeholderTextColor={'rgb(122,122,122)'}
+              secureTextEntry={true}
+              onChangeText={txt => {
+                setPassword(txt), _passwordvalidate(txt);
+              }}
+              style={{
+                height: height * 0.06,
+                backgroundColor: 'rgb(54,54,54)',
+                borderRadius: 3,
+                paddingHorizontal: 10,
+                color: '#fff',
+                marginTop: 20,
+                fontFamily: 'InstagramSans-Medium',
+              }}
+            />
+            {ErrorPassword != null ? (
+              <View
+                style={{
+                  height: height * 0.02,
+                  width: width / 1.3,
+                  justifyContent: 'center',
+                  // backgroundColor: "grey"
+                }}>
+                <Text
+                  style={{
+                    color: 'red',
+                    fontSize: 15,
+                  }}>
+                  {ErrorPassword}
+                </Text>
+              </View>
+            ) : null}
+
+            <TouchableOpacity
+              onPress={() => onSubmit()}
+              style={{
+                height: height * 0.06,
+                backgroundColor: 'rgb(28,154,236)',
+                borderRadius: 3,
+                justifyContent: 'center',
+
+                marginTop: 20,
+              }}>
+              <Text
+                style={{
+                  color: '#fff',
+                  textAlign: 'center',
+                  fontSize: 18,
+                  fontFamily: 'InstagramSans-Medium',
+                }}>
+                Sign up
+              </Text>
+            </TouchableOpacity>
+          </View>
+
           <View
             style={{
               flexDirection: 'row',
@@ -385,30 +327,40 @@ const Signup = ({navigation}) => {
               borderBottomColor: 'rgb(54,54,54)',
               borderBottomWidth: 0.5,
             }}></View>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Login')}
-            style={{
-              height: height * 0.06,
-              //   backgroundColor: 'rgb(28,154,236)',
-              borderRadius: 3,
-              justifyContent: 'center',
-
-              marginTop: 10,
-            }}>
-            <Text
+          <View style={{position: 'absolute', bottom: 50}}>
+            <View
               style={{
-                textAlign: 'center',
-                fontFamily: 'InstagramSans-Medium',
-                color: 'rgb(54,54,54)',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                width: width * 1,
+                borderBottomColor: 'rgb(54,54,54)',
+                borderBottomWidth: 0.5,
+              }}></View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Login')}
+              style={{
+                height: height * 0.06,
+                //   backgroundColor: 'rgb(28,154,236)',
+                borderRadius: 3,
+                justifyContent: 'center',
+
+                marginTop: 10,
               }}>
-              Already have an account ?
-              <Text style={{color: '#fff', fontFamily: 'InstagramSans-Bold'}}>
-                Log in.
+              <Text
+                style={{
+                  textAlign: 'center',
+                  fontFamily: 'InstagramSans-Medium',
+                  color: 'rgb(54,54,54)',
+                }}>
+                Already have an account ?
+                <Text style={{color: '#fff', fontFamily: 'InstagramSans-Bold'}}>
+                  Log in.
+                </Text>
               </Text>
-            </Text>
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
