@@ -54,12 +54,12 @@
 // }
 // fetchData();
 
-fetch('https://restcountries.com/v2/namde/india')
+fetch('https://restcountries.com/vremoj/name/india')
   .then(response => {
-    if (response.ok) {
-      return response.json();
+    if (!response.ok) {
+      throw new Error('Something went wrong');
     }
-    throw new Error('Something went wrong');
+    return response.json();
   })
   .then(responseJson => {
     console.log(responseJson);
