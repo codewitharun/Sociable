@@ -1,5 +1,4 @@
 // // const users = [
-// //   {firstName: 'Akshay', lastName: 'Khurana', age: 27},
 // //   {firstName: 'Salman', lastName: 'Khan', age: 55},
 // //   {firstName: 'Riya', lastName: 'Rajput', age: 34},
 // //   {firstName: 'Simran', lastName: 'Kapoor', age: 27},
