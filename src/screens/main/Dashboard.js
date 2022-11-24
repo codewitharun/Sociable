@@ -18,7 +18,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 import asyncStorage from '@react-native-async-storage/async-storage';
 
-import {getPosts, getUser} from '../../redux/action/firebaseActions';
+import {getPosts, getUser, sendLikes} from '../../redux/action/firebaseActions';
 import {clockRunning} from 'react-native-reanimated';
 import {firebase} from '@react-native-firebase/auth';
 
@@ -114,26 +114,19 @@ const Dashboard = ({navigation}) => {
         }}>
         <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <TouchableOpacity>
+            {like.map(cur => {
+              if (cur.postId == postId) {
+                console.log(cur.postId, cur.like);
+                setLiked(cur.like);
+              }
+            })}
             <Icon
-              name={liked == false ? 'heart' : 'heart-outline'}
-              color={liked == false ? 'red' : 'white'}
+              name={liked == true ? 'heart' : 'heart-outline'}
+              color={liked == true ? 'red' : 'white'}
               size={30}
               // onPress={likeeed}
-              onPress={(title, uid, postId) => {
-                {
-                  liked == true ? console.log('unliked') : console.log('liked');
-                  // likeByUser(title, uid, postId);
-                  const findifLiked = () => {
-                    var myObject = like;
-
-                    Object.keys(myObject).forEach(function (key, index) {
-                      myObject[key] == postId;
-                    });
-
-                    console.log('my object ', myObject[0].like);
-                  };
-                  findifLiked();
-                }
+              onPress={() => {
+                likebyuser(postId, like);
               }}
             />
           </TouchableOpacity>
@@ -196,24 +189,27 @@ const Dashboard = ({navigation}) => {
     retrieveData();
   }, []);
 
-  const likebyuser = (postId, title, uid) => {
+  const likebyuser = postId => {
+    // setLiked(true);
     const update = {
       like: liked,
-      postId: uid,
+      postId: postId,
       userId: user.uid,
     };
-    console.log(title);
-    setLiked(!liked);
+    console.log(postId);
+
     if (liked) {
       firestore()
         .collection('Upload')
-        .doc(uid)
+        .doc(postId)
         .update({like: firestore.FieldValue.arrayUnion(update)});
+      console.log('liked', postId);
     } else {
       firestore()
         .collection('Upload')
-        .doc(uid)
+        .doc(postId)
         .update({like: firestore.FieldValue.arrayRemove(update)});
+      console.log('disliked');
     }
   };
   return (

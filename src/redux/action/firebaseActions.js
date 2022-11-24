@@ -10,7 +10,8 @@ import {
   GET_USER,
   GET_POSTS,
   LOGOUT_USER,
-  GET_CURRENT_UPOSTS,
+  GET_CURRENT_POSTS,
+  GET_FRIENDS,
 } from '../type/type';
 
 export const getPosts = () => {
@@ -189,7 +190,7 @@ export const getCurrentUsersPosts = () => {
 
             if (temp) {
               dispatch({
-                type: GET_CURRENT_UPOSTS,
+                type: GET_CURRENT_POSTS,
                 payload: temp,
               });
               // console.log('Post data from redux', temp);
@@ -197,6 +198,63 @@ export const getCurrentUsersPosts = () => {
               console.log('Unable to fetch');
             }
           });
+        });
+    };
+  } catch (error) {
+    console.log(
+      'Error while getting POST data from firestore refer to redux action',
+      error,
+    );
+  }
+};
+
+export const getFriend = () => {
+  try {
+    return async dispatch => {
+      firestore()
+        .collection('Users')
+        .orderBy('displayName', 'asc')
+        .get()
+        .then(querySnapshot => {
+          let tempp = [];
+          console.log('Total Users: ', querySnapshot.size);
+          querySnapshot.forEach(documentSnapshot => {
+            let userDetails = {};
+
+            userDetails = documentSnapshot.data();
+
+            userDetails['id'] = documentSnapshot.id;
+            tempp.push(userDetails);
+
+            if (tempp) {
+              dispatch({
+                type: GET_FRIENDS,
+                payload: tempp,
+              });
+              // console.log('Post data from redux', tempp);
+            } else {
+              console.log('Unable to fetch');
+            }
+          });
+        });
+    };
+  } catch (error) {
+    console.log(
+      'Error while getting POST data from firestore refer to redux action',
+      error,
+    );
+  }
+};
+
+export const sendLikes = () => {
+  try {
+    return async dispatch => {
+      firestore()
+        .collection('Posts')
+        .doc()
+        .update()
+        .then(() => {
+          console.log('Likes stored in database');
         });
     };
   } catch (error) {
