@@ -28,6 +28,7 @@ import Upload from '../main/upload';
 import Notifications from '../main/notification';
 import Termandcon from '../main/termandcon';
 import Privacy from '../main/privacy';
+import Friends from '../main/Friends';
 const Drawer = createDrawerNavigator();
 
 //     <DrawerContentScrollView {...props}>
@@ -85,7 +86,7 @@ export function Afterauth(props) {
       />
       <bottom.Screen
         name="Friends"
-        component={Profile}
+        component={Friends}
         options={{
           tabBarIcon: ({}) => (
             <Icon name="account-group" color="white" size={30} />

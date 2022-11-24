@@ -13,6 +13,7 @@ import {
   ActivityIndicator,
   FlatList,
   RefreshControl,
+  Pressable,
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import React, {useState, useEffect} from 'react';
@@ -32,6 +33,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useSelector, useDispatch} from 'react-redux';
 import {userSignout} from '../../redux/action/firebaseActions';
 import asyncStorage from '@react-native-async-storage/async-storage';
+import Modal from 'react-native-modal';
 
 import {
   getPosts,
@@ -42,7 +44,12 @@ import {
 const Postprofile = ({navigation, params}) => {
   const [liked, setLiked] = useState(false);
   const [User, setUser] = useState('');
+  const [updateCaption, setUpdateCaption] = useState('');
+  const [isModalVisible, setModalVisible] = useState(false);
 
+  const toggleModalVisibility = () => {
+    setModalVisible(!isModalVisible);
+  };
   const {user} = useSelector(state => state.fromReducer);
   const {currentUserPosts} = useSelector(state => state.fromReducer);
   // console.log('user in PostProfile screen', currentUserPosts);
@@ -52,17 +59,11 @@ const Postprofile = ({navigation, params}) => {
   const fetchUser = () => dispatch(getUser());
   const fetchUserPosts = () => dispatch(getCurrentUsersPosts());
   useEffect(() => {
-    setTimeout(() => {
-      setRefreshing(true);
-      fetchUser();
-      getuserPost();
-      setRefreshing(false);
-    }, 2000);
-  }, []);
-
-  const getuserPost = () => {
+    setRefreshing(true);
     fetchUserPosts();
-  };
+    fetchUser();
+    setRefreshing(false);
+  }, []);
 
   const onSignout = () => {
     auth()
@@ -264,12 +265,44 @@ const Postprofile = ({navigation, params}) => {
             // const filteredData = Item.filter(item => item.id !== title);
             // //Updating List Data State with NEW Data.
             // setTEMP_DATA(filteredData);
-            firestore().collection('Upload').doc(postId).delete();
+            firestore()
+              .collection('Upload')
+              .doc(postId)
+              .delete()
+              .then(() => {
+                fetchUserPosts();
+              });
           },
         },
       ],
     );
   };
+
+  const EditSelectedElement = (title, postId) => {
+    // console.log(title);
+    // firestore().collection('Upload').doc(title).update({
+    //   caption: updateCaption,
+    // });
+
+    Alert.alert('Are You Sure Want To Edit this Post = ' + title, 'hello', [
+      {text: 'Cancel', onPress: () => {}, style: 'cancel'},
+      {
+        text: 'OK',
+        onPress: () => {
+          firestore()
+            .collection('Upload')
+            .doc(postId)
+            .update({
+              name: 'Aadu Singh',
+            })
+            .then(() => {
+              fetchUserPosts();
+            });
+        },
+      },
+    ]);
+  };
+
   const renderItem = ({item}) => (
     <Item
       title={item.caption}
@@ -303,16 +336,14 @@ const Postprofile = ({navigation, params}) => {
         </View>
         <View>
           <TouchableOpacity>
-            <Text
-              style={{color: 'white', marginRight: 190, fontWeight: 'bold'}}>
+            <Text style={{color: 'white', fontWeight: 'bold'}}>
               {/* {useData?.displayName} */}
               {username}
             </Text>
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity
-            onPress={() => deleteSelectedElement(title, postId)}>
+          <TouchableOpacity onPress={() => EditSelectedElement(postId)}>
             <Icon name="dots-vertical" size={20} color={'white'} />
           </TouchableOpacity>
         </View>
@@ -380,6 +411,12 @@ const Postprofile = ({navigation, params}) => {
           </TouchableOpacity>
           <TouchableOpacity style={{width: width * 0.5}}>
             <Text style={{color: 'white'}}>{title}</Text>
+            <TextInput
+              placeholder={title}
+              onChangeText={txt => {
+                setUpdateCaption(txt);
+              }}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -550,5 +587,46 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderColor: COLOR.BUTTON,
     borderRadius: 200 / 2,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });
