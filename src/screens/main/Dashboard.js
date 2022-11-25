@@ -17,14 +17,15 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useSelector, useDispatch} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 import asyncStorage from '@react-native-async-storage/async-storage';
-
+import {increment, decrement} from '../../redux/action/action';
 import {getPosts, getUser, sendLikes} from '../../redux/action/firebaseActions';
 import {clockRunning} from 'react-native-reanimated';
 import {firebase} from '@react-native-firebase/auth';
 
 const Dashboard = ({navigation}) => {
   const {user} = useSelector(state => state.fromReducer);
-
+  const {counter} = useSelector(state => state.fromReducer);
+  console.log(counter);
   const getCurrentUser = () => dispatch(getUser());
   const [useData, setUserData] = useState('');
   const [liked, setLiked] = useState(false);
@@ -114,19 +115,22 @@ const Dashboard = ({navigation}) => {
         }}>
         <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <TouchableOpacity>
-            {like.map(cur => {
+            {/* {like.map(cur => {
               if (cur.postId == postId) {
                 console.log(cur.postId, cur.like);
                 setLiked(cur.like);
               }
-            })}
+            })} */}
             <Icon
-              name={liked == true ? 'heart' : 'heart-outline'}
-              color={liked == true ? 'red' : 'white'}
+              name={counter ? 'heart' : 'heart-outline'}
+              color={counter ? 'red' : 'white'}
               size={30}
-              // onPress={likeeed}
+              // onPress={() => }
               onPress={() => {
-                likebyuser(postId, like);
+                {
+                  // console.log(e.timeStamp);
+                  likebyuser(postId, like, uid);
+                }
               }}
             />
           </TouchableOpacity>
@@ -190,27 +194,41 @@ const Dashboard = ({navigation}) => {
   }, []);
 
   const likebyuser = postId => {
-    // setLiked(true);
+    // setLiked(isLiked => !isLiked);
     const update = {
-      like: liked,
+      like: counter == 1 ? true : true,
       postId: postId,
       userId: user.uid,
     };
-    console.log(postId);
-
-    if (liked) {
+    if (counter == 1) {
+      dispatch(decrement());
       firestore()
         .collection('Upload')
         .doc(postId)
         .update({like: firestore.FieldValue.arrayUnion(update)});
-      console.log('liked', postId);
-    } else {
+      console.log('disliked', postId);
+    }
+    if (counter == 0) {
+      dispatch(increment());
       firestore()
         .collection('Upload')
         .doc(postId)
         .update({like: firestore.FieldValue.arrayRemove(update)});
-      console.log('disliked');
+      console.log('liked', postId);
     }
+    // if (liked) {
+    //   firestore()
+    //     .collection('Upload')
+    //     .doc(postId)
+    //     .update({like: firestore.FieldValue.arrayRemove(update)});
+    //   console.log('disliked', postId);
+    // } else {
+    //   firestore()
+    //     .collection('Upload')
+    //     .doc(postId)
+    //     .update({like: firestore.FieldValue.arrayUnion(update)});
+    //   console.log('liked', postId);
+    // }
   };
   return (
     <SafeAreaView style={{backgroundColor: 'black'}}>
