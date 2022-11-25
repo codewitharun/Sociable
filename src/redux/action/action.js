@@ -1,4 +1,10 @@
-import {GET_MOVIES, GET_USER, LOGOUT_USER} from '../type/type';
+import {
+  GET_MOVIES,
+  GET_USER,
+  LOGOUT_USER,
+  INCREMENT,
+  DECREMENT,
+} from '../type/type';
 import auth from '@react-native-firebase/auth';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -28,3 +34,13 @@ export const getMovies = () => {
     // Add custom logic to handle errors
   }
 };
+
+export const increment = () => ({
+  type: INCREMENT,
+  // payload: e,
+});
+
+export const decrement = () => ({
+  type: DECREMENT,
+  // payload: e,
+});
