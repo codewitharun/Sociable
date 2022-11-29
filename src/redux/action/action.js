@@ -35,12 +35,25 @@ export const getMovies = () => {
   }
 };
 
-export const increment = () => ({
-  type: INCREMENT,
-  // payload: e,
-});
+export const increment = (like, dispatch) => {
+  // console.log(like);
+  if (like) {
+    try {
+      const arr = [];
+      arr.push(like);
 
-export const decrement = () => ({
+      dispatch({
+        type: INCREMENT,
+        payload: like,
+      });
+      console.log('dghjkfsdjkf', arr);
+    } catch (error) {
+      // Add custom logic to handle errors
+    }
+  }
+};
+
+export const decrement = dislike => ({
   type: DECREMENT,
-  // payload: e,
+  payload: dislike,
 });
