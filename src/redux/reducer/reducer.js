@@ -19,7 +19,8 @@ const initialState = {
   postUser: [],
   post: [653],
   allUsersOnApp: [],
-  counter: 0,
+  likeButton: [],
+  dislikeButton: 1,
 };
 function fromReducer(state = initialState, action) {
   switch (action.type) {
@@ -42,14 +43,14 @@ function fromReducer(state = initialState, action) {
     case INCREMENT:
       return {
         ...state,
-        // counter: action.payload,
-        counter: state.counter + 1,
+        likeButton: action.payload,
+        // counter: state.likeButton + 1,
       };
     case DECREMENT:
       return {
         ...state,
-        // counter: action.payload.pop(),
-        counter: state.counter - 1,
+        likeButton: action.payload,
+        // counter: state.likeButton - 1,
       };
     default:
       return state;

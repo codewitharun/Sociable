@@ -17,18 +17,19 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useSelector, useDispatch} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 import asyncStorage from '@react-native-async-storage/async-storage';
-import {increment, decrement} from '../../redux/action/action';
 import {getPosts, getUser, sendLikes} from '../../redux/action/firebaseActions';
 import {clockRunning} from 'react-native-reanimated';
 import {firebase} from '@react-native-firebase/auth';
-
+import {decrement, increment} from '../../redux/action/action';
 const Dashboard = ({navigation}) => {
   const {user} = useSelector(state => state.fromReducer);
-  const {counter} = useSelector(state => state.fromReducer);
-  console.log(counter);
+  const {likeButton} = useSelector(state => state.fromReducer);
+  console.log(likeButton);
+
   const getCurrentUser = () => dispatch(getUser());
   const [useData, setUserData] = useState('');
-  const [liked, setLiked] = useState(false);
+
+  const [isLiked, updateLike] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const {posts} = useSelector(state => state.fromReducer);
   // console.log('user in drawer screen', posts);
@@ -122,24 +123,27 @@ const Dashboard = ({navigation}) => {
               }
             })} */}
             <Icon
-              name={counter ? 'heart' : 'heart-outline'}
-              color={counter ? 'red' : 'white'}
+              name={likeButton == postId ? 'thumb-up' : 'thumb-up'}
+              color={likeButton == postId ? COLOR.BUTTON : 'white'}
               size={30}
-              // onPress={() => }
               onPress={() => {
-                {
-                  // console.log(e.timeStamp);
-                  likebyuser(postId, like, uid);
-                }
+                increment(postId, dispatch);
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Icon
+              name={likeButton !== postId ? 'thumb-down' : 'thumb-down'}
+              color={likeButton !== postId ? COLOR.BUTTON : 'white'}
+              size={30}
+              onPress={() => {
+                dispatch(decrement([]));
               }}
             />
           </TouchableOpacity>
           <TouchableOpacity>
             <Icon name="comment-outline" color={'white'} size={30} />
           </TouchableOpacity>
-          {/* <TouchableOpacity>
-            <Icon name="delete-outline" color={'white'} size={30} />
-          </TouchableOpacity> */}
         </View>
       </View>
 
@@ -163,6 +167,7 @@ const Dashboard = ({navigation}) => {
       </View>
     </View>
   );
+
   const renderItem = ({item}) => (
     <Item
       title={item.caption}
@@ -193,43 +198,11 @@ const Dashboard = ({navigation}) => {
     retrieveData();
   }, []);
 
-  const likebyuser = postId => {
-    // setLiked(isLiked => !isLiked);
-    const update = {
-      like: counter == 1 ? true : true,
-      postId: postId,
-      userId: user.uid,
-    };
-    if (counter == 1) {
-      dispatch(decrement());
-      firestore()
-        .collection('Upload')
-        .doc(postId)
-        .update({like: firestore.FieldValue.arrayUnion(update)});
-      console.log('disliked', postId);
-    }
-    if (counter == 0) {
-      dispatch(increment());
-      firestore()
-        .collection('Upload')
-        .doc(postId)
-        .update({like: firestore.FieldValue.arrayRemove(update)});
-      console.log('liked', postId);
-    }
-    // if (liked) {
-    //   firestore()
-    //     .collection('Upload')
-    //     .doc(postId)
-    //     .update({like: firestore.FieldValue.arrayRemove(update)});
-    //   console.log('disliked', postId);
-    // } else {
-    //   firestore()
-    //     .collection('Upload')
-    //     .doc(postId)
-    //     .update({like: firestore.FieldValue.arrayUnion(update)});
-    //   console.log('liked', postId);
-    // }
+  const likebyuser = (postId, uid, post) => {
+    dispatch(INCREMENT);
   };
+  const dislikebyuser = postId => {};
+  // };
   return (
     <SafeAreaView style={{backgroundColor: 'black'}}>
       <View
