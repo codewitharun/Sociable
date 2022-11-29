@@ -35,11 +35,11 @@ export const getMovies = () => {
   }
 };
 
+const arr = [];
 export const increment = (like, dispatch) => {
   // console.log(like);
   if (like) {
     try {
-      const arr = [];
       arr.push(like);
 
       dispatch({
