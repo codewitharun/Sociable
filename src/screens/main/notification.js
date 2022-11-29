@@ -19,20 +19,11 @@ const Notifications = ({navigation}) => {
   const fetchUser = () => dispatch(getUser());
   useEffect(() => {
     setTimeout(() => {
-      notified();
       setRefreshing(true);
       fetchUser();
 
       setRefreshing(false);
     }, 2000);
-  }, []);
-
-  function notified() {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
-
-    return unsubscribe;
   }, []);
 
   return (
