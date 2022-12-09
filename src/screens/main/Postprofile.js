@@ -45,8 +45,14 @@ const Postprofile = ({navigation, params}) => {
   const [liked, setLiked] = useState(false);
   const [User, setUser] = useState('');
   const [updateCaption, setUpdateCaption] = useState('');
+
+  let userefForCaption = '';
+
   const [isModalVisible, setModalVisible] = useState(false);
 
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
   const toggleModalVisibility = () => {
     setModalVisible(!isModalVisible);
   };
@@ -278,29 +284,8 @@ const Postprofile = ({navigation, params}) => {
     );
   };
 
-  const EditSelectedElement = (title, postId) => {
-    // console.log(title);
-    // firestore().collection('Upload').doc(title).update({
-    //   caption: updateCaption,
-    // });
-
-    Alert.alert('Are You Sure Want To Edit this Post = ' + title, 'hello', [
-      {text: 'Cancel', onPress: () => {}, style: 'cancel'},
-      {
-        text: 'OK',
-        onPress: () => {
-          firestore()
-            .collection('Upload')
-            .doc(postId)
-            .update({
-              name: 'Aadu Singh',
-            })
-            .then(() => {
-              fetchUserPosts();
-            });
-        },
-      },
-    ]);
+  const EditSelectedElement = postId => {
+    setModalVisible(!isModalVisible);
   };
 
   const renderItem = ({item}) => (
@@ -342,12 +327,44 @@ const Postprofile = ({navigation, params}) => {
             </Text>
           </TouchableOpacity>
         </View>
+
         <View>
-          <TouchableOpacity onPress={() => EditSelectedElement(postId)}>
+          {/* <Button title="Show modal" onPress={toggleModal} /> */}
+          <TouchableOpacity
+            onPress={() => {
+              EditSelectedElement(postId);
+            }}>
             <Icon name="dots-vertical" size={20} color={'white'} />
           </TouchableOpacity>
         </View>
       </View>
+      {/* // modal starts here */}
+
+      <Modal isVisible={isModalVisible}>
+        <View style={{height: height * 0.5, backgroundColor: 'white'}}>
+          <Text>{postId}</Text>
+          <TextInput
+            style={{color: 'red'}}
+            placeholder={title}
+            placeholderTextColor={'red'}
+            // ref={userefForCaption}
+            onChangeText={txt => {
+              userefForCaption = txt;
+            }}
+          />
+          <Button
+            title="update caption"
+            onPress={() => {
+              firestore()
+                .collection('Upload')
+                .doc(postId)
+                .update({caption: userefForCaption});
+            }}
+          />
+          <Button title="Hide modal" onPress={toggleModal} />
+        </View>
+      </Modal>
+
       <View
         style={{
           height: height * 0.5,
@@ -395,7 +412,6 @@ const Postprofile = ({navigation, params}) => {
           </TouchableOpacity>
         </View>
       </View>
-
       {/* username and caption portion starts here  */}
       <View
         style={{
@@ -411,12 +427,6 @@ const Postprofile = ({navigation, params}) => {
           </TouchableOpacity>
           <TouchableOpacity style={{width: width * 0.5}}>
             <Text style={{color: 'white'}}>{title}</Text>
-            <TextInput
-              placeholder={title}
-              onChangeText={txt => {
-                setUpdateCaption(txt);
-              }}
-            />
           </TouchableOpacity>
         </View>
       </View>

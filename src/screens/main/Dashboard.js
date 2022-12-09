@@ -20,16 +20,27 @@ import asyncStorage from '@react-native-async-storage/async-storage';
 import {getPosts, getUser, sendLikes} from '../../redux/action/firebaseActions';
 import {clockRunning} from 'react-native-reanimated';
 import {firebase} from '@react-native-firebase/auth';
-import {decrement, increment} from '../../redux/action/action';
+import DoubleClick from 'react-native-double-tap';
+import {
+  comments,
+  decrement,
+  getLikes,
+  increment,
+} from '../../redux/action/action';
 const Dashboard = ({navigation}) => {
   const {user} = useSelector(state => state.fromReducer);
   const {likeButton} = useSelector(state => state.fromReducer);
-  console.log(likeButton);
+  const {likesOnpost} = useSelector(state => state.fromReducer);
+  // const myArray = likeButton.split(',');
+  // console.log(likesOnpost);
 
+  const [comment, setComments] = useState('testing comments');
+  const getlike = () => dispatch(getLikes());
   const getCurrentUser = () => dispatch(getUser());
   const [useData, setUserData] = useState('');
+  const [commentsScreen, setCommentScreeen] = useState(false);
+  const [isLiked, updateLike] = useState([]);
 
-  const [isLiked, updateLike] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const {posts} = useSelector(state => state.fromReducer);
   // console.log('user in drawer screen', posts);
@@ -40,6 +51,7 @@ const Dashboard = ({navigation}) => {
     setRefreshing(true);
     fetchPosts();
     getCurrentUser();
+    getlike();
     setRefreshing(false);
   }, [refreshing]);
 
@@ -98,15 +110,24 @@ const Dashboard = ({navigation}) => {
           justifyContent: 'center',
           // borderRadius: 20,
         }}>
-        <Image
-          source={{uri: url}}
-          style={{
-            height: 400,
-            width: 400,
-            resizeMode: 'contain',
+        <DoubleClick
+          // singleTap={() => {
+          //   console.log('single tap');
+          // }}
+          doubleTap={() => {
+            increment(postId, dispatch);
           }}
-        />
-        {/* <Text style={{color: 'white'}}>{title}</Text> */}
+          delay={200}>
+          <Image
+            source={{uri: url}}
+            style={{
+              height: 400,
+              width: 400,
+              resizeMode: 'contain',
+            }}
+          />
+          {/* <Text style={{color: 'white'}}>{title}</Text> */}
+        </DoubleClick>
       </View>
       <View
         style={{
@@ -114,36 +135,37 @@ const Dashboard = ({navigation}) => {
           // backgroundColor: 'red',
           width: width * 0.4,
         }}>
+        {posts.map(element => {
+          // console.log(element);
+        })}
         <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <TouchableOpacity>
-            {/* {like.map(cur => {
-              if (cur.postId == postId) {
-                console.log(cur.postId, cur.like);
-                setLiked(cur.like);
-              }
-            })} */}
             <Icon
-              name={likeButton == postId ? 'thumb-up' : 'thumb-up'}
-              color={likeButton == postId ? COLOR.BUTTON : 'white'}
+              name={likeButton.includes(postId) ? 'heart' : 'heart-outline'}
+              color={likeButton.includes(postId) ? 'red' : 'white'}
               size={30}
               onPress={() => {
                 increment(postId, dispatch);
               }}
             />
           </TouchableOpacity>
+
           <TouchableOpacity>
             <Icon
-              name={likeButton !== postId ? 'thumb-down' : 'thumb-down'}
-              color={likeButton !== postId ? COLOR.BUTTON : 'white'}
+              name="comment-outline"
+              color={'white'}
               size={30}
               onPress={() => {
-                dispatch(decrement([]));
+                comments(postId, dispatch, comment);
+                // setCommentScreeen(true);
               }}
             />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Icon name="comment-outline" color={'white'} size={30} />
-          </TouchableOpacity>
+          {commentsScreen == true ? (
+            <View style={{height: 300, backgroundColor: 'red'}}>
+              <Text style={{color: 'white'}}>HELLO {postId}</Text>
+            </View>
+          ) : null}
         </View>
       </View>
 
@@ -167,6 +189,7 @@ const Dashboard = ({navigation}) => {
       </View>
     </View>
   );
+  const like = [];
 
   const renderItem = ({item}) => (
     <Item
@@ -176,8 +199,9 @@ const Dashboard = ({navigation}) => {
       username={item.name}
       email={item.email}
       postId={item.id}
-      like={item.like}
+      // like={item.like}
       uid={item.uid}
+      like={like}
     />
   );
 
@@ -187,7 +211,7 @@ const Dashboard = ({navigation}) => {
 
       if (userdata !== null) {
         // We have data!!
-        console.log('value from asyncstoragee parseed', userdata);
+        // console.log('value from asyncstoragee parseed', userdata);
         setUserData(JSON.parse(userdata));
       }
     } catch (error) {

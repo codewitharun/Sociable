@@ -245,22 +245,3 @@ export const getFriend = () => {
     );
   }
 };
-
-export const sendLikes = () => {
-  try {
-    return async dispatch => {
-      firestore()
-        .collection('Posts')
-        .doc()
-        .update()
-        .then(() => {
-          console.log('Likes stored in database');
-        });
-    };
-  } catch (error) {
-    console.log(
-      'Error while getting POST data from firestore refer to redux action',
-      error,
-    );
-  }
-};

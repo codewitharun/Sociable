@@ -262,7 +262,7 @@ const Upload = ({navigation, params}) => {
           <View
             style={{
               height: height * 0.47,
-              //   backgroundColor: 'red',
+              // backgroundColor: 'red',
 
               alignSelf: 'center',
               alignItems: 'center',
@@ -344,7 +344,7 @@ const Upload = ({navigation, params}) => {
                     fontSize: 18,
                     fontFamily: 'InstagramSans-Medium',
                   }}>
-                  Upload details
+                  Upload Post
                 </Text>
               </TouchableOpacity>
             </View>
@@ -392,26 +392,31 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   imageStyle: {
-    width: width * 1,
+    width: width * 0.9,
     height: height * 0.3,
     resizeMode: 'contain',
+    margin: 20,
     // backgroundColor: 'red',
     borderWidth: 1,
-    borderStyle: 'solid',
+    borderStyle: 'dashed',
     borderColor: COLOR.BUTTON,
+    borderRadius: 11,
+
     // borderRadius: 200 / 2,
+    padding: 10,
   },
   imageStyle1: {
-    width: width * 1,
+    width: width * 0.9,
     height: height * 0.4,
-    margin: 5,
+
     // backgroundColor: 'red',
     borderWidth: 1,
-    borderStyle: 'solid',
+    borderStyle: 'dashed',
     borderColor: COLOR.BUTTON,
     borderRadius: 10,
     alignSelf: 'center',
     justifyContent: 'center',
     resizeMode: 'contain',
+    padding: 10,
   },
 });

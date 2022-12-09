@@ -1,9 +1,9 @@
 import {
-  GET_MOVIES,
+  GET_LIKES,
   GET_USER,
   LOGOUT_USER,
   INCREMENT,
-  DECREMENT,
+  COMMENT,
 } from '../type/type';
 import auth from '@react-native-firebase/auth';
 import axios from 'axios';
@@ -13,47 +13,131 @@ import {firebase} from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
+import {Alert} from 'react-native';
 
-export const getMovies = () => {
+export const getLikes = () => {
   try {
     return async dispatch => {
-      const res = await axios.get(
-        'https://jsonplaceholder.typicode.com/photos?_limit=10',
-      );
-      if (res.data) {
-        dispatch({
-          type: GET_MOVIES,
-          payload: res.data,
+      firestore()
+        .collection('Upload')
+        .get()
+        .then(querySnapshot => {
+          let temp = [];
+          console.log('Total Post: ', querySnapshot.size);
+          querySnapshot.forEach(documentSnapshot => {
+            let userDetails = {};
+
+            userDetails = documentSnapshot.data();
+
+            userDetails['id'] = documentSnapshot.id;
+            temp.push(userDetails.like);
+            // console.log(userDetails.id);
+
+            if (temp) {
+              dispatch({
+                type: GET_LIKES,
+                payload: temp,
+              });
+              // console.log('Post data from redux', temp);
+            } else {
+              console.log('Unable to fetch');
+            }
+          });
         });
-        console.log(res.data);
-      } else {
-        console.log('Unable to fetch');
-      }
     };
   } catch (error) {
-    // Add custom logic to handle errors
+    console.log('Error while fetching like', error);
   }
 };
 
 const arr = [];
 export const increment = (like, dispatch) => {
+  const update = {
+    like: like,
+    userId: auth().currentUser.uid,
+    postId: like,
+  };
   // console.log(like);
-  if (like) {
+  if (arr.includes(like)) {
+    try {
+      arr.pop(like);
+
+      dispatch({
+        type: INCREMENT,
+        payload: arr,
+      });
+      // console.log('dghjkfsdjkf', arr);
+      firestore()
+        .collection('Upload')
+        .doc(like)
+        .update({like: firestore.FieldValue.arrayRemove(update)});
+    } catch (error) {
+      // Add custom logic to handle errors
+      console.log('Error while dislike', error);
+    }
+  } else {
     try {
       arr.push(like);
 
       dispatch({
         type: INCREMENT,
-        payload: like,
+        payload: arr,
       });
-      console.log('dghjkfsdjkf', arr);
+      firestore()
+        .collection('Upload')
+        .doc(like)
+        .update({like: firestore.FieldValue.arrayUnion(update)});
+      // firestore().collection('Upload').doc(like).update({like: arr});
+      // console.log('dghjkfsdjkf', arr);
     } catch (error) {
       // Add custom logic to handle errors
+      console.log('Error while like', error);
     }
   }
 };
+export const comments = (postId, dispatch, comments) => {
+  const update = {
+    comment: comments,
+    userId: auth().currentUser.uid,
+    postId: postId,
+  };
+  // console.log(like);
+  if (arr.includes(comments)) {
+    try {
+      arr.pop(comments);
 
-export const decrement = dislike => ({
-  type: DECREMENT,
-  payload: dislike,
-});
+      dispatch({
+        type: COMMENT,
+        payload: arr,
+      });
+      // console.log('dghjkfsdjkf', arr);
+      Alert.alert('tried to set comment in ==>', postId);
+      // firestore()
+      //   .collection('Upload')
+      //   .doc(postId)
+      //   .update({comment: firestore.FieldValue.arrayRemove(update)});
+    } catch (error) {
+      // Add custom logic to handle errors
+      console.log('Error while dislike', error);
+    }
+  } else {
+    try {
+      arr.push(comments);
+
+      dispatch({
+        type: COMMENT,
+        payload: arr,
+      });
+      Alert.alert('tried to set comment in ==>', postId);
+      // firestore()
+      //   .collection('Upload')
+      //   .doc(postId)
+      //   .update({comment: firestore.FieldValue.arrayUnion(update)});
+      // firestore().collection('Upload').doc(like).update({like: arr});
+      // console.log('dghjkfsdjkf', arr);
+    } catch (error) {
+      // Add custom logic to handle errors
+      console.log('Error while like', error);
+    }
+  }
+};

@@ -32,5 +32,7 @@
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:459787963543:ios:333c3acf299680d911add2</string>
+	<key>DATABASE_URL</key>
+	<string>https://sociable-c403e-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>

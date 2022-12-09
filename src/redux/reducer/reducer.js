@@ -8,6 +8,7 @@ import {
   GET_FRIENDS,
   INCREMENT,
   DECREMENT,
+  GET_LIKES,
 } from '../type/type';
 
 const initialState = {
@@ -20,7 +21,7 @@ const initialState = {
   post: [653],
   allUsersOnApp: [],
   likeButton: [],
-  dislikeButton: 1,
+  likesOnpost: [],
 };
 function fromReducer(state = initialState, action) {
   switch (action.type) {
@@ -46,11 +47,10 @@ function fromReducer(state = initialState, action) {
         likeButton: action.payload,
         // counter: state.likeButton + 1,
       };
-    case DECREMENT:
+    case GET_LIKES:
       return {
         ...state,
-        likeButton: action.payload,
-        // counter: state.likeButton - 1,
+        likesOnpost: action.payload,
       };
     default:
       return state;

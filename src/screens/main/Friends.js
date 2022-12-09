@@ -9,6 +9,9 @@ import {
   ScrollView,
   Image,
   StatusBar,
+  TextInput,
+  Button,
+  Linking,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
@@ -19,14 +22,20 @@ import {getPosts, getUser, getFriend} from '../../redux/action/firebaseActions';
 import {clockRunning} from 'react-native-reanimated';
 import {firebase} from '@react-native-firebase/auth';
 import {COLOR, height, width} from '../components/Colors';
+import {AlphabetList} from 'react-native-section-alphabet-list';
+import Modal from 'react-native-modal';
 const Friends = ({navigation}) => {
   const [refreshing, setRefreshing] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
   const {allUsersOnApp} = useSelector(state => state.fromReducer);
   // console.log('All users on the app', allUsersOnApp);
 
   const dispatch = useDispatch();
   const fetchFriends = () => dispatch(getFriend());
 
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
   useEffect(() => {
     setRefreshing(true);
     fetchFriends();
@@ -42,8 +51,8 @@ const Friends = ({navigation}) => {
     like,
     uid,
   }) => (
-    <View style={styles.item}>
-      <TouchableOpacity>
+    <View>
+      <TouchableOpacity onPress={toggleModal}>
         <View
           style={{
             justifyContent: 'space-between',
@@ -74,6 +83,48 @@ const Friends = ({navigation}) => {
           </View>
         </View>
       </TouchableOpacity>
+      <View>
+        <Modal isVisible={isModalVisible}>
+          <View
+            style={{
+              height: height * 0.5,
+              backgroundColor: 'black',
+              borderRadius: 10,
+              borderColor: COLOR.BUTTON,
+              borderWidth: 1,
+              // borderStyle: 'dotted',
+            }}>
+            <View style={{padding: 20}}>
+              <TouchableOpacity onPress={toggleModal}>
+                <Icon
+                  name="close"
+                  color={'white'}
+                  size={40}
+                  style={{alignSelf: 'flex-end'}}
+                />
+              </TouchableOpacity>
+              <Image
+                source={{uri: url}}
+                style={{
+                  height: 60,
+                  width: 60,
+                  borderRadius: 100 / 2,
+                  alignSelf: 'center',
+                }}
+              />
+              <Text style={{color: 'white', alignSelf: 'center'}}>
+                {username}
+              </Text>
+              <TouchableOpacity
+                onPress={() => Linking.openURL(`mailto:${email}`)}>
+                <Text style={{color: 'white', alignSelf: 'center'}}>
+                  {email}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </View>
     </View>
   );
   const renderItem = ({item}) => (
@@ -120,15 +171,15 @@ const Friends = ({navigation}) => {
           data={allUsersOnApp}
           renderItem={renderItem}
           keyExtractor={item => item.id}
-          refreshControl={
-            <RefreshControl
-              title="Referesing Users"
-              tintColor={COLOR.BUTTON}
-              titleColor="#fff"
-              refreshing={refreshing}
-              onRefresh={getFriend}
-            />
-          }
+          // refreshControl={
+          //   <RefreshControl
+          //     title="Referesing Users"
+          //     tintColor={COLOR.BUTTON}
+          //     titleColor="#fff"
+          //     refreshing={refreshing}
+          //     onRefresh={getFriend}
+          //   />
+          // }
         />
       </View>
     </SafeAreaView>

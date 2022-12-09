@@ -38,8 +38,8 @@ const Splash = ({navigation}) => {
 
       const fcmToken = await messaging().getToken();
       setToken(fcmToken);
-
-      console.log('Device FcmToken: ========>>>>>', fcmToken);
+      asyncStorage.setItem('fcmtoken', fcmToken);
+      // console.log('Device FcmToken: ========>>>>>', fcmToken);
     }
   }
   async function requestUserPermission() {
