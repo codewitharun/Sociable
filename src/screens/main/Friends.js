@@ -18,7 +18,12 @@ import {useSelector, useDispatch} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 import asyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {getPosts, getUser, getFriend} from '../../redux/action/firebaseActions';
+import {
+  getPosts,
+  getUser,
+  getFriend,
+  userFromFriends,
+} from '../../redux/action/firebaseActions';
 import {clockRunning} from 'react-native-reanimated';
 import {firebase} from '@react-native-firebase/auth';
 import {COLOR, height, width} from '../components/Colors';
@@ -28,12 +33,16 @@ const Friends = ({navigation}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const {allUsersOnApp} = useSelector(state => state.fromReducer);
-  // console.log('All users on the app', allUsersOnApp);
+  const {usersForModal} = useSelector(state => state.fromReducer);
+  console.log('Users for Modal in friends', usersForModal);
 
   const dispatch = useDispatch();
   const fetchFriends = () => dispatch(getFriend());
 
-  const toggleModal = () => {
+  const toggleModal = props => {
+    {
+      props.username && props.email ? dispatch(userFromFriends(props)) : null;
+    }
     setModalVisible(!isModalVisible);
   };
   useEffect(() => {
@@ -52,7 +61,8 @@ const Friends = ({navigation}) => {
     uid,
   }) => (
     <View>
-      <TouchableOpacity onPress={toggleModal}>
+      <TouchableOpacity
+        onPress={() => toggleModal({username, email, uid, url})}>
         <View
           style={{
             justifyContent: 'space-between',
@@ -104,7 +114,7 @@ const Friends = ({navigation}) => {
                 />
               </TouchableOpacity>
               <Image
-                source={{uri: url}}
+                source={{uri: usersForModal.url}}
                 style={{
                   height: 60,
                   width: 60,
@@ -113,13 +123,21 @@ const Friends = ({navigation}) => {
                 }}
               />
               <Text style={{color: 'white', alignSelf: 'center'}}>
-                {username}
+                {usersForModal.username}
               </Text>
               <TouchableOpacity
                 onPress={() => Linking.openURL(`mailto:${email}`)}>
                 <Text style={{color: 'white', alignSelf: 'center'}}>
-                  {email}
+                  {usersForModal.email}
                 </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
+                <Icon
+                  style={{color: 'white', alignSelf: 'center'}}
+                  name="chat-outline"
+                  size={50}
+                  color={'white'}
+                />
               </TouchableOpacity>
             </View>
           </View>

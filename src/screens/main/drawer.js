@@ -22,7 +22,7 @@ import {getPosts, getUser} from '../../redux/action/firebaseActions';
 
 const Drawer = ({navigation}) => {
   const {user} = useSelector(state => state.fromReducer);
-  console.log('user in drawer screen', user);
+  // console.log('user in drawer screen', user);
   const [refreshing, setRefreshing] = useState(false);
   // console.log('users from drawer screen', users.displayName);
   const dispatch = useDispatch();
@@ -198,6 +198,7 @@ const Drawer = ({navigation}) => {
               </View>
               <View style={{paddingLeft: 10, paddingTop: 20}}>
                 <TouchableOpacity
+                  onPress={() => navigation.navigate('Friends')}
                   style={{
                     flexDirection: 'row',
                     // justifyContent: 'space-between',

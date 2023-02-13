@@ -53,12 +53,13 @@ const Profile = ({navigation, params}) => {
   };
   useEffect(() => {
     setRefreshing(true);
-
-    fetchUsers();
+    setTimeout(() => {
+      fetchUsers();
+    }, 3000);
     setRefreshing(false);
   }, [refreshing]);
 
-  console.log(User);
+  // console.log(User);
   function fetchUsers(params) {
     setRefreshing(true);
     firestore()
@@ -76,9 +77,9 @@ const Profile = ({navigation, params}) => {
         userDetails = documentSnapshot.data();
         // All the document related data
         // userDetails['id'] = documentSnapshot.id;
-        console.log(
-          'user details from profile screen: ' + JSON.stringify(userDetails),
-        );
+        // console.log(
+        //   'user details from profile screen: ' + JSON.stringify(userDetails),
+        // );
         AsyncStorage.setItem('LoggedUser', JSON.stringify(userDetails));
         setUserData(userDetails);
         setEmail(userDetails?.email);
@@ -122,6 +123,7 @@ const Profile = ({navigation, params}) => {
   };
   const reference = storage().ref(`${User.uid}/profilePhoto`);
   async function uploadDetails() {
+    console.log(update);
     try {
       await firestore()
         .collection('Users')
@@ -134,7 +136,7 @@ const Profile = ({navigation, params}) => {
         });
     } catch (error) {
       // console.log(' image upload to storage', error);
-      Alert.alert('Please Fill all the fields', error.message);
+      Alert.alert('Please Fill all the fields', error);
     }
   }
   const captureImage = async type => {
@@ -167,12 +169,12 @@ const Profile = ({navigation, params}) => {
           return;
         }
 
-        console.log('base64 -> ', response.base64);
-        console.log('uri -> ', response.uri);
-        console.log('width -> ', response.width);
-        console.log('height -> ', response.height);
-        console.log('fileSize -> ', response.fileSize);
-        console.log('type -> ', response.type);
+        // console.log('base64 -> ', response.base64);
+        // console.log('uri -> ', response.uri);
+        // console.log('width -> ', response.width);
+        // console.log('height -> ', response.height);
+        // console.log('fileSize -> ', response.fileSize);
+        // console.log('type -> ', response.type);
         // console.log('response assets response -> ', response.assets[0].uri);
 
         setFilePath(response);
@@ -243,13 +245,13 @@ const Profile = ({navigation, params}) => {
         alert(response.errorMessage);
         return;
       }
-      console.log('base64 -> ', response.base64);
-      // console.log('base64 -> ', response?.assets?.width);
-      console.log('uri -> ', response.uri);
-      console.log('width -> ', response.width);
-      console.log('height -> ', response.height);
-      console.log('fileSize -> ', response.fileSize);
-      console.log('type -> ', response.type);
+      // console.log('base64 -> ', response.base64);
+      // // console.log('base64 -> ', response?.assets?.width);
+      // console.log('uri -> ', response.uri);
+      // console.log('width -> ', response.width);
+      // console.log('height -> ', response.height);
+      // console.log('fileSize -> ', response.fileSize);
+      // console.log('type -> ', response.type);
       // console.log('response assets response -> ', response.assets[0].uri);
 
       setFilePath(response);

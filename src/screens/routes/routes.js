@@ -29,6 +29,7 @@ import Notifications from '../main/notification';
 import Termandcon from '../main/termandcon';
 import Privacy from '../main/privacy';
 import Friends from '../main/Friends';
+import MyScreen from '../main/ChatScreen';
 const Drawer = createDrawerNavigator();
 
 //     <DrawerContentScrollView {...props}>
@@ -146,6 +147,7 @@ function Routes() {
         <Auth.Screen name="Postprofile" component={Postprofile} />
         <Auth.Screen name="TandC" component={Termandcon} />
         <Auth.Screen name="Privacy" component={Privacy} />
+        <Auth.Screen name="Chat" component={MyScreen} />
       </Auth.Navigator>
     </NavigationContainer>
   );

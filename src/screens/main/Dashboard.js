@@ -267,7 +267,10 @@ const Dashboard = ({navigation}) => {
               </TouchableOpacity>
             </View>
             <View style={{justifyContent: 'center'}}>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Chat');
+                }}>
                 <Icon name="android-messages" size={30} color="white" />
               </TouchableOpacity>
             </View>

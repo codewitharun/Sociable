@@ -9,6 +9,7 @@ import {
   INCREMENT,
   DECREMENT,
   GET_LIKES,
+  SET_MODAL,
 } from '../type/type';
 
 const initialState = {
@@ -22,6 +23,7 @@ const initialState = {
   allUsersOnApp: [],
   likeButton: [],
   likesOnpost: [],
+  usersForModal: [],
 };
 function fromReducer(state = initialState, action) {
   switch (action.type) {
@@ -52,6 +54,8 @@ function fromReducer(state = initialState, action) {
         ...state,
         likesOnpost: action.payload,
       };
+    case SET_MODAL:
+      return {...state, usersForModal: action.payload};
     default:
       return state;
   }

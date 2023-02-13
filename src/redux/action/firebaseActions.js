@@ -12,6 +12,7 @@ import {
   LOGOUT_USER,
   GET_CURRENT_POSTS,
   GET_FRIENDS,
+  SET_MODAL,
 } from '../type/type';
 
 export const getPosts = () => {
@@ -237,6 +238,28 @@ export const getFriend = () => {
             }
           });
         });
+    };
+  } catch (error) {
+    console.log(
+      'Error while getting POST data from firestore refer to redux action',
+      error,
+    );
+  }
+};
+
+export const userFromFriends = props => {
+  // console.log('from redux for modal', props);
+  try {
+    return async dispatch => {
+      if (props.username) {
+        dispatch({
+          type: SET_MODAL,
+          payload: props,
+        });
+        // console.log('Post data from redux', tempp);
+      } else {
+        console.log('No data from friends');
+      }
     };
   } catch (error) {
     console.log(

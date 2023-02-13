@@ -9,7 +9,7 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-
+import messaging from '@react-native-firebase/messaging';
 import React, {useState, useEffect} from 'react';
 import {firebase} from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
@@ -21,7 +21,6 @@ const Signup = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [errorEmail, setErrorEmail] = useState('');
-
   const [ErroUsername, setErrorUsername] = useState('');
   const [confirm, setConfirm] = useState('');
   const [errorConfirm, setErrorConfirmPassword] = useState('');
@@ -29,9 +28,11 @@ const Signup = ({navigation}) => {
   const [ErrorPassword, setErrorPassword] = useState('');
   const [hidepass, setHidePass] = useState(false);
   const [check, setCheck] = useState(false);
+  const [fcmToken, setfcmToken] = useState('');
   const update = {
     displayName: username,
     email: email,
+    token: firestore.FieldValue.arrayUnion(fcmToken),
   };
   async function EmailSign() {
     try {
@@ -76,6 +77,23 @@ const Signup = ({navigation}) => {
     }
   }
 
+  useEffect(() => {
+    // Get the device token
+    messaging()
+      .getToken()
+      .then(token => {
+        return setfcmToken(token);
+      });
+
+    // If using other push notification providers (ie Amazon SNS, etc)
+    // you may need to get the APNs token instead for iOS:
+    // if(Platform.OS == 'ios') { messaging().getAPNSToken().then(token => { return saveTokenToDatabase(token); }); }
+
+    // Listen to whether the token changes
+    return messaging().onTokenRefresh(token => {
+      setfcmToken(token);
+    });
+  }, []);
   async function onGoogleButtonPress() {
     // Get the users ID token
     const {idToken} = await GoogleSignin.signIn();
