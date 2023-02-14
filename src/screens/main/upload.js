@@ -13,6 +13,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import React, {useState, useEffect} from 'react';
 import RNFS from 'react-native-fs';
 import {useSelector, useDispatch} from 'react-redux';
@@ -28,7 +29,7 @@ import {color} from 'react-native-reanimated';
 import {getUser} from '../../redux/action/firebaseActions';
 const Upload = ({navigation, params}) => {
   const {user} = useSelector(state => state.fromReducer);
-  console.log('user in upload screen', user);
+  // console.log('user in upload screen', user);
   const [refreshing, setRefreshing] = useState(false);
   // console.log('users from drawer screen', users.displayName);
   const dispatch = useDispatch();
@@ -65,12 +66,6 @@ const Upload = ({navigation, params}) => {
     comment: [],
     createdAt: date,
   };
-  const removeItem = id => {
-    let arr = data.filter(function (item) {
-      return item.id !== id;
-    });
-    setDat(arr);
-  };
 
   const findDate = () => {
     const date = new Date();
@@ -91,13 +86,24 @@ const Upload = ({navigation, params}) => {
           },
           {
             text: 'Gallary',
-            onPress: () => chooseFile('photo'),
+            onPress: () => cropImageGallary(),
 
             style: 'default',
           },
+          // {
+          //   text: 'Gallary',
+          //   onPress: () => chooseFile('photo'),
+
+          //   style: 'default',
+          // },
+          // {
+          //   text: 'Camera',
+          //   onPress: () => captureImage('photo'),
+          //   style: 'default',
+          // },
           {
             text: 'Camera',
-            onPress: () => captureImage('photo'),
+            onPress: () => cropImage(),
             style: 'default',
           },
         ],
@@ -210,6 +216,7 @@ const Upload = ({navigation, params}) => {
       maxHeight: 550,
       saveToPhotos: false,
       quality: 1,
+      selectionLimit: 0,
     };
     launchImageLibrary(options, response => {
       console.log('Response = ', response);
@@ -241,7 +248,40 @@ const Upload = ({navigation, params}) => {
       console.log(response);
     });
   };
-
+  const cropImage = async () => {
+    await ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+    })
+      .then(image => {
+        setFilePath(image.path);
+        setImagename(image.path);
+        console.log('edit image name', image.filename);
+        console.log('edit image path', image.path);
+        console.log('image response ', image);
+      })
+      .catch(error => {
+        console.log('crop image error', error);
+      });
+  };
+  const cropImageGallary = async () => {
+    await ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    })
+      .then(image => {
+        setFilePath(image.path);
+        setImagename(image.path);
+        console.log('edit image name', image.filename);
+        console.log('edit image path', image.path);
+        console.log('image response', image);
+      })
+      .catch(error => {
+        console.log('Crop image picker error ', error);
+      });
+  };
   return (
     <SafeAreaView style={{backgroundColor: 'black'}}>
       <View
@@ -273,7 +313,7 @@ const Upload = ({navigation, params}) => {
                 <Image
                   onLoad={async () => {
                     // path to existing file on filesystem
-                    const pathToFile = filePath?.assets[0].uri;
+                    const pathToFile = filePath;
 
                     // uploads file
                     await reference.putFile(pathToFile);
@@ -287,7 +327,7 @@ const Upload = ({navigation, params}) => {
                     console.log('setImaage', image);
                   }}
                   source={{
-                    uri: filePath?.assets[0].uri,
+                    uri: filePath,
                   }}
                   style={styles.imageStyle1}
                 />
