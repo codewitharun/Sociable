@@ -1124,6 +1124,15 @@ PODS:
   - RNGoogleSignin (8.0.0):
     - GoogleSignIn (~> 6.2.2)
     - React-Core
+  - RNImageCropPicker (0.38.1):
+    - React-Core
+    - React-RCTImage
+    - RNImageCropPicker/QBImagePickerController (= 0.38.1)
+    - TOCropViewController
+  - RNImageCropPicker/QBImagePickerController (0.38.1):
+    - React-Core
+    - React-RCTImage
+    - TOCropViewController
   - RNReanimated (2.12.0):
     - DoubleConversion
     - FBLazyVector
@@ -1154,6 +1163,7 @@ PODS:
   - RNScreens (3.17.0):
     - React-Core
     - React-RCTImage
+  - TOCropViewController (2.6.1)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -1204,6 +1214,7 @@ DEPENDENCIES:
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
+  - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -1241,6 +1252,7 @@ SPEC REPOS:
     - Libuv-gRPC
     - nanopb
     - PromisesObjC
+    - TOCropViewController
 
 EXTERNAL SOURCES:
   appcenter-analytics:
@@ -1335,6 +1347,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
+  RNImageCropPicker:
+    :path: "../node_modules/react-native-image-crop-picker"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -1420,8 +1434,10 @@ SPEC CHECKSUMS:
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: 4defbd70b2faf3d6761b82fa7880285241762cb0
   RNGoogleSignin: b2179ba653c759b936404a7746fc5302f9de6a5a
+  RNImageCropPicker: 648356d68fbf9911a1016b3e3723885d28373eda
   RNReanimated: c3e58924b9418883b0bde9e78c4c957302f02435
   RNScreens: 0df01424e9e0ed7827200d6ed1087ddd06c493f9
+  TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   Yoga: 0b84a956f7393ef1f37f3bb213c516184e4a689d
 
 PODFILE CHECKSUM: d212e2c2c652a9f01d84dda6b5fc9eb8ec0c9c92
