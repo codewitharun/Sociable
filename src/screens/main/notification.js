@@ -5,7 +5,7 @@ import {firebase} from '@react-native-firebase/database';
 
 const Notifications = ({navigation}) => {
   const [users, setUsers] = useState([]);
-
+  console.log(users);
   useEffect(() => {
     const unsubscribe = firebase
       .database()
@@ -18,7 +18,7 @@ const Notifications = ({navigation}) => {
         //   console.log('user', user);
         // });
 
-        setUsers(snapshot?.val());
+        setUsers(snapshot?._snapshot?.childKeys);
       });
 
     return () => unsubscribe();
@@ -29,18 +29,14 @@ const Notifications = ({navigation}) => {
       style={{
         height: '100%',
         width: '100%',
-        backgroundColor: 'red',
-        justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: 'black',
       }}
       data={users}
       renderItem={({item}) => (
         <TouchableOpacity
           style={styles.userContainer}
-          onPress={() =>
-            navigation.navigate('PreviousChatUser', {userName: item})
-          }>
-          <Text style={styles.userText}>{item.item}</Text>
+          onPress={() => navigation.navigate('Chat', {userName: item})}>
+          <Text style={styles.userText}>{item}</Text>
         </TouchableOpacity>
       )}
       keyExtractor={item => item}
@@ -58,6 +54,7 @@ const styles = StyleSheet.create({
   userText: {
     fontSize: 16,
     color: 'black',
+    backgroundColor: 'red',
   },
 });
 
