@@ -58,7 +58,7 @@ const Profile = ({navigation, params}) => {
       fetchUsers();
     }, 3000);
     setRefreshing(false);
-  }, [refreshing]);
+  }, []);
 
   // console.log(User);
   function fetchUsers(params) {
@@ -107,13 +107,13 @@ const Profile = ({navigation, params}) => {
           },
           {
             text: 'Gallary',
-            onPress: () => chooseFile('photo'),
+            onPress: () => chooseFile(),
 
             style: 'default',
           },
           {
             text: 'Camera',
-            onPress: () => captureImage('photo'),
+            onPress: () => captureImage(),
             style: 'default',
           },
         ],
@@ -134,6 +134,15 @@ const Profile = ({navigation, params}) => {
           console.log('User updated!');
           AsyncStorage.setItem('LoggedUser', JSON.stringify(update));
           navigation.navigate('Success');
+        })
+        .then(() => {
+          ImagePicker.clean()
+            .then(() => {
+              console.log('removed all tmp images from tmp directory');
+            })
+            .catch(e => {
+              alert('error while cleaning tmp images from picker: ' + e);
+            });
         });
     } catch (error) {
       // console.log(' image upload to storage', error);
@@ -149,9 +158,9 @@ const Profile = ({navigation, params}) => {
       .then(image => {
         setFilePath(image.path);
         // setImagename(image.path);
-        console.log('edit image name', image.filename);
-        console.log('edit image path', image.path);
-        console.log('image response', image);
+        // console.log('edit image name', image.filename);
+        // console.log('edit image path', image.path);
+        // console.log('image response', image);
       })
       .catch(error => {
         console.log('Crop image picker error ', error);
@@ -206,9 +215,9 @@ const Profile = ({navigation, params}) => {
       .then(image => {
         setFilePath(image.path);
         // setImagename(image.path);
-        console.log('edit image name', image.filename);
-        console.log('edit image path', image.path);
-        console.log('image response', image);
+        // console.log('edit image name', image.filename);
+        // console.log('edit image path', image.path);
+        // console.log('image response', image);
       })
       .catch(error => {
         console.log('Crop image picker error ', error);

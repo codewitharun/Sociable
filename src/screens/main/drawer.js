@@ -163,9 +163,6 @@ const Drawer = ({navigation}) => {
                 tintColor={COLOR.BUTTON}
                 titleColor="#fff"
                 refreshing={refreshing}
-                onRefresh={console.log(
-                  'this is just testing for refreshing drawer screen data',
-                )}
               />
             }>
             <View>

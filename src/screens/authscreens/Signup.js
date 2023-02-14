@@ -122,11 +122,11 @@ const Signup = ({navigation}) => {
   };
 
   const _emailvalidate = mail => {
-    var emailRegex = /[a-zA-Z]@(yopmail)\.com\b$/g;
+    var emailRegex = /[a-zA-Z0-9]@(yopmail)\.com\b$/g;
     //   /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
     //  /^(?:\d{10}|\w+@\w+\.\w{2,3})$/;
-    if (mail === '') {
+    if (mail === '' || mail === undefined || mail === null) {
       setErrorEmail('*Please enter email.');
     } else if (!emailRegex.test(mail)) {
       setErrorEmail('*Please enter valid email.');
@@ -182,6 +182,7 @@ const Signup = ({navigation}) => {
   };
   const onSubmit = () => {
     if (validate()) {
+      console.log('flag', validate());
       EmailSign();
     } else {
       alert('Mandatory field is required');

@@ -40,9 +40,8 @@ const Friends = ({navigation}) => {
   const fetchFriends = () => dispatch(getFriend());
 
   const toggleModal = props => {
-    {
-      props.username && props.email ? dispatch(userFromFriends(props)) : null;
-    }
+    props?.username && props?.email ? dispatch(userFromFriends(props)) : null;
+
     setModalVisible(!isModalVisible);
   };
   useEffect(() => {
@@ -131,7 +130,10 @@ const Friends = ({navigation}) => {
                   {usersForModal.email}
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
+              <TouchableOpacity
+                onPress={() => {
+                  toggleModal(), navigation.navigate('Chat');
+                }}>
                 <Icon
                   style={{color: 'white', alignSelf: 'center'}}
                   name="chat-outline"

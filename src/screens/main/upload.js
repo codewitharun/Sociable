@@ -54,7 +54,7 @@ const Upload = ({navigation, params}) => {
   const [date, setDate] = useState();
   // const parsedUserData = JSON.stringify(JSON.parse(userData));
   // console.log('User data is after' + userData.displayName);
-  console.log('IMageNAme ', ImageName);
+  // console.log('IMageNAme ', ImageName);
   const update = {
     photoUrl: image,
     userPhoto: user?.photoUrl,
@@ -122,6 +122,15 @@ const Upload = ({navigation, params}) => {
         .then(() => {
           Alert.alert('Post Uploaded');
           navigation.navigate('Success');
+        })
+        .then(() => {
+          ImagePicker.clean()
+            .then(() => {
+              console.log('removed all tmp images from tmp directory');
+            })
+            .catch(e => {
+              alert('error while cleaning tmp images from picker: ' + e);
+            });
         });
     } catch (error) {
       console.log('error while uploading post', error);
