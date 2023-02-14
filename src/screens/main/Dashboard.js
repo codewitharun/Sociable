@@ -121,8 +121,8 @@ const Dashboard = ({navigation}) => {
           <Image
             source={{uri: url}}
             style={{
-              height: 400,
-              width: 400,
+              height: height * 0.5,
+              width: width * 0.95,
               resizeMode: 'contain',
             }}
           />
