@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import {firebase} from '@react-native-firebase/database';
 // import 'firebase/database';
 
-const Notifications = () => {
+const Notifications = ({navigation}) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -11,13 +11,14 @@ const Notifications = () => {
       .database()
       .ref('chatRooms')
       .on('value', snapshot => {
-        // const messages = snapshot.val();
-        snapshot.forEach(element => {
-          // console.log(element);
-          setUsers(element);
-        });
+        // const messages = snapshot?.val();
+        // console.log(snapshot.);
+        // const uniqueUsers = snapshot.forEach(user => {
+        //   user;
+        //   console.log('user', user);
+        // });
 
-        console.log('uniqueUsers', users);
+        setUsers(snapshot?.val());
       });
 
     return () => unsubscribe();
@@ -25,11 +26,21 @@ const Notifications = () => {
 
   return (
     <FlatList
+      style={{
+        height: '100%',
+        width: '100%',
+        backgroundColor: 'red',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
       data={users}
       renderItem={({item}) => (
-        <TouchableOpacity style={styles.userContainer}>
-          {console.log('item', item)}
-          <Text style={styles.userText}>{item}</Text>
+        <TouchableOpacity
+          style={styles.userContainer}
+          onPress={() =>
+            navigation.navigate('PreviousChatUser', {userName: item})
+          }>
+          <Text style={styles.userText}>{item.item}</Text>
         </TouchableOpacity>
       )}
       keyExtractor={item => item}

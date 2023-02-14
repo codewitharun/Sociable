@@ -15,15 +15,8 @@ import {
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import firestore from '@react-native-firebase/firestore';
-import asyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
-  getPosts,
-  getUser,
-  getFriend,
-  userFromFriends,
-} from '../../redux/action/firebaseActions';
+import {getFriend, userFromFriends} from '../../redux/action/firebaseActions';
 import {clockRunning} from 'react-native-reanimated';
 import {firebase} from '@react-native-firebase/auth';
 import {COLOR, height, width} from '../components/Colors';
