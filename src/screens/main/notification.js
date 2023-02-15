@@ -35,7 +35,9 @@ const Notifications = ({navigation}) => {
       renderItem={({item}) => (
         <TouchableOpacity
           style={styles.userContainer}
-          onPress={() => navigation.navigate('Chat', {userName: item})}>
+          onPress={() =>
+            navigation.navigate('Chat', {user2: item, user3: 'Arun'})
+          }>
           <Text style={styles.userText}>{item}</Text>
         </TouchableOpacity>
       )}

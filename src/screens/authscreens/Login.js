@@ -35,7 +35,7 @@ const Login = ({navigation}) => {
 
   // validation starts here
   const _emailvalidate = mail => {
-    var emailRegex = /[a-zA-Z]@(yopmail)\.com\b$/g;
+    var emailRegex = /[a-zA-Z0-9]@(yopmail)\.com\b$/g;
     //   /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
     //  /^(?:\d{10}|\w+@\w+\.\w{2,3})$/;

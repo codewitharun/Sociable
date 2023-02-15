@@ -7,7 +7,8 @@ import auth from '@react-native-firebase/auth';
 import {GiftedChat} from 'react-native-gifted-chat';
 import axios from 'axios';
 import {COLOR, height, width} from '../components/Colors';
-const ChatRoom = ({user1, user2}) => {
+const ChatRoom = ({user1, user2, user3}) => {
+  console.log(user1, user2, user3);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [fcmToken, setfcmToken] = useState('');
