@@ -11,7 +11,7 @@ import React, {useState, useEffect} from 'react';
 import {COLOR, height, width} from './components/Colors';
 
 import messaging from '@react-native-firebase/messaging';
-
+import SplashScreen from 'react-native-splash-screen';
 import Authscreen from './authscreens/Authscreen';
 import auth, {firebase} from '@react-native-firebase/auth';
 import asyncStorage from '@react-native-async-storage/async-storage';
@@ -53,8 +53,10 @@ const Splash = ({navigation}) => {
     }
   }
   useEffect(() => {
+    // SplashScreen.hide();
     setTimeout(() => {
       const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+      // console.log(subscriber);
       requestUserPermission();
       return subscriber;
     }, 2000);

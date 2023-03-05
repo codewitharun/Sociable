@@ -27,6 +27,7 @@ const Friends = ({navigation}) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const {allUsersOnApp} = useSelector(state => state.fromReducer);
   const {usersForModal} = useSelector(state => state.fromReducer);
+  const [searchText, setSearchText] = useState('');
   console.log('Users for Modal in friends', usersForModal);
 
   const dispatch = useDispatch();
@@ -179,9 +180,30 @@ const Friends = ({navigation}) => {
             }}>
             Others in Yopmail
           </Text>
+          <View
+            style={{
+              backgroundColor: 'white',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+              width: width * 1,
+              height: height * 0.05,
+              display: 'flex',
+              flexDirection: 'row',
+            }}>
+            <TextInput
+              style={{color: 'black', width: width * 0.7}}
+              onChangeText={text => setSearchText(text)}
+              value={searchText}
+              placeholder="Search..."
+              placeholderTextColor={'gray'}
+            />
+            <Button title="Search" />
+          </View>
         </View>
         <FlatList
-          data={allUsersOnApp}
+          data={allUsersOnApp.filter(item =>
+            item.displayName.toLowerCase().includes(searchText),
+          )}
           renderItem={renderItem}
           keyExtractor={item => item.id}
           // refreshControl={
