@@ -8,4 +8,5 @@ export const GET_CURRENT_POSTS = 'GET_CURRENT_POSTS';
 export const INCREMENT = 'counter/INCREMENT';
 export const COMMENT = 'COMMENT';
 export const GET_LIKES = 'GET_LIKES';
+export const GET_ADDED_FRIENDS = 'Get_Added_FRIENDS';
 export const SET_MODAL = 'SET_MODAL';

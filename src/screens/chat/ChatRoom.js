@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect, useCallback} from 'react';
 import {GiftedChat, Bubble, Send} from 'react-native-gifted-chat';
 // import
@@ -6,19 +7,33 @@ import storage from '@react-native-firebase/storage';
 import {firebase} from '@react-native-firebase/database';
 import {useSelector} from 'react-redux';
 // import {messaging} from '@react-native-firebase/messaging';
-import {View, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  Text,
+  ActivityIndicator,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 // import ImagePicker from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-controls';
+import PushNotification from 'react-native-push-notification';
 const ChatRoom = ({user1, user2, navigation}) => {
   const [messages, setMessages] = useState([]);
   const [chatRoomId, setChatRoomId] = useState('');
   const [fcmToken, setfcmToken] = useState('');
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [mediaUrl, setMediaUrl] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [chatName, setChatName] = useState('');
   const [isImageSelected, setIsImageSelected] = useState(false);
+  // console.log('User11111', user1, user2.key);
+  const onInputTextChanged = useCallback(text => {
+    setIsTyping(text.length > 0);
+  }, []);
+
   useEffect(() => {
     // messaging()
     //   .getToken()
@@ -26,22 +41,42 @@ const ChatRoom = ({user1, user2, navigation}) => {
     //     setfcmToken(fcmToken);
     //   });
 
-    const chatRoomId = [user1, user2].sort().join('-');
+    const chatRoomId = [user1.uid, user2.value.uid].sort().join('-');
+    // const chatRoomId = user2?.key;
+
     setChatRoomId(chatRoomId);
-    const chatRef = firebase.database().ref(`chatRooms/${chatRoomId}`);
+    const chatRef = firebase.database().ref(`chatRooms/users/${chatRoomId}`);
+
     chatRef.on('value', snapshot => {
       const message = snapshot.val();
+      setChatName(message);
       const messages = [];
       snapshot.forEach(message => {
         messages.push(message.val());
       });
       setMessages(messages);
     });
-
+    PushNotification.configure({
+      onRegister: function(token) {
+        // Send the token to the backend server to register the device
+      },
+      onNotification: function(notification) {
+        // Handle the incoming push notification
+      },
+    });
+    
+    // Send push notification on new message
+    function sendPushNotification(message) {
+      PushNotification.localNotification({
+        message: message,
+      });
+    }
     return () => {
       chatRef.off();
     };
   }, [user1, user2]);
+  const chatRoomsRef = firebase.database().ref(`chatRooms`);
+
   const handleMediaSelection = useCallback(async () => {
     try {
       const image = await ImagePicker.openPicker({
@@ -125,13 +160,15 @@ const ChatRoom = ({user1, user2, navigation}) => {
   };
 
   const sendMessage = async newMessages => {
+    setIsTyping(false);
     newMessages.forEach(newMessage => {
       firebase
         .database()
-        .ref(`chatRooms/${chatRoomId}`)
+        .ref(`chatRooms/users/${chatRoomId}`)
         .push({
           _id: newMessage._id,
           text: newMessage.text,
+
           createdAt: firebase.database.ServerValue.TIMESTAMP,
           // user: {
           //   _id: newMessage.user._id,
@@ -140,6 +177,7 @@ const ChatRoom = ({user1, user2, navigation}) => {
           user: {
             _id: newMessage.user._id,
             name: newMessage.user.name,
+            avatar: newMessage.user.avatar,
           },
           image: mediaUrl ? mediaUrl : null,
         });
@@ -160,64 +198,103 @@ const ChatRoom = ({user1, user2, navigation}) => {
       />
     );
   };
+  const renderFooter = () => {
+    if (isTyping) {
+      return (
+        <View>
+          <ActivityIndicator size="small" color="blue" />
+          <Text style={{color: 'black'}}>Typing...</Text>
+        </View>
+      );
+    }
+    return null;
+  };
+  // const onTyping = useCallback(() => {
+  //   setIsTyping(true);
+  // }, []);
+
+  // const onStopTyping = useCallback(() => {
+  //   setIsTyping(false);
+  // }, []);
 
   return (
-    <GiftedChat
-      showUserAvatar
-      inverted={false}
-      // shouldUpdateMessage={true}
-      // dateFormat="yyyy-MM-dd"
-      placeholder="Enter your message here"
-      alwaysShowSend
-      renderUsernameOnMessage
-      messages={messages}
-      user={{_id: user1, name: user1}}
-      onSend={newMessages => sendMessage(newMessages)}
-      renderSend={props => (
-        <Send {...props}>
-          <View style={{marginRight: 10, marginBottom: 5}}>
-            <Icon name="send" size={32} color="#00AAFF" />
-          </View>
-        </Send>
-      )}
-      renderMessageImage={renderMessageImage}
-      renderInputToolbar={props => (
-        <InputToolbar
-          {...props}
-          containerStyle={{
-            backgroundColor: 'black',
-            borderTopWidth: 1,
-            borderTopColor: 'gray',
-          }}
-        />
-      )}
-      renderBubble={props => (
-        <Bubble
-          {...props}
-          wrapperStyle={{
-            right: {
-              backgroundColor: '#00AAFF',
-            },
-            left: {
-              backgroundColor: '#E6E6E6',
-            },
-          }}
-          textStyle={{
-            right: {
-              color: '#000',
-            },
-            left: {
-              color: '#000',
-            },
-          }}
-        />
-      )}
-      renderActions={() => (
-        <TouchableOpacity onPress={handleMediaSelection}>
-          <Icon name="attachment" size={32} color="#00AAFF" />
-        </TouchableOpacity>
-      )}
-    />
+    <>
+      <GiftedChat
+        showUserAvatar
+        inverted={false}
+        // shouldUpdateMessage={true}
+        // dateFormat="yyyy-MM-dd"
+        // renderAvatar={props => {
+        //   if (props.currentMessage.user._id === user1.id) {
+        //     return <Image source={{uri: user1.photoUrl}} />;
+        //   } else {
+        //     // return default avatar for other users
+        //     return <Image />;
+        //   }
+        // }}
+        // renderChatFooter={renderFooter}
+        placeholder="Enter your message here"
+        chatId={chatRoomId}
+        chatName={chatName}
+        
+        renderAvatarOnTop
+        onPressAvatar={res => console.log('hello', res)}
+        // alwaysShowSend
+        renderUsernameOnMessage
+        // isTyping={true}
+        messages={messages}
+        user={{_id: user1.uid, name: user1.displayName, avatar: user1.photoUrl}}
+        onSend={newMessages => sendMessage(newMessages)}
+        renderSend={props => (
+          <Send {...props}>
+            <View style={{marginRight: 10, marginBottom: 5}}>
+              <Icon name="send" size={32} color="#00AAFF" />
+            </View>
+          </Send>
+        )}
+        renderMessageImage={renderMessageImage}
+        renderInputToolbar={props => (
+          <InputToolbar
+            {...props}
+            containerStyle={{
+              backgroundColor: 'black',
+              borderTopWidth: 1,
+              borderTopColor: 'gray',
+            }}></InputToolbar>
+        )}
+        renderBubble={props => (
+          <Bubble
+            {...props}
+            wrapperStyle={{
+              right: {
+                backgroundColor: '#00AAFF',
+              },
+              left: {
+                backgroundColor: '#E6E6E6',
+              },
+            }}
+            textStyle={{
+              right: {
+                color: '#000',
+              },
+              left: {
+                color: '#000',
+              },
+            }}
+          />
+        )}
+        onInputTextChanged={onInputTextChanged}
+        renderActions={() => (
+          <TouchableOpacity onPress={handleMediaSelection}>
+            <Icon name="attachment" size={32} color="#00AAFF" />
+          </TouchableOpacity>
+        )}
+        // textInputProps={{
+        //   onFocus: onTyping,
+        //   onBlur: onStopTyping,
+        // }}
+      />
+    </>
   );
 };
 

@@ -25,11 +25,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Postprofile from '../main/Postprofile';
 import {COLOR} from '../components/Colors';
 import Upload from '../main/upload';
-import Notifications from '../main/notification';
 import Termandcon from '../main/termandcon';
 import Privacy from '../main/privacy';
 import Friends from '../main/Friends';
 import MyScreen from '../main/ChatScreen';
+import Addedfriends from '../main/Addedfriend';
+import PreviousChat from '../main/PreviousChat';
+import Notify from '../main/Notify';
 const Drawer = createDrawerNavigator();
 
 //     <DrawerContentScrollView {...props}>
@@ -85,9 +87,16 @@ export function Afterauth(props) {
           tabBarIcon: ({}) => <Icon name="home" color="white" size={30} />,
         }}
       />
+      {/* <bottom.Screen
+        name="MyFriends"
+        component={Addedfriends}
+        options={{
+          tabBarIcon: ({}) => <Icon name="home" color="white" size={30} />,
+        }}
+      /> */}
       <bottom.Screen
-        name="Friends"
-        component={Friends}
+        name="MyFriends"
+        component={Addedfriends}
         options={{
           tabBarIcon: ({}) => (
             <Icon name="account-group" color="white" size={30} />
@@ -103,7 +112,7 @@ export function Afterauth(props) {
       />
       <bottom.Screen
         name="Notifications"
-        component={Notifications}
+        component={Notify}
         options={{
           tabBarIcon: ({}) => (
             <Icon name="bell-badge-outline" color="white" size={30} />
@@ -148,6 +157,14 @@ function Routes() {
         <Auth.Screen name="TandC" component={Termandcon} />
         <Auth.Screen name="Privacy" component={Privacy} />
         <Auth.Screen name="Chat" component={MyScreen} />
+        <Auth.Screen name="AllUsers" component={Friends} />
+        {/* <bottom.Screen
+        name="MyFriends"
+        component={Addedfriends}
+        options={{
+          tabBarIcon: ({}) => <Icon name="home" color="white" size={30} />,
+        }}
+      /> */}
       </Auth.Navigator>
     </NavigationContainer>
   );

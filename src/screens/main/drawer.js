@@ -195,7 +195,7 @@ const Drawer = ({navigation}) => {
               </View>
               <View style={{paddingLeft: 10, paddingTop: 20}}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('Friends')}
+                  onPress={() => navigation.navigate('AllUsers')}
                   style={{
                     flexDirection: 'row',
                     // justifyContent: 'space-between',
@@ -215,7 +215,7 @@ const Drawer = ({navigation}) => {
                       fontSize: 15,
                       width: width * 0.75,
                     }}>
-                    My Friends
+                    All Users
                   </Text>
                   <Icon name="arrow-right-thin" color={'white'} size={20} />
                 </TouchableOpacity>

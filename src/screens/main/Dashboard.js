@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   StyleSheet,
   Text,
@@ -115,7 +116,7 @@ const Dashboard = ({navigation}) => {
           //   console.log('single tap');
           // }}
           doubleTap={() => {
-            increment(postId, dispatch);
+            dispatch(increment(postId));
           }}
           delay={200}>
           <Image
@@ -145,7 +146,7 @@ const Dashboard = ({navigation}) => {
               color={likeButton.includes(postId) ? 'red' : 'white'}
               size={30}
               onPress={() => {
-                increment(postId, dispatch);
+                dispatch(increment(postId));
               }}
             />
           </TouchableOpacity>
@@ -222,11 +223,6 @@ const Dashboard = ({navigation}) => {
     retrieveData();
   }, []);
 
-  const likebyuser = (postId, uid, post) => {
-    dispatch(INCREMENT);
-  };
-  const dislikebyuser = postId => {};
-  // };
   return (
     <SafeAreaView style={{backgroundColor: 'black'}}>
       <View
@@ -269,7 +265,7 @@ const Dashboard = ({navigation}) => {
             <View style={{justifyContent: 'center'}}>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('Chat');
+                  navigation.navigate('PreviousChat');
                 }}>
                 <Icon name="android-messages" size={30} color="white" />
               </TouchableOpacity>

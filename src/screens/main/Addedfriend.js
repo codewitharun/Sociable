@@ -19,24 +19,25 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   getFriend,
   userFromFriends,
-  addFriends,
+  getAddedFriend,
 } from '../../redux/action/firebaseActions';
 import {clockRunning} from 'react-native-reanimated';
 import {firebase} from '@react-native-firebase/auth';
 import {COLOR, height, width} from '../components/Colors';
 import {AlphabetList} from 'react-native-section-alphabet-list';
 import Modal from 'react-native-modal';
-const Friends = ({navigation}) => {
+const Addedfriends = ({navigation}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const {friendsAdded} = useSelector(state => state.fromReducer);
   const {allUsersOnApp} = useSelector(state => state.fromReducer);
   const {usersForModal} = useSelector(state => state.fromReducer);
   const [searchText, setSearchText] = useState('');
-  console.log('Users for Modal in friends', usersForModal);
+  //   console.log('Users added as friend', friendsAdded);
 
   const dispatch = useDispatch();
-  const fetchFriends = () => dispatch(getFriend());
-
+  const fetchFriends = () => dispatch(getAddedFriend());
+  const fetchAllFriends = () => dispatch(getFriend());
   const toggleModal = props => {
     props?.username && props?.email ? dispatch(userFromFriends(props)) : null;
 
@@ -45,8 +46,10 @@ const Friends = ({navigation}) => {
   useEffect(() => {
     setRefreshing(true);
     fetchFriends();
+    fetchAllFriends();
     setRefreshing(false);
   }, []);
+
   function handleChat(params) {
     const usersForChat = {
       key: params.username,
@@ -141,24 +144,7 @@ const Friends = ({navigation}) => {
                 }}>
                 <Icon
                   style={{color: 'white', alignSelf: 'center'}}
-                  name="chat-outline"
-                  size={50}
-                  color={'white'}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  toggleModal(),
-                    addFriends({
-                      displayName: usersForModal.username,
-                      email: usersForModal.email,
-                      uid: usersForModal.uid,
-                      photoUrl: usersForModal.url,
-                    });
-                }}>
-                <Icon
-                  style={{color: 'white', alignSelf: 'center'}}
-                  name="chat-outline"
+                  name="chat"
                   size={50}
                   color={'white'}
                 />
@@ -205,8 +191,9 @@ const Friends = ({navigation}) => {
                   ? 'Logo-Regular'
                   : 'FONTSPRINGDEMO-BlueVinylRegular',
               fontSize: 35,
+              marginTop: 20,
             }}>
-            Others in Yopmail
+            My Friends
           </Text>
           <View
             style={{
@@ -228,27 +215,81 @@ const Friends = ({navigation}) => {
             <Button title="Search" />
           </View>
         </View>
+        {searchText && searchText !== '' && (
+          <View
+            style={{
+              height: 200,
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <View
+              style={{
+                alignSelf: 'center',
+                width: '90%',
+                height: 200,
+                backgroundColor: 'grey',
+                marginTop: 20,
+              }}>
+              <FlatList
+                StickyHeaderComponent={() => (
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontSize: 30,
+                      color: 'white',
+                      fontFamily:
+                        Platform.OS == 'android'
+                          ? 'Logo-Regular'
+                          : 'FONTSPRINGDEMO-BlueVinylRegular',
+                    }}>
+                    Others In Yopmail
+                  </Text>
+                )}
+                data={allUsersOnApp.filter(item =>
+                  item.displayName.toLowerCase().includes(searchText),
+                )}
+                renderItem={renderItem}
+                keyExtractor={item => item.id}
+              />
+            </View>
+          </View>
+        )}
+
         <FlatList
-          data={allUsersOnApp.filter(item =>
+          //   ListHeaderComponent={() => (
+          //     <Text
+          //       style={{
+          //         textAlign: 'center',
+          //         fontSize: 30,
+          //         fontFamily:
+          //           Platform.OS == 'android'
+          //             ? 'Logo-Regular'
+          //             : 'FONTSPRINGDEMO-BlueVinylRegular',
+          //       }}>
+          //       My Friends
+          //     </Text>
+          //   )}
+          data={friendsAdded.filter(item =>
             item.displayName.toLowerCase().includes(searchText),
           )}
           renderItem={renderItem}
           keyExtractor={item => item.id}
-          // refreshControl={
-          //   <RefreshControl
-          //     title="Referesing Users"
-          //     tintColor={COLOR.BUTTON}
-          //     titleColor="#fff"
-          //     refreshing={refreshing}
-          //     onRefresh={getFriend}
-          //   />
-          // }
+          refreshControl={
+            <RefreshControl
+              title="Referesing Users"
+              tintColor={COLOR.BUTTON}
+              titleColor="#fff"
+              refreshing={refreshing}
+              onRefresh={getFriend}
+            />
+          }
         />
       </View>
     </SafeAreaView>
   );
 };
 
-export default Friends;
+export default Addedfriends;
 
 const styles = StyleSheet.create({});

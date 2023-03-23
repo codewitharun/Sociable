@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-
+import firestore from '@react-native-firebase/firestore';
 import {COLOR, height, width} from './components/Colors';
 
 import messaging from '@react-native-firebase/messaging';
@@ -38,7 +38,14 @@ const Splash = ({navigation}) => {
 
       const fcmToken = await messaging().getToken();
       setToken(fcmToken);
+
       asyncStorage.setItem('fcmtoken', fcmToken);
+      // firestore()
+      //   .collection('Users')
+      //   .doc(user)
+      //   .collection('FcmTokens')
+      //   .doc('fcmtoken')
+      //   .set({deviceToken: fcmToken});
       // console.log('Device FcmToken: ========>>>>>', fcmToken);
     }
   }

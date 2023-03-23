@@ -13,47 +13,49 @@ import {
   GET_CURRENT_POSTS,
   GET_FRIENDS,
   SET_MODAL,
+  GET_ADDED_FRIENDS,
 } from '../type/type';
+import {Alert} from 'react-native';
 
-export const getPosts = () => {
-  try {
-    return async dispatch => {
-      firestore()
-        .collection('Upload')
-        // .where('uid', '==', '9PuCW7G1nUQUPfdD62yGnvXL2303')
-        .orderBy('createdAt', 'desc')
-        // .doc('Posts')
-        .get()
-        .then(querySnapshot => {
-          let temp = [];
-          console.log('Total Post: ', querySnapshot.size);
-          querySnapshot.forEach(documentSnapshot => {
-            let userDetails = {};
+// export const getPosts = () => {
+//   try {
+//     return async dispatch => {
+//       firestore()
+//         .collection('Upload')
+//         // .where('uid', '==', '9PuCW7G1nUQUPfdD62yGnvXL2303')
+//         .orderBy('createdAt', 'desc')
+//         // .doc('Posts')
+//         .get()
+//         .then(querySnapshot => {
+//           let temp = [];
+//           console.log('Total Post: ', querySnapshot.size);
+//           querySnapshot.forEach(documentSnapshot => {
+//             let userDetails = {};
 
-            userDetails = documentSnapshot.data();
+//             userDetails = documentSnapshot.data();
 
-            userDetails['id'] = documentSnapshot.id;
-            temp.push(userDetails);
+//             userDetails['id'] = documentSnapshot.id;
+//             temp.push(userDetails);
 
-            if (temp) {
-              dispatch({
-                type: GET_POSTS,
-                payload: temp,
-              });
-              // console.log('Post data from redux', temp);
-            } else {
-              console.log('Unable to fetch');
-            }
-          });
-        });
-    };
-  } catch (error) {
-    console.log(
-      'Error while getting POST data from firestore refer to redux action',
-      error,
-    );
-  }
-};
+//             if (temp) {
+//               dispatch({
+//                 type: GET_POSTS,
+//                 payload: temp,
+//               });
+//               // console.log('Post data from redux', temp);
+//             } else {
+//               console.log('Unable to fetch');
+//             }
+//           });
+//         });
+//     };
+//   } catch (error) {
+//     console.log(
+//       'Error while getting POST data from firestore refer to redux action',
+//       error,
+//     );
+//   }
+// };
 export const getUser = () => {
   try {
     return async dispatch => {
@@ -84,6 +86,60 @@ export const getUser = () => {
   } catch (error) {
     console.log(
       'Error while getting user data from firestore refer to redux action',
+    );
+  }
+};
+
+export const getPosts = () => {
+  try {
+    return async (dispatch, getState) => {
+      const userId = auth().currentUser.uid;
+      // console.log('hggjhgjhghgh', getState);
+      // Retrieve the user's friend list from the database
+      const friendList = await firestore()
+        .collection('Users')
+        .doc(userId)
+        .collection('Friends')
+        .get()
+        .then(querySnapshot => {
+          let temp = [];
+          querySnapshot.forEach(documentSnapshot => {
+            temp.push(documentSnapshot.id);
+          });
+          return temp;
+        })
+        .catch(error => {
+          console.log('Error while getting friend list from firestore', error);
+        });
+
+      // Retrieve posts from the user's friend list
+      const posts = await firestore()
+        .collection('Upload')
+        .where('uid', 'in', friendList)
+        .orderBy('createdAt', 'desc')
+        .get()
+        .then(querySnapshot => {
+          let temp = [];
+          querySnapshot.forEach(documentSnapshot => {
+            let userDetails = {};
+
+            userDetails = documentSnapshot.data();
+
+            userDetails['id'] = documentSnapshot.id;
+            temp.push(userDetails);
+          });
+          return temp;
+        });
+
+      dispatch({
+        type: GET_POSTS,
+        payload: posts,
+      });
+    };
+  } catch (error) {
+    console.log(
+      'Error while getting POST data from firestore refer to redux action',
+      error,
     );
   }
 };
@@ -230,6 +286,66 @@ export const getFriend = () => {
             if (tempp) {
               dispatch({
                 type: GET_FRIENDS,
+                payload: tempp,
+              });
+              // console.log('Post data from redux', tempp);
+            } else {
+              console.log('Unable to fetch');
+            }
+          });
+        });
+    };
+  } catch (error) {
+    console.log(
+      'Error while getting POST data from firestore refer to redux action',
+      error,
+    );
+  }
+};
+
+export const addFriends = Friends => {
+  const user = auth().currentUser.uid;
+  console.log('friend to add ', Friends);
+  firestore()
+    .collection('Users')
+    .doc(user)
+    .collection('Friends')
+    .doc(Friends.uid)
+    .set(Friends)
+    .then(res => {
+      console.log('Added as Friend Successfully');
+      Alert.alert('Successfully added as Friend');
+    })
+    .catch(err => {
+      console.log('error while adding friend', err);
+    });
+};
+
+export const getAddedFriend = () => {
+  const user = auth().currentUser.uid;
+  try {
+    return async dispatch => {
+      firestore()
+        .collection('Users')
+        .doc(user)
+        .collection('Friends')
+        // .doc(Friends.id)
+        .orderBy('displayName', 'asc')
+        .get()
+        .then(querySnapshot => {
+          let tempp = [];
+          console.log('Total Friends: ', querySnapshot.size);
+          querySnapshot.forEach(documentSnapshot => {
+            let userDetails = {};
+
+            userDetails = documentSnapshot.data();
+
+            userDetails['id'] = documentSnapshot.id;
+            tempp.push(userDetails);
+
+            if (tempp) {
+              dispatch({
+                type: GET_ADDED_FRIENDS,
                 payload: tempp,
               });
               // console.log('Post data from redux', tempp);
