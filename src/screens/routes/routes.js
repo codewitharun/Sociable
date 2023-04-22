@@ -32,6 +32,7 @@ import MyScreen from '../main/ChatScreen';
 import Addedfriends from '../main/Addedfriend';
 import PreviousChat from '../main/PreviousChat';
 import Notify from '../main/Notify';
+
 const Drawer = createDrawerNavigator();
 
 //     <DrawerContentScrollView {...props}>
@@ -119,6 +120,7 @@ export function Afterauth(props) {
           ),
         }}
       />
+
       <bottom.Screen
         name="More"
         component={MyDrawer}

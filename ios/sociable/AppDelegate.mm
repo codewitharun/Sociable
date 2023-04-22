@@ -3,7 +3,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-
+#import "RNSplashScreen.h" 
 #import <React/RCTAppSetupUtils.h>
 #import <UserNotifications/UNUserNotificationCenter.h>
 #import <UserNotifications/UserNotifications.h>
@@ -62,6 +62,9 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  [RNSplashScreen show];  // here
+    // or
+    //[RNSplashScreen showSplash:@"LaunchScreen" inRootView:rootView];
   return YES;
 }
 

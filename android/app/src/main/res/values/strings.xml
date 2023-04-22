@@ -4,5 +4,6 @@
 <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
 
     <color name="colorAccent">#C60C30</color>
+<color name="primary_dark">#000000</color>
 
 </resources>

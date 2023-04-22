@@ -61,6 +61,7 @@ const Splash = ({navigation}) => {
   }
   useEffect(() => {
     // SplashScreen.hide();
+    // SplashScreen.hide();
     setTimeout(() => {
       const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
       // console.log(subscriber);
@@ -71,22 +72,23 @@ const Splash = ({navigation}) => {
 
   if (initializing)
     return (
-      <View
-        style={{
-          backgroundColor: 'black',
-          height: height * 1,
-          width: width * 1,
-          justifyContent: 'center',
-        }}>
-        <ActivityIndicator
-          color={COLOR.BUTTON}
-          size={40}
-          style={{justifyContent: 'center'}}
-        />
-        <Text style={{textAlign: 'center', color: COLOR.WTEXT}}>
-          Loading please Wait ...
-        </Text>
-      </View>
+      // <View
+      //   style={{
+      //     backgroundColor: 'black',
+      //     height: height * 1,
+      //     width: width * 1,
+      //     justifyContent: 'center',
+      //   }}>
+      //   <ActivityIndicator
+      //     color={COLOR.BUTTON}
+      //     size={40}
+      //     style={{justifyContent: 'center'}}
+      //   />
+      //   <Text style={{textAlign: 'center', color: COLOR.WTEXT}}>
+      //     Loading please Wait ...
+      //   </Text>
+      // </View>
+      SplashScreen.hide()
     );
 
   if (!user) {
