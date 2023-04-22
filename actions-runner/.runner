@@ -1,9 +1,0 @@
-﻿{
-  "agentId": 2,
-  "agentName": "ARUNPC",
-  "poolId": 1,
-  "poolName": "Default",
-  "serverUrl": "https://pipelines.actions.githubusercontent.com/htZ9U0wzBnYtA0LwSzuBhuegASTllQq6mR9P0qcYoNkF7jUSsG",
-  "gitHubUrl": "https://github.com/codewitharun/Sociable",
-  "workFolder": "_work"
-}
