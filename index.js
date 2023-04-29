@@ -6,11 +6,11 @@ app.get("/", (req, res) => {
 });
 
 app.post("/user", (req, res) => {
-  //   req.body.user = "test";
-  //   req.body.username = "test";
+  req.body.user = "test";
+  req.body.username = "test";
   req.send("<h1>Hi testing my first backend code</h1>");
-  //   res.sendDate(new Date());
-  //   console.log(req, res);
+  res.sendDate(new Date());
+  console.log(req, res);
 });
 
-app.listen(3000);
+app.listen(3001);
