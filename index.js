@@ -25,10 +25,14 @@ mongoose
   })
   .then((res) => {
     console.log("Connection with database established"),
-      (speed = "connected to Mongoose");
+      (speed = "connected to Mongoose ");
   })
-  .catch((error) => {console.log("Could not connect to MongoDB", error)
-  (speed = "failed to connect to mongoose",process.env.mongoURI);});
+  .catch((error) => {
+    console.log(
+      "Could not connect to MongoDB",
+      error
+    )((speed = "failed to connect to mongoose "));
+  });
 
 app.use("/api", userRoutes);
 app.get("/", (req, res) => {
@@ -38,8 +42,11 @@ app.get("/", (req, res) => {
         <title>Hello World</title>
       </head>
       <body>
-        <h1>Hello World, from Arun</h1>
-        <p>Hello ${speed}</p>
+        <h1>Hello World, from Arun, db you are using is  ${process.env.MONGODB_CREDENTIALS.slice(
+          0,
+          5
+        )}</h1>
+        <p>Hello ${speed} </p>
       </body>
     </html>
   `;
