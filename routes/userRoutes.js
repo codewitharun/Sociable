@@ -99,7 +99,7 @@ router.post("/login", async (req, res) => {
     // res.send("Login successful");
   } catch (error) {
     console.error(error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send("Internal Server Error", error);
   }
 });
 
