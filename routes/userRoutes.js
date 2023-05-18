@@ -95,6 +95,8 @@ router.post("/login", async (req, res) => {
       email: user.email,
       mobile: user.mobileNumber,
       userID: user._id,
+      name:user.name,
+      user:user
     });
     // res.send("Login successful");
   } catch (error) {
