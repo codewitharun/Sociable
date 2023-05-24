@@ -59,7 +59,8 @@ Sociable is built using the following technologies:
 - WebRTC (for video call functionality)
 - gifted-chat (for text chatting )
 
-Sociable is easily available on App center on ``` https://install.appcenter.ms/users/arun4appcenter/apps/sociable/distribution_groups/testers ```
+Sociable is easily available on App center on [Download Sociable Apk](https://install.appcenter.ms/users/arun4appcenter/apps/sociable/distribution_groups/testers)
+
 
 ## License
 
