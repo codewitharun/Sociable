@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import UserDB from "../models/userSchema.js";
+
 dotenv.config();
 
 const router = express.Router();
@@ -96,7 +97,6 @@ router.post("/login", async (req, res) => {
       mobile: user.mobileNumber,
       userID: user._id,
       name:user.name,
-      user:user
     });
     // res.send("Login successful");
   } catch (error) {

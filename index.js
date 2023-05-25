@@ -5,7 +5,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import swagger from "./swagger.js";
-import userRoutes from "./routes/userRoutes.js";
+import userRoutes from "./Routes/userRoutes.js";
+import webrtcRoutes from "./routes/webrtcRoutes.js";
 import oasGenerator from "express-oas-generator";
 dotenv.config();
 
@@ -35,6 +36,7 @@ mongoose
   });
 
 app.use("/api", userRoutes);
+app.use("/api/chat", webrtcRoutes);
 app.get("/", (req, res) => {
   const html = `
     <html>
