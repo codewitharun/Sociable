@@ -1,20 +1,44 @@
-<div class="container">
-    <hr>
-    <h1>Create New Book</h1>
-    <hr>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome to Your API</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
 
-    <form action="http://localhost:3000/book" method="POST">
-        <div class="form-group">
-            <label for="ISBN">ISBN</label>
-            <input class="form-control" name="isbn">
-        </div>
+    h1 {
+      color: #333;
+    }
 
-        <div class="form-group">
-            <label for="Title">Title</label>
-            <input class="form-control" name="title">
-        </div>
+    p {
+      color: #777;
+    }
 
-        <!--Other fields-->
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-</div>
+    .response-container {
+      margin-top: 50px;
+    }
+
+    .response-container pre {
+      font-family: Consolas, monospace;
+      background-color: #f8f8f8;
+      padding: 10px;
+      border-radius: 5px;
+      overflow: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to Sociable </h1>
+  <p>This is a welcome page for your API. It's up and running!</p>
+  
+  <div class="response-container">
+    <h2>API Response:</h2>
+    <pre id="api-response"></pre>
+  </div>
+  
+  <script src="app.js"></script>
+</body>
+</html>

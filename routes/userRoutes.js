@@ -7,7 +7,25 @@ import UserDB from "../models/userSchema.js";
 dotenv.config();
 
 const router = express.Router();
-let tokenLocal = "";
+let deviceTokenLocal = "";
+const authenticateToken = (req, res, next) => {
+  // console.log(req.headers.authorization)
+  const authHeader = req.headers.authorization;
+  // const token = authHeader && authHeader.split(" ")[1];
+console.log(authHeader)
+  if (!authHeader) {
+    return res.status(401).send("Missing JWT token");
+  }
+
+  jwt.verify(authHeader, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).send("Invalid JWT token");
+    }
+
+    req.user = user;
+    next();
+  });
+};
 router.post("/signup", async (req, res) => {
   try {
     const { name, email, password, mobileNumber } = req.body;
@@ -57,8 +75,9 @@ router.get("/users/:id", async (req, res) => {
   }
 });
 
-router.get("/users", async (req, res) => {
+router.get("/users", authenticateToken, async (req, res) => {
   try {
+    
     const users = await UserDB.find({});
     res.json(users);
   } catch (error) {
@@ -88,15 +107,15 @@ router.post("/login", async (req, res) => {
     });
     user.loggedInDevices.push(token);
     await user.save();
-    tokenLocal = token;
+    deviceTokenLocal = token;
     // Add new device token to loggedInDevices array
-    // console.log(tokenLocal);
+    // console.log(deviceTokenLocal);
     return res.json({
       token: token,
       email: user.email,
       mobile: user.mobileNumber,
       userID: user._id,
-      name:user.name,
+      name: user.name,
     });
     // res.send("Login successful");
   } catch (error) {
@@ -105,7 +124,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/logout", async (req, res) => {
+router.post("/logout", authenticateToken,async (req, res) => {
   const { email, deviceToken } = req.body;
   try {
     // Find user by ID
@@ -115,7 +134,7 @@ router.post("/logout", async (req, res) => {
     }
     // Remove device token from loggedInDevices array
     user.loggedInDevices = user.loggedInDevices.filter(
-      (token) => token !== tokenLocal
+      (device) => device !== deviceTokenLocal
     );
     await user.save();
     res.send("Logout successful");

@@ -6,53 +6,44 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import swagger from "./swagger.js";
 import userRoutes from "./Routes/userRoutes.js";
-import webrtcRoutes from "./routes/webrtcRoutes.js";
 import oasGenerator from "express-oas-generator";
+
 dotenv.config();
 
 const app = express();
 
-oasGenerator.init(app, {});
+oasGenerator.init(app);
 // swagger(app);
 app.use(cors());
 app.use(express.json());
+
 const mongoURI = process.env.MONGODB_CREDENTIALS;
 console.log(mongoURI);
 let speed = "";
+
 mongoose
   .connect(mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then((res) => {
-    console.log("Connection with database established"),
-      (speed = "connected to Mongoose ");
+  .then(() => {
+    console.log("Connection with database established");
+    speed = "connected to Mongoose";
   })
   .catch((error) => {
-    console.log(
-      "Could not connect to MongoDB",
-      error
-    )((speed = "failed to connect to mongoose "));
+    console.log("Could not connect to MongoDB", error);
+    speed = "failed to connect to Mongoose";
   });
 
+
+// app.use(authenticateToken);
+
 app.use("/api", userRoutes);
-app.use("/api/chat", webrtcRoutes);
+
+
+
 app.get("/", (req, res) => {
-  const html = `
-    <html>
-      <head>
-        <title>Hello World</title>
-      </head>
-      <body>
-        <h1>Hello World, from Arun, db you are using is  ${process.env.MONGODB_CREDENTIALS.slice(
-          0,
-          5
-        )}</h1>
-        <p>Hello ${speed} </p>
-      </body>
-    </html>
-  `;
-  res.send(html);
+  res.sendFile("users.htm", { root: "./" });
 });
 
 app.listen(3001, () => {
