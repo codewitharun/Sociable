@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 import swagger from "./swagger.js";
 import userRoutes from "./routes/userRoutes.js";
 import oasGenerator from "express-oas-generator";
-
+import webrtcRoutes from "./routes/webrtcRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -40,6 +40,7 @@ mongoose
 
 app.use("/api", userRoutes);
 
+app.use("/api/chat", webrtcRoutes);
 
 
 app.get("/", (req, res) => {
