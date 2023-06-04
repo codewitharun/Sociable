@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import swagger from "./swagger.js";
-import userRoutes from "./Routes/userRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 import oasGenerator from "express-oas-generator";
 
 dotenv.config();
