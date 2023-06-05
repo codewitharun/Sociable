@@ -60,7 +60,7 @@ const Notify = () => {
   PushNotification.popInitialNotification(notification => {
     console.log('Initial Notification', notification);
   });
-  const socket = io('https://sociable-xisn.onrender.com/');
+  const socket = io('https://sociable-xisn.onrender.com/api/chat/webrtc');
 
   PushNotification.createChannel(
     {
@@ -78,8 +78,8 @@ const Notify = () => {
     console.log(`channel found '${created}'`),
   );
   useEffect(() => {
-    console.log(socket)
-console.log("useEffect working now")
+    console.log(socket);
+    console.log('useEffect working now');
     // Listening for the 'connect' event
     socket.on('connect', () => {
       console.log('Connected to server');
