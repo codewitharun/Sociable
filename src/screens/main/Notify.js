@@ -1,5 +1,6 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect} from 'react';
+import io from 'socket.io-client';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification, {Importance} from 'react-native-push-notification';
 const Notify = () => {
@@ -59,7 +60,8 @@ const Notify = () => {
   PushNotification.popInitialNotification(notification => {
     console.log('Initial Notification', notification);
   });
-  
+  const socket = io('https://sociable-xisn.onrender.com/');
+
   PushNotification.createChannel(
     {
       channelId: 'default', // (required)
@@ -75,11 +77,39 @@ const Notify = () => {
   PushNotification.getChannels(created =>
     console.log(`channel found '${created}'`),
   );
+  useEffect(() => {
+    console.log(socket)
+console.log("useEffect working now")
+    // Listening for the 'connect' event
+    socket.on('connect', () => {
+      console.log('Connected to server');
+    });
+
+    // Listening for a custom event 'message'
+    socket.on('message', data => {
+      console.log('Received a message:', data);
+    });
+
+    // Error event listener
+    socket.on('error', error => {
+      console.log('Socket error:', error);
+      // Handle the error here
+    });
+
+    // Clean up event listeners when the component is unmounted
+    return () => {
+      socket.off('connect');
+      socket.off('message');
+      socket.off('error');
+    };
+  }, []);
 
   return (
-    <View>
-      <Text>Notification</Text>
-    </View>
+    <SafeAreaView>
+      <View>
+        <Text>Notification</Text>
+      </View>
+    </SafeAreaView>
   );
 };
 

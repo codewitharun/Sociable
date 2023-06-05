@@ -13,6 +13,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   KeyboardAvoidingView,
+  ScrollView, TextInput
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import React, {useState, useEffect} from 'react';
@@ -24,7 +25,6 @@ import storage from '@react-native-firebase/storage';
 import {showAlert, closeAlert} from 'react-native-customisable-alert';
 // import ImagePicker from 'react-native-image-picker';
 
-import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
 import {color} from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';

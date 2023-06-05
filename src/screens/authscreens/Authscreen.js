@@ -15,7 +15,6 @@ import {
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-// import {TouchableOpacity} from 'react-native-gesture-handler';
 
 GoogleSignin.configure({
   webClientId:
