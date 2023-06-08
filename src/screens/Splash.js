@@ -60,7 +60,7 @@ const Splash = ({navigation}) => {
     }
   }
   useEffect(() => {
-    // SplashScreen.hide();
+    SplashScreen.hide();
     // SplashScreen.hide();
     setTimeout(() => {
       const subscriber = auth().onAuthStateChanged(onAuthStateChanged);

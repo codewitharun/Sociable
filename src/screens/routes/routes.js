@@ -32,7 +32,7 @@ import MyScreen from '../main/ChatScreen';
 import Addedfriends from '../main/Addedfriend';
 import PreviousChat from '../main/PreviousChat';
 import Notify from '../main/Notify';
-
+import YourComponent from '../main/Location';
 const Drawer = createDrawerNavigator();
 
 //     <DrawerContentScrollView {...props}>
@@ -84,6 +84,13 @@ export function Afterauth(props) {
       <bottom.Screen
         name="Dashboard"
         component={Dashboard}
+        options={{
+          tabBarIcon: ({}) => <Icon name="home" color="white" size={30} />,
+        }}
+      />
+          <bottom.Screen
+        name="Location"
+        component={YourComponent}
         options={{
           tabBarIcon: ({}) => <Icon name="home" color="white" size={30} />,
         }}
