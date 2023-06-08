@@ -6,6 +6,7 @@ import {firebase} from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
+import {showAlert} from 'react-native-customisable-alert';
 import {
   GET_USER,
   GET_POSTS,
@@ -146,62 +147,50 @@ export const getPosts = () => {
 
 export const loginUser = (user, onsucess) => {
   console.log(user);
-  try {
-    auth()
-      .signInWithEmailAndPassword(user.email, user.password)
 
-      .then(() => {
-        console.log('signed in!');
-      })
-      .then(() => {
-        firebase.auth().onAuthStateChanged(function (user) {
-          if (user) {
-            try {
-              // return async dispatch => {
-              firestore()
-                .collection('Users')
-                .doc(user.uid)
-                .get()
-                .then(documentSnapshot => {
-                  let userDetails = {};
-                  userDetails = documentSnapshot.data();
-                  const userData = JSON.stringify(userDetails);
-                  getLoggedUser(userData);
-                  console.log(
-                    'user details from Login screen: ' +
-                      JSON.stringify(userDetails),
-                  );
+  auth()
+    .signInWithEmailAndPassword(user.email, user.password)
+    .then(() => {
+      console.log('signed in!');
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          firestore()
+            .collection('Users')
+            .doc(user.uid)
+            .get()
+            .then(documentSnapshot => {
+              let userDetails = {};
+              userDetails = documentSnapshot.data();
+              const userData = JSON.stringify(userDetails);
+              getLoggedUser(userData);
+              console.log(
+                'user details from Login screen: ' +
+                  JSON.stringify(userDetails),
+              );
+              onsucess();
+            })
+            .catch(error => {
+              console.log('Login Failed', error);
 
-                  // dispatch({
-                  //   type: CURRENT_USER,
-                  //   payload: userDetails,
-                  // });
-                });
-              // };
-            } catch (error) {
-              console.log('error while loggin', error);
-            }
-          }
-        });
-      })
-      .then(() => {
-        onsucess();
-      })
-
-      .catch(error => {
-        if (error.code === 'auth/email-already-in-use') {
-          console.log('That email address is already in use!');
+              showAlert({
+                title: 'Are you sure?',
+                message: 'All your files will be deleted!',
+                alertType: 'warning',
+                onPress: () => console.log('files deleted!'),
+              });
+            });
         }
-
-        if (error.code === 'auth/invalid-email') {
-          console.log('That email address is invalid!');
-        }
-
-        console.error(error);
       });
-  } catch (error) {
-    console.log(error);
-  }
+    })
+    .catch(error => {
+      console.error(error);
+      showAlert({
+        title: 'Are you sure?',
+        message: 'All your files will be deleted!',
+        alertType: 'warning',
+        onPress: () => console.log('files deleted!'),
+      });
+    });
 };
 
 export async function getLoggedUser(userData) {

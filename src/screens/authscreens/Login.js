@@ -6,8 +6,15 @@ import {
   Dimensions,
   TextInput,
   TouchableOpacity,
+  Button,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from 'react-native-alert-notification';
 
 import {loginUser} from '../../redux/action/firebaseActions';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -198,6 +205,27 @@ const Login = ({navigation}) => {
                 Log in
               </Text>
             </TouchableOpacity>
+            <Button
+              title={'toast notification'}
+              onPress={() =>
+                Toast.show({
+                  type: ALERT_TYPE.SUCCESS,
+                  title: 'Success',
+                  textBody: 'Congrats! this is toast notification success',
+                })
+              }
+            />
+            <Button
+              title={'dialog box'}
+              onPress={() =>
+                Dialog.show({
+                  type: ALERT_TYPE.SUCCESS,
+                  title: 'Success',
+                  textBody: 'Congrats! this is dialog box success',
+                  button: 'close',
+                })
+              }
+            />
             <TouchableOpacity
               onPress={() => navigation.navigate('Forgot')}
               style={{

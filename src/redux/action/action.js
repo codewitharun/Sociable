@@ -63,10 +63,10 @@ export const getLikes = postId => {
             'Total Likes for Post ',
             postId,
             ':',
-            documentSnapshot.data().like.length,
+            documentSnapshot?.data().like.length,
           );
 
-          temp = documentSnapshot.data().like;
+          temp = documentSnapshot?.data().like;
 
           if (temp) {
             dispatch({
@@ -77,6 +77,9 @@ export const getLikes = postId => {
           } else {
             console.log('Unable to fetch likes');
           }
+        })
+        .catch(err => {
+          console.log('Error while fetching like', err);
         });
     };
   } catch (error) {

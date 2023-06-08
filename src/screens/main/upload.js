@@ -11,6 +11,7 @@ import {
   PermissionsAndroid,
   Alert,
   ActivityIndicator,
+  TextInput,
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -22,10 +23,7 @@ import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import {showAlert, closeAlert} from 'react-native-customisable-alert';
 // import ImagePicker from 'react-native-image-picker';
-import asyncStorage from '@react-native-async-storage/async-storage';
-import {TextInput} from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
-import {color} from 'react-native-reanimated';
 import {getUser} from '../../redux/action/firebaseActions';
 const Upload = ({navigation, params}) => {
   const {user} = useSelector(state => state.fromReducer);
