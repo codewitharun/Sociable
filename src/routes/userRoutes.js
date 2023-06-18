@@ -28,12 +28,12 @@ console.log(authHeader)
 };
 router.post("/signup", async (req, res) => {
   try {
-    const { name, email, password, mobileNumber } = req.body;
+    const { name, email, password, mobileNumber,aboutMe } = req.body;
 
     // Check if email already exists in the database
     const existingUser = await UserDB.findOne({ email });
     if (existingUser) {
-      return res.status(409).json({ error: "Email already exists" });
+      return res.status(409).send({ error: "Email already exists" });
     }
 
     // Hash the password before saving it to the database
@@ -46,13 +46,14 @@ router.post("/signup", async (req, res) => {
       email,
       password: hashedPassword,
       mobileNumber,
+      aboutMe
     });
     await user.save();
 
-    return res.status(201).json({ message: "User created successfully" });
+    return res.status(201).send({ message: "User created successfully" });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).send({ error: "Internal server error" });
   }
 });
 
@@ -92,7 +93,7 @@ router.post("/login", async (req, res) => {
     // Check if user exists
     const user = await UserDB.findOne({ email });
     if (!user) {
-      return res.status(404).send("User not found");
+      return res.status(400).send("No user found with email " + email +  " . Please enter correct email");
     }
     // Check if password is correct
     const isMatch = await bcrypt.compare(password, user.password);
@@ -110,7 +111,7 @@ router.post("/login", async (req, res) => {
     deviceTokenLocal = token;
     // Add new device token to loggedInDevices array
     // console.log(deviceTokenLocal);
-    return res.json({
+    return res.send({
       token: token,
       email: user.email,
       mobile: user.mobileNumber,

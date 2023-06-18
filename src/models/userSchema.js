@@ -9,7 +9,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-  
   },
   password: {
     type: String,
@@ -21,6 +20,9 @@ const userSchema = new mongoose.Schema({
   },
   loggedInDevices: [String],
   deviceToken: String,
+  aboutMe: {
+    type: String,
+  },
 });
 
 const UserDB = mongoose.models.User || mongoose.model("User", userSchema);

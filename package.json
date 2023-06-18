@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/codewitharun/Sociable#readme",
   "devDependencies": {
-    "express-oas-generator": "^1.0.46",
     "nodemon": "^2.0.22"
   },
   "dependencies": {
