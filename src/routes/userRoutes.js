@@ -12,7 +12,7 @@ const authenticateToken = (req, res, next) => {
   // console.log(req.headers.authorization)
   const authHeader = req.headers.authorization;
   // const token = authHeader && authHeader.split(" ")[1];
-console.log(authHeader)
+  console.log(authHeader);
   if (!authHeader) {
     return res.status(401).send("Missing JWT token");
   }
@@ -28,7 +28,7 @@ console.log(authHeader)
 };
 router.post("/signup", async (req, res) => {
   try {
-    const { name, email, password, mobileNumber,aboutMe } = req.body;
+    const { name, email, password, mobileNumber, aboutMe } = req.body;
 
     // Check if email already exists in the database
     const existingUser = await UserDB.findOne({ email });
@@ -46,7 +46,7 @@ router.post("/signup", async (req, res) => {
       email,
       password: hashedPassword,
       mobileNumber,
-      aboutMe
+      aboutMe,
     });
     await user.save();
 
@@ -78,7 +78,6 @@ router.get("/users/:id", async (req, res) => {
 
 router.get("/users", authenticateToken, async (req, res) => {
   try {
-    
     const users = await UserDB.find({});
     res.json(users);
   } catch (error) {
@@ -93,7 +92,11 @@ router.post("/login", async (req, res) => {
     // Check if user exists
     const user = await UserDB.findOne({ email });
     if (!user) {
-      return res.status(400).send("No user found with email " + email +  " . Please enter correct email");
+      return res
+        .status(400)
+        .send(
+          "No user found with email " + email + " . Please enter correct email"
+        );
     }
     // Check if password is correct
     const isMatch = await bcrypt.compare(password, user.password);
@@ -125,7 +128,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/logout", authenticateToken,async (req, res) => {
+router.post("/logout", authenticateToken, async (req, res) => {
   const { email, deviceToken } = req.body;
   try {
     // Find user by ID
