@@ -72,9 +72,9 @@ app.get("/", (req, res) => {
   res.sendFile("users.htm", { root: "./" });
 });
 
-app.listen(3001, () => {
-  console.log("Server started");
-});
-server.listen(3002, (port) => {
+// app.listen(3001, () => {
+//   console.log("Server started");
+// });
+server.listen(3001, (port) => {
   console.log("Server started", server.address());
 })
