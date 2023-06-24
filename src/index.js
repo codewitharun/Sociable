@@ -5,9 +5,12 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import swagger from "./swagger.js";
+import { Server as SocketIOServer } from 'socket.io';
+import http from "http";
+
 import userRoutes from "./routes/userRoutes.js";
 // import oasGenerator from "express-oas-generator";
-import webrtcRoutes from "./routes/webrtcRoutes.js";
+import VideoRoute from "./routes/webrtcRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -16,7 +19,8 @@ const app = express();
 // swagger(app);
 app.use(cors());
 app.use(express.json());
-
+const server = http.createServer(app);
+const io = new SocketIOServer(server);
 const mongoURI = process.env.MONGODB_CREDENTIALS;
 console.log(mongoURI);
 let speed = "";
@@ -36,10 +40,33 @@ mongoose
   });
 
 // app.use(authenticateToken);
+io.on("connection", (socket) => {
+  console.log("New socket connection established");
+
+  socket.on("joinRoom", (roomId) => {
+    socket.join(roomId);
+    console.log("Connected to socket", socket.id);
+  });
+
+  socket.on("offer", (data) => {
+    io.to(data.roomId).emit("offer", data);
+  });
+
+  socket.on("answer", (data) => {
+    io.to(data.roomId).emit("answer", data);
+  });
+
+  socket.on("iceCandidate", (data) => {
+    io.to(data.roomId).emit("iceCandidate", data);
+  });
+
+  // Handle other signaling events as needed
+});
+
 
 app.use("/api", userRoutes);
 
-app.use("/api/chat", webrtcRoutes);
+app.use("/api/", VideoRoute);
 
 app.get("/", (req, res) => {
   res.sendFile("users.htm", { root: "./" });
@@ -48,3 +75,6 @@ app.get("/", (req, res) => {
 app.listen(3001, () => {
   console.log("Server started");
 });
+server.listen(3002, (port) => {
+  console.log("Server started", server.address());
+})

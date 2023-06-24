@@ -1,69 +1,25 @@
+import VideoCall from "../models/webrtcSchema.js"; // Import the VideoCall model
 import express from "express";
-import webSchema from "../models/webrtcSchema.js";
-import http from "http";
-import { Server } from "socket.io";
 const router = express.Router();
-const server = http.createServer(express());
-const io = new Server(server);
-
-io.on("connection", (socket) => {
-  console.log("A user connected");
-
-  // Handle WebRTC signaling events
-  socket.on("offer", async (data) => {
-    try {
-      const createdData = await webSchema.create(data);
-      // Emit the created data to all connected sockets
-      io.emit("offer", createdData);
-    } catch (error) {
-      console.error(error);
-    }
-  });
-
-  socket.on("answer", async (data) => {
-    try {
-      const createdData = await webSchema.create(data);
-      // Emit the created data to all connected sockets
-      io.emit("answer", createdData);
-    } catch (error) {
-      console.error(error);
-    }
-  });
-
-  socket.on("candidate", async (data) => {
-    try {
-      const createdData = await webSchema.create(data);
-      // Emit the created data to all connected sockets
-      io.emit("candidate", createdData);
-    } catch (error) {
-      console.error(error);
-    }
-  });
-
-  // Handle disconnection
-  socket.on("disconnect", () => {
-    console.log("A user disconnected");
-  });
-});
-
-router.get("/webrtc", async (req, res) => {
+// Create a new video call session
+router.post("/videocalls", async (req, res) => {
   try {
-    const data = await webSchema.find();
-  
-    res.json(io);
+    const { roomId, participants } = req.body;
+    const videoCall = await VideoCall.create({ roomId, participants });
+    res.status(201).json(videoCall);
   } catch (error) {
-    res.status(500).json({ error: "An error occurred" });
+    res.status(500).json({ error: "Failed to create video call session" });
   }
 });
 
-router.post("/webrtc", async (req, res) => {
+// Retrieve existing video call sessions
+router.get("/videocalls", async (req, res) => {
   try {
-    const newData = req.body;
-    const createdData = await webSchema.create(newData);
-    res.json(createdData);
+    const videoCalls = await VideoCall.find().populate("participants");
+    res.json(videoCalls);
   } catch (error) {
-    res.status(500).json({ error: "An error occurred" });
+    res.status(500).json({ error: "Failed to retrieve video call sessions" });
   }
 });
-const webrtcRoutes = router;
-export default webrtcRoutes;
+const VideoRoute = router;
+export default VideoRoute;
