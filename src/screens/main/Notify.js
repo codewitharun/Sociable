@@ -107,7 +107,7 @@ const Notify = () => {
   const disconnectSocket = () => {
     socketRef.current.disconnect(); // Disconnect the socket
     setIsConnected(false);
-    
+
     // Replace 'your-room-id' with the actual room ID
     socketRef.current.emit('disconnectRoom', roomId);
   };
