@@ -65,10 +65,9 @@ io.on("connection", (socket) => {
       .emit("incomingIceCandidate", { candidate, socketId: socket.id });
   });
 
-  socket.on("disconnect", () => {
-    const roomId = Object.keys(socket.rooms)[1];
-    // console.log("🚀 ~ file: index.js:65 ~ socket.on ~ rooms:",socket )
-    // Get the room ID of the socket
+  socket.on("disconnectRoom", (roomId) => {
+    console.log("🚀 ~ file: index.js:69 ~ socket.on ~ roomId:", roomId)
+    socket.leave(roomId); // Leave the specified room
     socket.to(roomId).emit("userDisconnected", socket.id);
   });
 });
