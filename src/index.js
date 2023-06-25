@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import swagger from "./swagger.js";
-import { Server as SocketIOServer } from 'socket.io';
+import { Server as SocketIOServer } from "socket.io";
 import http from "http";
 
 import userRoutes from "./routes/userRoutes.js";
@@ -40,29 +40,37 @@ mongoose
   });
 
 // app.use(authenticateToken);
-io.on("connection", (socket) => {
-  console.log("New socket connection established");
+const users = {};
 
-  socket.on("joinRoom", (roomId) => {
+io.on('connection', (socket) => {
+  socket.on('createRoom', (roomId) => {
     socket.join(roomId);
-    console.log("Connected to socket", socket.id);
+    console.log(`Socket ${socket.id} joined room ${roomId}`);
+    users[socket.id] = roomId;
+    socket.emit('roomJoined', roomId);
   });
 
-  socket.on("offer", (data) => {
-    io.to(data.roomId).emit("offer", data);
+  socket.on('offer', (data) => {
+    const { offer, roomId } = data;
+    socket.to(roomId).emit('incomingOffer', { offer, socketId: socket.id });
   });
 
-  socket.on("answer", (data) => {
-    io.to(data.roomId).emit("answer", data);
+  socket.on('answer', (data) => {
+    const { answer, socketId } = data;
+    socket.to(socketId).emit('incomingAnswer', { answer, socketId: socket.id });
   });
 
-  socket.on("iceCandidate", (data) => {
-    io.to(data.roomId).emit("iceCandidate", data);
+  socket.on('iceCandidate', (data) => {
+    const { candidate, socketId } = data;
+    socket.to(socketId).emit('incomingIceCandidate', { candidate, socketId: socket.id });
   });
 
-  // Handle other signaling events as needed
+  socket.on('disconnect', () => {
+    const roomId = users[socket.id];
+    delete users[socket.id];
+    socket.to(roomId).emit('userDisconnected', socket.id);
+  });
 });
-
 
 app.use("/api", userRoutes);
 
@@ -77,4 +85,4 @@ app.get("/", (req, res) => {
 // });
 server.listen(3001, (port) => {
   console.log("Server started", server.address());
-})
+});
