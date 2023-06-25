@@ -46,10 +46,10 @@ io.on('connection', (socket) => {
   socket.on('createRoom', (roomId) => {
     socket.join(roomId);
     console.log(`Socket ${socket.id} joined room ${roomId}`);
-    // users[socket.id] = roomId;
+    users[socket.id] = roomId;
     
-     users["arun"] = roomId;
-     console.log(users["arun"],roomId)
+     
+    //  console.log(users["arun"],roomId, users[socket.id])
     socket.emit('roomJoined', roomId);
   });
 
