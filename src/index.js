@@ -38,30 +38,37 @@ mongoose
 
 io.on("connection", (socket) => {
   socket.on("joinSession", ({ user, roomId }) => {
+    console.log("🚀 ~ file: index.js:41 ~ socket.on ~ roomId:", roomId, user)
     socket.join(roomId); // Join the specified room
     socket.username = user; // Assign a username to the socket if needed
     // Additional code for handling the session
   });
 
+
   socket.on("offer", (data) => {
     const { offer, roomId } = data;
+    // console.log("🚀 ~ file: index.js:50 ~ socket.on ~ data:", data)
     socket.to(roomId).emit("incomingOffer", { offer, socketId: socket.id });
   });
 
   socket.on("answer", (data) => {
     const { answer, socketId } = data;
+    // console.log("🚀 ~ file: index.js:56 ~ socket.on ~ data:", data)
     socket.to(socketId).emit("incomingAnswer", { answer, socketId: socket.id });
   });
 
   socket.on("iceCandidate", (data) => {
     const { candidate, socketId } = data;
+    // console.log("🚀 ~ file: index.js:62 ~ socket.on ~ data:", data)
     socket
       .to(socketId)
       .emit("incomingIceCandidate", { candidate, socketId: socket.id });
   });
 
   socket.on("disconnect", () => {
-    const roomId = Object.keys(socket.rooms)[1]; // Get the room ID of the socket
+    const roomId = Object.keys(socket.rooms)[1];
+    // console.log("🚀 ~ file: index.js:65 ~ socket.on ~ rooms:",socket )
+    // Get the room ID of the socket
     socket.to(roomId).emit("userDisconnected", socket.id);
   });
 });
