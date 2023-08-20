@@ -6,7 +6,12 @@ import {firebase} from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
-import {showAlert} from 'react-native-customisable-alert';
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from 'react-native-alert-notification';
 import {
   GET_USER,
   GET_POSTS,
@@ -60,28 +65,16 @@ import {Alert} from 'react-native';
 export const getUser = () => {
   try {
     return async dispatch => {
-      try {
-        const userdata = await AsyncStorage.getItem('LoggedUser');
+      const userdata = await AsyncStorage.getItem('LoggedUser');
 
-        if (userdata !== null) {
-          // We have data!!
-          const usernow = JSON.parse(userdata);
-          // console.log(
-          //   'value from asyncstoragee  redux before parsed',
-          //   userdata,
-          // );
-          // console.log(
-          //   'value from asyncstoragee redux after parseed ',
-          //   usernow.uid,
-          // );
+      if (userdata !== null) {
+        // We have data!!
+        const usernow = JSON.parse(userdata);
 
-          dispatch({
-            type: GET_USER,
-            payload: usernow,
-          });
-        }
-      } catch (error) {
-        console.log('no data in async storage', error);
+        dispatch({
+          type: GET_USER,
+          payload: usernow,
+        });
       }
     };
   } catch (error) {
@@ -167,28 +160,17 @@ export const loginUser = (user, onsucess) => {
                 'user details from Login screen: ' +
                   JSON.stringify(userDetails),
               );
-              onsucess();
-            })
-            .catch(error => {
-              console.log('Login Failed', error);
-
-              showAlert({
-                title: 'Are you sure?',
-                message: 'All your files will be deleted!',
-                alertType: 'warning',
-                onPress: () => console.log('files deleted!'),
-              });
+              onsucess(userData);
             });
         }
       });
     })
     .catch(error => {
-      console.error(error);
-      showAlert({
-        title: 'Are you sure?',
-        message: 'All your files will be deleted!',
-        alertType: 'warning',
-        onPress: () => console.log('files deleted!'),
+      console.log(error);
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Login Failed',
+        textBody: `${error}`,
       });
     });
 };

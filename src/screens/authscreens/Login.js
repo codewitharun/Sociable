@@ -7,6 +7,8 @@ import {
   TextInput,
   TouchableOpacity,
   Button,
+  ActivityIndicator,
+  Image,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {
@@ -15,24 +17,40 @@ import {
   AlertNotificationRoot,
   Toast,
 } from 'react-native-alert-notification';
-
+import CommonImage from '../components/CommonImage';
 import {loginUser} from '../../redux/action/firebaseActions';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {COLOR} from '../components/Colors';
+import Header from '../../common/header';
+import CommonTextInput from '../../common/textinput';
+import CommonButton from '../../common/button';
+import showAlert from '../../common/showAlert';
 const {height, width} = Dimensions.get('screen');
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [errorEmail, setErrorEmail] = useState('');
   const [ErrorPassword, setErrorPassword] = useState('');
   const [password, setPassword] = useState('');
+  const [Loading, setLoading] = useState(false);
   const [reference, setRefrence] = useState('');
 
   async function EmailSign() {
+    setLoading(true);
     const user = {
       email: email,
       password: password,
     };
-    loginUser(user, () => {
-      console.log('on success ');
+    loginUser(user, Login => {
+      console.log('on success ', JSON.parse(Login));
+      const name = JSON.parse(Login);
+      setLoading(false);
+      Dialog.show({
+        type: ALERT_TYPE.SUCCESS,
+
+        title: 'Login Success',
+        textBody: `Welcome to Sociable ${name.displayName}`,
+        button: 'close',
+      });
       navigation.reset({
         index: 0,
         routes: [{name: 'Success'}],
@@ -43,13 +61,12 @@ const Login = ({navigation}) => {
   // validation starts here
   const _emailvalidate = mail => {
     var emailRegex = /[a-zA-Z0-9]@(yopmail)\.com\b$/g;
-    //   /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-
-    //  /^(?:\d{10}|\w+@\w+\.\w{2,3})$/;
     if (mail === '') {
       setErrorEmail('*Please enter email.');
+      showAlert(errorEmail);
     } else if (!emailRegex.test(mail)) {
       setErrorEmail('*Please enter valid email.');
+      showAlert(errorEmail);
     } else {
       setErrorEmail(null);
     }
@@ -59,10 +76,12 @@ const Login = ({navigation}) => {
       /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
     if (pass === '') {
       setErrorPassword('*Please enter password.');
+      showAlert(ErrorPassword);
     } else if (/([A-Z]+)/g.test(pass) && pass.length < 8) {
       setErrorPassword(
         '*Please enter a special character and length must be 8 digit.',
       );
+      showAlert(ErrorPassword);
     } else if (!passwordRegex.test(pass)) {
       setErrorPassword('*Please enter valid password.');
     } else {
@@ -85,210 +104,106 @@ const Login = ({navigation}) => {
     return flag;
   };
   const onSubmit = () => {
+    setLoading(true);
     if (validate()) {
       EmailSign();
     } else {
-      alert('Mandatory field is required');
+      setLoading(false);
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: 'Warning',
+        textBody: 'Mandatory fields are required',
+      });
     }
   };
 
   return (
-    <SafeAreaView style={{backgroundColor: 'black'}}>
+    <SafeAreaView>
       <KeyboardAwareScrollView>
-        <View
-          style={{
-            height: height * 1,
-            justifyContent: 'center',
-            width: width * 1,
-            backgroundColor: 'black',
-          }}>
-          <View style={{height: '12%', width: '90%', alignSelf: 'center'}}>
-            <Text
-              style={{
-                fontFamily:
-                  Platform.OS == 'android'
-                    ? 'Logo-Regular'
-                    : 'FONTSPRINGDEMO-BlueVinylRegular',
-                fontSize: 35,
-                textAlign: 'center',
-                // lineHeight: 29,
-                color: 'white',
-              }}>
-              Sociable
-            </Text>
+        <View style={styles.container}>
+          <View style={{height: '30%', width: '100%'}}>
+            <Header name={'Sociable'} />
           </View>
-          <View style={{alignSelf: 'center', width: width * 0.9}}>
-            <TextInput
-              placeholder="Enter your corporate email ID"
-              placeholderTextColor={'rgb(122,122,122)'}
-              autoCapitalize={false}
-              onChangeText={txt => {
-                setEmail(txt), _emailvalidate(txt);
-              }}
-              style={{
-                height: height * 0.06,
-                backgroundColor: 'rgb(54,54,54)',
-                borderRadius: 3,
-                paddingHorizontal: 10,
-                color: '#fff',
-                fontFamily: 'InstagramSans-Medium',
-              }}
-            />
-            {errorEmail != null ? (
-              <View
-                style={{
-                  height: height * 0.02,
-                  width: width / 1.3,
-                  justifyContent: 'center',
-                  // backgroundColor: "grey"
-                }}>
-                <Text
-                  style={{
-                    color: 'red',
-                    fontSize: 15,
-                  }}>
-                  {errorEmail}
-                </Text>
-              </View>
-            ) : null}
-            <TextInput
-              placeholder="Password"
-              placeholderTextColor={'rgb(122,122,122)'}
-              secureTextEntry={true}
-              onChangeText={txt => {
-                setPassword(txt), _passwordvalidate(txt);
-              }}
-              style={{
-                height: height * 0.06,
-                backgroundColor: 'rgb(54,54,54)',
-                borderRadius: 3,
-                paddingHorizontal: 10,
-                color: '#fff',
-                marginTop: 20,
-                fontFamily: 'InstagramSans-Medium',
-              }}
-            />
-            {ErrorPassword != null ? (
-              <View
-                style={{
-                  height: height * 0.02,
-                  width: width / 1.3,
-                  justifyContent: 'center',
-                  // backgroundColor: "grey"
-                }}>
-                <Text
-                  style={{
-                    color: 'red',
-                    fontSize: 15,
-                  }}>
-                  {ErrorPassword}
-                </Text>
-              </View>
-            ) : null}
-            <TouchableOpacity
-              onPress={() => onSubmit()}
-              style={{
-                height: height * 0.06,
-                backgroundColor: 'rgb(28,154,236)',
-                borderRadius: 3,
-                justifyContent: 'center',
+          <View style={styles.textViewContainer}>
+            <View style={{marginTop: 30}}>
+              <CommonTextInput
+                placeholder={'Enter your email Id'}
+                hidden={false}
+                setText={txt => {
+                  setEmail(txt);
+                }}
+                validate={txt => {
+                  _emailvalidate(txt);
+                }}
+              />
 
-                marginTop: 20,
-              }}>
-              <Text
-                style={{
-                  color: '#fff',
-                  textAlign: 'center',
-                  fontSize: 18,
-                  fontFamily: 'InstagramSans-Medium',
-                }}>
-                Log in
-              </Text>
-            </TouchableOpacity>
-            <Button
-              title={'toast notification'}
-              onPress={() =>
-                Toast.show({
-                  type: ALERT_TYPE.SUCCESS,
-                  title: 'Success',
-                  textBody: 'Congrats! this is toast notification success',
-                })
-              }
-            />
-            <Button
-              title={'dialog box'}
-              onPress={() =>
-                Dialog.show({
-                  type: ALERT_TYPE.SUCCESS,
-                  title: 'Success',
-                  textBody: 'Congrats! this is dialog box success',
-                  button: 'close',
-                })
-              }
-            />
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Forgot')}
-              style={{
-                height: height * 0.06,
-                //   backgroundColor: 'rgb(28,154,236)',
-                borderRadius: 3,
-                justifyContent: 'center',
-
-                marginTop: 10,
-              }}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  fontFamily: 'InstagramSans-Medium',
-                  color: 'rgb(54,54,54)',
-                }}>
-                Forgot your login details?{' '}
-                <Text style={{color: '#fff', fontFamily: 'InstagramSans-Bold'}}>
-                  Get Help logging in
-                </Text>
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              width: width * 1,
-              borderBottomColor: 'rgb(54,54,54)',
-              borderBottomWidth: 0.5,
-            }}></View>
-
-          <View style={{position: 'absolute', bottom: 50}}>
+              <CommonTextInput
+                placeholder={'Enter your Password'}
+                hidden={true}
+                setText={txt => {
+                  setPassword(txt);
+                }}
+                validate={txt => {
+                  _passwordvalidate(txt);
+                }}
+              />
+            </View>
             <View
               style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
+                height: height * 0.1,
                 width: width * 1,
-                borderBottomColor: 'rgb(54,54,54)',
-                borderBottomWidth: 0.5,
-              }}></View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Signup')}
-              style={{
-                height: height * 0.06,
-                //   backgroundColor: 'rgb(28,154,236)',
-                borderRadius: 3,
                 justifyContent: 'center',
-
-                marginTop: 10,
+                alignItems: 'center',
               }}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  fontFamily: 'InstagramSans-Medium',
-                  color: 'rgb(54,54,54)',
-                }}>
-                Don't have an account?
-                <Text style={{color: '#fff', fontFamily: 'InstagramSans-Bold'}}>
-                  Sign up.
+              <TouchableOpacity onPress={() => navigation.navigate('Forgot')}>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    fontSize: 14,
+                    color: COLOR.Link,
+                    fontWeight: '400',
+                    letterSpacing: 2,
+                  }}>
+                  FORGOT PASSWORD
                 </Text>
-              </Text>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
+            <CommonButton name={'LOG IN'} onPress={() => onSubmit()} />
+            <View style={styles.secondLogin}>
+              <View
+                style={{
+                  justifyContent: 'flex-start',
+                }}>
+                <Text
+                  style={{
+                    color: '#606060',
+                    fontWeight: '400',
+                    letterSpacing: 2,
+                  }}>
+                  OR LOG IN BY
+                </Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  Dialog.show({
+                    type: ALERT_TYPE.WARNING,
+                    title: 'Google Login',
+                    textBody: `Google Login Coming Soon! meanwhile you can Login by Sign Up manually`,
+                    button: `OK`,
+                  });
+                }}>
+                <Image
+                  style={{height: 50, width: 50, borderRadius: 50}}
+                  source={CommonImage.googleLogo}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+                <Text>
+                  Don't have account ?
+                  <Text style={{color: COLOR.Link}}> SIGN UP</Text>
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </KeyboardAwareScrollView>
@@ -299,18 +214,26 @@ const Login = ({navigation}) => {
 export default Login;
 
 const styles = StyleSheet.create({
-  hairline: {
-    backgroundColor: '#A2A2A2',
-    height: 1,
-    width: 165,
+  container: {
+    height: height * 1,
+    width: width * 1,
+    backgroundColor: '#FFFFFF',
+    display: 'flex',
+    flexDirection: 'column',
   },
-
-  loginButtonBelowText1: {
-    fontFamily: 'AvenirNext-Bold',
-    fontSize: 14,
-    paddingHorizontal: 5,
-    alignSelf: 'center',
-    color: '#A2A2A2',
-    // marginBottom:
+  textViewContainer: {
+    height: '70%',
+    width: '100%',
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+  },
+  secondLogin: {
+    height: height * 0.23,
+    width: width * 1,
+    justifyContent: 'space-evenly',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 });

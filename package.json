@@ -44,6 +44,7 @@
     "react-native-image-crop-picker": "^0.38.0",
     "react-native-image-picker": "^4.10.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
+    "react-native-linear-gradient": "^2.8.2",
     "react-native-mediapicker": "^0.4.1",
     "react-native-modal": "^13.0.1",
     "react-native-permissions": "^3.8.0",
@@ -62,7 +63,8 @@
     "redux-thunk": "^2.4.1",
     "socket.io": "^4.5.3",
     "socket.io-client": "^4.6.2",
-    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.4.0"
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.4.0",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@babel/core": "^7.21.4",

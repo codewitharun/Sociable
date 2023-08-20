@@ -72,20 +72,7 @@ const Postprofile = ({navigation, params}) => {
     setRefreshing(false);
   }, []);
 
-  const onSignout = () => {
-    auth()
-      .signOut()
-      .then(() => console.log('User signed out!'))
-      .then(() => {
-        AsyncStorage.removeItem('userid');
-      })
-      .then(() =>
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'Login'}],
-        }),
-      );
-  };
+
 
   const onChoose = () => {
     try {

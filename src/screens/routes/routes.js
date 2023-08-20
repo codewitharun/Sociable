@@ -88,20 +88,7 @@ export function Afterauth(props) {
           tabBarIcon: ({}) => <Icon name="home" color="white" size={30} />,
         }}
       />
-          <bottom.Screen
-        name="Location"
-        component={YourComponent}
-        options={{
-          tabBarIcon: ({}) => <Icon name="home" color="white" size={30} />,
-        }}
-      />
-      {/* <bottom.Screen
-        name="MyFriends"
-        component={Addedfriends}
-        options={{
-          tabBarIcon: ({}) => <Icon name="home" color="white" size={30} />,
-        }}
-      /> */}
+
       <bottom.Screen
         name="MyFriends"
         component={Addedfriends}
@@ -119,12 +106,10 @@ export function Afterauth(props) {
         }}
       />
       <bottom.Screen
-        name="Notifications"
+        name="Beta"
         component={Notify}
         options={{
-          tabBarIcon: ({}) => (
-            <Icon name="bell-badge-outline" color="white" size={30} />
-          ),
+          tabBarIcon: ({}) => <Icon name="beta" color="white" size={30} />,
         }}
       />
 

@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Image,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import messaging from '@react-native-firebase/messaging';
@@ -16,23 +17,39 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
+import CommonTextInput from '../../common/textinput';
+import Header from '../../common/header';
+import {COLOR} from '../components/Colors';
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from 'react-native-alert-notification';
+import CommonButton from '../../common/button';
+import CommonImage from '../components/CommonImage';
+import showAlert from '../../common/showAlert';
 const {height, width} = Dimensions.get('screen');
 const Signup = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [errorEmail, setErrorEmail] = useState('');
-  const [ErroUsername, setErrorUsername] = useState('');
+  const [errorUsername, setErrorUsername] = useState('');
   const [confirm, setConfirm] = useState('');
   const [errorConfirm, setErrorConfirmPassword] = useState('');
   const [password, setPassword] = useState('');
   const [ErrorPassword, setErrorPassword] = useState('');
-  const [hidepass, setHidePass] = useState(false);
+  const [hidePass, setHidePass] = useState(true);
   const [check, setCheck] = useState(false);
+
   const [fcmToken, setfcmToken] = useState('');
   const update = {
     displayName: username,
     email: email,
     token: firestore.FieldValue.arrayUnion(fcmToken),
+  };
+  const toggleEye = () => {
+    setHidePass(!hidePass);
   };
   async function EmailSign() {
     try {
@@ -114,8 +131,10 @@ const Signup = ({navigation}) => {
     var nameRegex = /^[a-z A-Z ]{2,32}$/i;
     if (name == '' || name == undefined || name == null) {
       setErrorUsername('*Please enter full name.');
+      showAlert(errorUsername);
     } else if (!nameRegex.test(name)) {
       setErrorUsername('*Please enter valid valid name.');
+      showAlert(errorUsername);
     } else {
       setErrorUsername(null);
     }
@@ -128,8 +147,10 @@ const Signup = ({navigation}) => {
     //  /^(?:\d{10}|\w+@\w+\.\w{2,3})$/;
     if (mail === '' || mail === undefined || mail === null) {
       setErrorEmail('*Please enter email.');
+      showAlert(errorEmail);
     } else if (!emailRegex.test(mail)) {
       setErrorEmail('*Please enter valid email.');
+      showAlert(errorEmail);
     } else {
       setErrorEmail(null);
     }
@@ -139,12 +160,15 @@ const Signup = ({navigation}) => {
       /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
     if (pass === '') {
       setErrorPassword('*Please enter password.');
+      showAlert(ErrorPassword);
     } else if (/([A-Z]+)/g.test(pass) && pass.length < 8) {
       setErrorPassword(
         '*Please enter a special character and length must be 8 digit.',
       );
+      showAlert(ErrorPassword);
     } else if (!passwordRegex.test(pass)) {
       setErrorPassword('*Please enter valid password.');
+      showAlert(ErrorPassword);
     } else {
       setErrorPassword(null);
     }
@@ -161,16 +185,21 @@ const Signup = ({navigation}) => {
 
     if (username === '') {
       setErrorUsername('*Please enter Name.');
+      showAlert(errorUsername);
       flag = false;
     }
 
     if (email === '') {
       setErrorEmail('*Please enter email.');
+      showAlert(errorEmail);
+
       flag = false;
     }
 
     if (password === '') {
       setErrorPassword('*Please enter password.');
+      showAlert(ErrorPassword);
+
       flag = false;
     }
     // if (confirm !== password) {
@@ -190,193 +219,85 @@ const Signup = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={{backgroundColor: 'black'}}>
+    <SafeAreaView>
       <KeyboardAwareScrollView>
-        <View
-          style={{
-            height: height * 1,
-            justifyContent: 'center',
-            width: width * 1,
-            backgroundColor: 'black',
-          }}>
-          <View style={{height: '12%', width: '90%', alignSelf: 'center'}}>
-            <Text
-              style={{
-                fontFamily:
-                  Platform.OS == 'android'
-                    ? 'Logo-Regular'
-                    : 'FONTSPRINGDEMO-BlueVinylRegular',
-                fontSize: 35,
-                textAlign: 'center',
-                // lineHeight: 29,
-                color: 'white',
-              }}>
-              Sociable
-            </Text>
+        <View style={styles.container}>
+          <View style={{height: '30%', width: '100%'}}>
+            <Header name={'Sociable'} />
           </View>
-          <View style={{alignSelf: 'center', width: width * 0.9}}>
-            <TextInput
-              placeholder="Enter your corporate email ID"
-              placeholderTextColor={'rgb(122,122,122)'}
-              onChangeText={txt => {
-                setEmail(txt), _emailvalidate(txt);
-              }}
-              style={{
-                height: height * 0.06,
-                backgroundColor: 'rgb(54,54,54)',
-                borderRadius: 3,
-                paddingHorizontal: 10,
-                color: '#fff',
-                fontFamily: 'InstagramSans-Medium',
-              }}
-            />
-            {errorEmail != null ? (
+          <View style={styles.textViewContainer}>
+            <View style={{marginTop: 30, marginBottom: 30}}>
+              <CommonTextInput
+                placeholder={'Enter your email Id'}
+                hidden={false}
+                setText={txt => {
+                  setEmail(txt);
+                }}
+                validate={txt => {
+                  _emailvalidate(txt);
+                }}
+              />
+
+              <CommonTextInput
+                placeholder={'Enter your Full Name'}
+                setText={txt => {
+                  setUsername(txt);
+                }}
+                validate={txt => {
+                  _validateName(txt);
+                }}
+              />
+              <CommonTextInput
+                placeholder={'Enter New Password'}
+                hidden={hidePass}
+                showEye={() => {
+                  toggleEye();
+                }}
+                setText={txt => {
+                  setPassword(txt);
+                }}
+                validate={txt => {
+                  _passwordvalidate(txt);
+                }}
+              />
+            </View>
+
+            <CommonButton name={'SIGN UP'} onPress={() => onSubmit()} />
+            <View style={styles.secondLogin}>
               <View
                 style={{
-                  height: height * 0.02,
-                  width: width / 1.3,
-                  justifyContent: 'center',
-                  // backgroundColor: "grey"
+                  justifyContent: 'flex-start',
                 }}>
                 <Text
                   style={{
-                    color: 'red',
-                    fontSize: 15,
+                    color: '#606060',
+                    fontWeight: '400',
+                    letterSpacing: 2,
                   }}>
-                  {errorEmail}
+                  OR SIGN UP BY
                 </Text>
               </View>
-            ) : null}
-            <TextInput
-              placeholder="Full Name"
-              placeholderTextColor={'rgb(122,122,122)'}
-              // secureTextEntry={true}
-              onChangeText={txt => {
-                setUsername(txt), _validateName(txt);
-              }}
-              style={{
-                height: height * 0.06,
-                backgroundColor: 'rgb(54,54,54)',
-                borderRadius: 3,
-                paddingHorizontal: 10,
-                color: '#fff',
-                marginTop: 20,
-                fontFamily: 'InstagramSans-Medium',
-              }}
-            />
-            {ErroUsername != null ? (
-              <View
-                style={{
-                  height: height * 0.02,
-                  width: width / 1.3,
-                  justifyContent: 'center',
-                  // backgroundColor: "grey"
+              <TouchableOpacity
+                onPress={() => {
+                  Dialog.show({
+                    type: ALERT_TYPE.WARNING,
+                    title: 'Google Login',
+                    textBody: `Google Login Coming Soon! meanwhile you can Login by Sign Up manually`,
+                    button: `OK`,
+                  });
                 }}>
-                <Text
-                  style={{
-                    color: 'red',
-                    fontSize: 15,
-                  }}>
-                  {ErroUsername}
+                <Image
+                  style={{height: 50, width: 50, borderRadius: 50}}
+                  source={CommonImage.googleLogo}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <Text>
+                  Already have an account ?
+                  <Text style={{color: COLOR.Link}}> SIGN IN</Text>
                 </Text>
-              </View>
-            ) : null}
-            <TextInput
-              placeholder="Password"
-              placeholderTextColor={'rgb(122,122,122)'}
-              secureTextEntry={true}
-              onChangeText={txt => {
-                setPassword(txt), _passwordvalidate(txt);
-              }}
-              style={{
-                height: height * 0.06,
-                backgroundColor: 'rgb(54,54,54)',
-                borderRadius: 3,
-                paddingHorizontal: 10,
-                color: '#fff',
-                marginTop: 20,
-                fontFamily: 'InstagramSans-Medium',
-              }}
-            />
-            {ErrorPassword != null ? (
-              <View
-                style={{
-                  height: height * 0.02,
-                  width: width / 1.3,
-                  justifyContent: 'center',
-                  // backgroundColor: "grey"
-                }}>
-                <Text
-                  style={{
-                    color: 'red',
-                    fontSize: 15,
-                  }}>
-                  {ErrorPassword}
-                </Text>
-              </View>
-            ) : null}
-
-            <TouchableOpacity
-              onPress={() => onSubmit()}
-              style={{
-                height: height * 0.06,
-                backgroundColor: 'rgb(28,154,236)',
-                borderRadius: 3,
-                justifyContent: 'center',
-
-                marginTop: 20,
-              }}>
-              <Text
-                style={{
-                  color: '#fff',
-                  textAlign: 'center',
-                  fontSize: 18,
-                  fontFamily: 'InstagramSans-Medium',
-                }}>
-                Sign up
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              width: width * 1,
-              borderBottomColor: 'rgb(54,54,54)',
-              borderBottomWidth: 0.5,
-            }}></View>
-          <View style={{position: 'absolute', bottom: 50}}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                width: width * 1,
-                borderBottomColor: 'rgb(54,54,54)',
-                borderBottomWidth: 0.5,
-              }}></View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Login')}
-              style={{
-                height: height * 0.06,
-                //   backgroundColor: 'rgb(28,154,236)',
-                borderRadius: 3,
-                justifyContent: 'center',
-
-                marginTop: 10,
-              }}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  fontFamily: 'InstagramSans-Medium',
-                  color: 'rgb(54,54,54)',
-                }}>
-                Already have an account ?
-                <Text style={{color: '#fff', fontFamily: 'InstagramSans-Bold'}}>
-                  Log in.
-                </Text>
-              </Text>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </KeyboardAwareScrollView>
@@ -387,18 +308,26 @@ const Signup = ({navigation}) => {
 export default Signup;
 
 const styles = StyleSheet.create({
-  hairline: {
-    backgroundColor: '#A2A2A2',
-    height: 1,
-    width: 165,
+  container: {
+    height: height * 1,
+    width: width * 1,
+    backgroundColor: '#FFFFFF',
+    display: 'flex',
+    flexDirection: 'column',
   },
-
-  loginButtonBelowText1: {
-    fontFamily: 'AvenirNext-Bold',
-    fontSize: 14,
-    paddingHorizontal: 5,
-    alignSelf: 'center',
-    color: '#A2A2A2',
-    // marginBottom:
+  textViewContainer: {
+    height: '70%',
+    width: '100%',
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+  },
+  secondLogin: {
+    height: height * 0.23,
+    width: width * 1,
+    justifyContent: 'space-evenly',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 });

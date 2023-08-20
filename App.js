@@ -8,7 +8,7 @@ import Routes from './src/screens/routes/routes';
 const App = ({navigation}) => {
   return (
     <Provider store={store}>
-      <AlertNotificationRoot>
+      <AlertNotificationRoot theme="light">
         <Routes />
       </AlertNotificationRoot>
     </Provider>

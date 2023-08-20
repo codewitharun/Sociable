@@ -11,6 +11,7 @@ import {
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
+import {Toast, ALERT_TYPE} from 'react-native-alert-notification';
 import React, {useEffect, useState} from 'react';
 import {COLOR, height, width} from '../components/Colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -37,6 +38,11 @@ const Drawer = ({navigation}) => {
   const onSignOut = () => {
     userSignout(() => {
       console.log('on success ');
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: 'Success',
+        textBody: 'Logout successfully',
+      });
       navigation.reset({
         index: 0,
         routes: [{name: 'Login'}],
@@ -53,6 +59,7 @@ const Drawer = ({navigation}) => {
           // justifyContent: 'flex-start',
           width: width * 1,
           backgroundColor: 'black',
+          position: 'relative',
         }}>
         <View
           style={{
@@ -82,6 +89,11 @@ const Drawer = ({navigation}) => {
               }}
               source={{uri: user?.photoUrl}}
             />
+          </View>
+          <View style={{position: 'absolute', bottom: 0}}>
+            <TouchableOpacity>
+              <Icon name="bell-badge-outline" color="white" size={30} />
+            </TouchableOpacity>
           </View>
           <View
             style={{

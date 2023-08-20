@@ -204,6 +204,7 @@ const Addedfriends = ({navigation}) => {
               height: height * 0.05,
               display: 'flex',
               flexDirection: 'row',
+              marginTop: 15,
             }}>
             <TextInput
               style={{color: 'black', width: width * 0.7}}
