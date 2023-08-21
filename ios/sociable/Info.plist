@@ -51,7 +51,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>App needs Microphone Access Permission for testing</string>
+	<string>App needs Microphone Access Permission for Voice and Video calls</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>App needs photo library Access
 </string>

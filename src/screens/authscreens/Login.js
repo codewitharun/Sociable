@@ -31,9 +31,12 @@ const Login = ({navigation}) => {
   const [errorEmail, setErrorEmail] = useState('');
   const [ErrorPassword, setErrorPassword] = useState('');
   const [password, setPassword] = useState('');
-  const [Loading, setLoading] = useState(false);
-  const [reference, setRefrence] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [hidePass, setHidePass] = useState(true);
 
+  const toggleEye = () => {
+    setHidePass(!hidePass);
+  };
   async function EmailSign() {
     setLoading(true);
     const user = {
@@ -139,7 +142,11 @@ const Login = ({navigation}) => {
 
               <CommonTextInput
                 placeholder={'Enter your Password'}
-                hidden={true}
+                hide={true}
+                hidden={hidePass}
+                showEye={() => {
+                  toggleEye();
+                }}
                 setText={txt => {
                   setPassword(txt);
                 }}
@@ -168,7 +175,11 @@ const Login = ({navigation}) => {
                 </Text>
               </TouchableOpacity>
             </View>
-            <CommonButton name={'LOG IN'} onPress={() => onSubmit()} />
+            <CommonButton
+              loading={loading}
+              name={'LOG IN'}
+              onPress={() => onSubmit()}
+            />
             <View style={styles.secondLogin}>
               <View
                 style={{

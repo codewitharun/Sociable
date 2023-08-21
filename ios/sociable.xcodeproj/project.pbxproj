@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		0078558E2CC44E49A6529FAB /* Nabla-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 16C6ECDD3E73493493EBA58B /* Nabla-Regular.ttf */; };
 		00E356F31AD99517003FC87E /* sociableTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* sociableTests.m */; };
-		02BBBC1F5667465380F66DEF /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		02BBBC1F5667465380F66DEF /* (null) in Resources */ = {isa = PBXBuildFile; };
 		0D0DE279D1854160ABA44F08 /* Comfortaa-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B19F79F489FA42409D9E2708 /* Comfortaa-Bold.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -22,6 +22,8 @@
 		5C20F818FB0B49DC8AE199CC /* Logo-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69F075EC1E354350A568765C /* Logo-Regular.ttf */; };
 		67ABF4FC1CE3AC5E8B7634BE /* Pods_sociable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4998DFB5E5A35960A67F9F /* Pods_sociable.framework */; };
 		6BAD3A0A864645E6BB964DF3 /* InstagramSansCondensed-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0378289B622249FF8F12B749 /* InstagramSansCondensed-Bold.ttf */; };
+		6E2A0A0D2A936E830075016F /* AppIcon.appiconset in Resources */ = {isa = PBXBuildFile; fileRef = 6E2A0A0C2A936E830075016F /* AppIcon.appiconset */; };
+		6E2A0A0F2A937D7E0075016F /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E2A0A0E2A937D7E0075016F /* splash.png */; };
 		6EDBFF31293F193B00F27E76 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6EDBFF30293F193A00F27E76 /* GoogleService-Info.plist */; };
 		73217BA19DAB4D6CA090ADC2 /* InstagramSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18606571E64B413E840A53BC /* InstagramSans-Bold.ttf */; };
 		7B34A0292982499AB313F9DF /* InstagramSansScript-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2505C36084464698E4DCC0 /* InstagramSansScript-Regular.ttf */; };
@@ -80,6 +82,8 @@
 		5B7EB9410499542E8C5724F5 /* Pods-sociable-sociableTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sociable-sociableTests.debug.xcconfig"; path = "Target Support Files/Pods-sociable-sociableTests/Pods-sociable-sociableTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5D2B381FC9584A7596AE2FD5 /* Comfortaa-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Comfortaa-Medium.ttf"; path = "../src/assets/fonts/Comfortaa-Medium.ttf"; sourceTree = "<group>"; };
 		69F075EC1E354350A568765C /* Logo-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Logo-Regular.ttf"; path = "../src/assets/fonts/Logo-Regular.ttf"; sourceTree = "<group>"; };
+		6E2A0A0C2A936E830075016F /* AppIcon.appiconset */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AppIcon.appiconset; sourceTree = "<group>"; };
+		6E2A0A0E2A937D7E0075016F /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = splash.png; path = ../assets/splash.png; sourceTree = "<group>"; };
 		6EDBFF30293F193A00F27E76 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = sociable/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		88BA0F20C4E340B9B8F7352B /* InstagramSans-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "InstagramSans-Medium.ttf"; path = "../src/assets/fonts/InstagramSans-Medium.ttf"; sourceTree = "<group>"; };
@@ -206,6 +210,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				6E2A0A0E2A937D7E0075016F /* splash.png */,
+				6E2A0A0C2A936E830075016F /* AppIcon.appiconset */,
 				6EDBFF30293F193A00F27E76 /* GoogleService-Info.plist */,
 				C3DFD5B428ED585B006F7D9F /* Fonts */,
 				13B07FAE1A68108700A75B9A /* sociable */,
@@ -277,6 +283,7 @@
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
 				8B5FA33E4010BECBDB17CEA5 /* [CP] Copy Pods Resources */,
+				82E80DA7C83D92EAD33C21AC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -301,6 +308,7 @@
 				9D3A7EE1E6F6256D86B0DF58 /* [CP-User] [RNFB] Core Configuration */,
 				9418FC15FF9F05004636A23D /* [CP] Copy Pods Resources */,
 				2F8A15FA8818C3FCD0DA4F54 /* [CP-User] [RNFB] Crashlytics Configuration */,
+				9C17CCD0E46352C3B8374055 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -386,6 +394,7 @@
 				C3DFD5C728ED585B006F7D9F /* Feather.ttf in Resources */,
 				2F0440B6704B47F881BBE965 /* InstagramSansCondensed-Regular.ttf in Resources */,
 				D0F351C631724078BEBE8B8C /* InstagramSansHeadline-Regular.ttf in Resources */,
+				6E2A0A0D2A936E830075016F /* AppIcon.appiconset in Resources */,
 				3689A143EFDB47BA9F6EE575 /* InstagramSansScript-Bold.ttf in Resources */,
 				7B34A0292982499AB313F9DF /* InstagramSansScript-Regular.ttf in Resources */,
 				6EDBFF31293F193B00F27E76 /* GoogleService-Info.plist in Resources */,
@@ -394,7 +403,8 @@
 				C3DFD5D428ED585B006F7D9F /* MaterialIcons.ttf in Resources */,
 				C3DFD5CB28ED585B006F7D9F /* AntDesign.ttf in Resources */,
 				0078558E2CC44E49A6529FAB /* Nabla-Regular.ttf in Resources */,
-				02BBBC1F5667465380F66DEF /* BuildFile in Resources */,
+				6E2A0A0F2A937D7E0075016F /* splash.png in Resources */,
+				02BBBC1F5667465380F66DEF /* (null) in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,6 +441,23 @@
 			shellPath = /bin/sh;
 			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\nif [[ ${PODS_ROOT} ]]; then\n  echo \"info: Exec FirebaseCrashlytics Run from Pods\"\n  \"${PODS_ROOT}/FirebaseCrashlytics/run\"\nelse\n  echo \"info: Exec FirebaseCrashlytics Run from framework\"\n  \"${PROJECT_DIR}/FirebaseCrashlytics.framework/run\"\nfi\n";
 		};
+		82E80DA7C83D92EAD33C21AC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-sociable-sociableTests/Pods-sociable-sociableTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-sociable-sociableTests/Pods-sociable-sociableTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-sociable-sociableTests/Pods-sociable-sociableTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		8B5FA33E4010BECBDB17CEA5 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -463,6 +490,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-sociable/Pods-sociable-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9C17CCD0E46352C3B8374055 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-sociable/Pods-sociable-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-sociable/Pods-sociable-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-sociable/Pods-sociable-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9D3A7EE1E6F6256D86B0DF58 /* [CP-User] [RNFB] Core Configuration */ = {

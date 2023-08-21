@@ -47,7 +47,7 @@
     "react-native-linear-gradient": "^2.8.2",
     "react-native-mediapicker": "^0.4.1",
     "react-native-modal": "^13.0.1",
-    "react-native-permissions": "^3.8.0",
+    "react-native-permissions": "^3.8.4",
     "react-native-push-notification": "^8.1.1",
     "react-native-reanimated": "^3.2.0",
     "react-native-safe-area-context": "^4.4.1",
@@ -75,6 +75,27 @@
     "metro-react-native-babel-preset": "^0.70.3",
     "react-test-renderer": "18.0.0"
   },
+  "reactNativePermissionsIOS": [
+    "AppTrackingTransparency",
+    "BluetoothPeripheral",
+    "Calendars",
+    "Camera",
+    "Contacts",
+    "FaceID",
+    "LocationAccuracy",
+    "LocationAlways",
+    "LocationWhenInUse",
+    "MediaLibrary",
+    "Microphone",
+    "Motion",
+    "Notifications",
+    "PhotoLibrary",
+    "PhotoLibraryAddOnly",
+    "Reminders",
+    "Siri",
+    "SpeechRecognition",
+    "StoreKit"
+  ],
   "jest": {
     "preset": "react-native"
   },

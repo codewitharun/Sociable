@@ -1,9 +1,15 @@
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import React from 'react';
 import {height, width} from '../screens/components/Colors';
 import LinearGradient from 'react-native-linear-gradient';
 
-const CommonButton = ({name, onPress}) => {
+const CommonButton = ({name, onPress, loading}) => {
   return (
     <View style={styles.Container}>
       <LinearGradient
@@ -16,7 +22,11 @@ const CommonButton = ({name, onPress}) => {
           onPress={() => {
             onPress();
           }}>
-          <Text style={styles.button}>{name}</Text>
+          {loading ? (
+            <ActivityIndicator size={30} />
+          ) : (
+            <Text style={styles.button}>{name}</Text>
+          )}
         </TouchableOpacity>
       </LinearGradient>
     </View>
@@ -32,7 +42,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-    
   },
   button: {
     textAlign: 'center',

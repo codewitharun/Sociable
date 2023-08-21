@@ -40,7 +40,7 @@ const Signup = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [ErrorPassword, setErrorPassword] = useState('');
   const [hidePass, setHidePass] = useState(true);
-  const [check, setCheck] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [fcmToken, setfcmToken] = useState('');
   const update = {
@@ -52,6 +52,7 @@ const Signup = ({navigation}) => {
     setHidePass(!hidePass);
   };
   async function EmailSign() {
+    setLoading(true);
     try {
       auth()
         .createUserWithEmailAndPassword(email, password)
@@ -65,6 +66,7 @@ const Signup = ({navigation}) => {
                 storage().ref(`${user.uid}/profilePhoto`).putString('hello');
               } catch (error) {
                 console.log(user);
+                setLoading(false);
               }
               // It shows the Firebase user
             }
@@ -72,6 +74,8 @@ const Signup = ({navigation}) => {
         })
         .then(() => {
           // navigation.push ('Success');
+          setLoading(false);
+
           navigation.reset({
             index: 0,
             routes: [{name: 'Profile'}],
@@ -229,7 +233,6 @@ const Signup = ({navigation}) => {
             <View style={{marginTop: 30, marginBottom: 30}}>
               <CommonTextInput
                 placeholder={'Enter your email Id'}
-                hidden={false}
                 setText={txt => {
                   setEmail(txt);
                 }}
@@ -249,6 +252,8 @@ const Signup = ({navigation}) => {
               />
               <CommonTextInput
                 placeholder={'Enter New Password'}
+                aa
+                hide={true}
                 hidden={hidePass}
                 showEye={() => {
                   toggleEye();
@@ -262,7 +267,11 @@ const Signup = ({navigation}) => {
               />
             </View>
 
-            <CommonButton name={'SIGN UP'} onPress={() => onSubmit()} />
+            <CommonButton
+              loading={loading}
+              name={'SIGN UP'}
+              onPress={() => onSubmit()}
+            />
             <View style={styles.secondLogin}>
               <View
                 style={{

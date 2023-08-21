@@ -9,7 +9,14 @@ import React from 'react';
 import {height, width} from '../screens/components/Colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const CommonTextInput = ({placeholder, showEye, setText, validate, hidden}) => {
+const CommonTextInput = ({
+  placeholder,
+  showEye,
+  setText,
+  validate,
+  hidden,
+  hide,
+}) => {
   return (
     <View
       style={{
@@ -42,7 +49,7 @@ const CommonTextInput = ({placeholder, showEye, setText, validate, hidden}) => {
         }}
       />
 
-      {
+      {hide && (
         <TouchableOpacity onPress={() => showEye()} style={styles.eyeIcon}>
           {/* You can use appropriate icons or images for the show/hide toggle */}
           {hidden ? (
@@ -51,7 +58,7 @@ const CommonTextInput = ({placeholder, showEye, setText, validate, hidden}) => {
             <Icon name="eye" size={30} color="gray" />
           )}
         </TouchableOpacity>
-      }
+      )}
     </View>
   );
 };
