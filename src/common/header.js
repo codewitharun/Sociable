@@ -40,26 +40,12 @@ const Header = ({name}) => {
                 ? 'Logo-Regular'
                 : 'FONTSPRINGDEMO-BlueVinylRegular',
             fontSize: 55,
-            marginTop: 20,
+            marginTop: 100,
             lineHeight: 60,
           }}>
-          welcome
+          {name}
         </Text>
       </View>
-      <Text
-        style={{
-          color: 'white',
-          textAlign: 'center',
-          fontFamily:
-            Platform.OS == 'android'
-              ? 'Logo-Regular'
-              : 'FONTSPRINGDEMO-BlueVinylRegular',
-          fontSize: 55,
-          marginTop: 20,
-          lineHeight: 60,
-        }}>
-        {name}
-      </Text>
     </ImageBackground>
   );
 };

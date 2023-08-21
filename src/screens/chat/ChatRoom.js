@@ -20,6 +20,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-controls';
 import PushNotification from 'react-native-push-notification';
+
 const ChatRoom = ({user1, user2, navigation}) => {
   const [messages, setMessages] = useState([]);
   const [chatRoomId, setChatRoomId] = useState('');
@@ -57,14 +58,14 @@ const ChatRoom = ({user1, user2, navigation}) => {
       setMessages(messages);
     });
     PushNotification.configure({
-      onRegister: function(token) {
+      onRegister: function (token) {
         // Send the token to the backend server to register the device
       },
-      onNotification: function(notification) {
+      onNotification: function (notification) {
         // Handle the incoming push notification
       },
     });
-    
+
     // Send push notification on new message
     function sendPushNotification(message) {
       PushNotification.localNotification({
@@ -236,7 +237,6 @@ const ChatRoom = ({user1, user2, navigation}) => {
         placeholder="Enter your message here"
         chatId={chatRoomId}
         chatName={chatName}
-        
         renderAvatarOnTop
         onPressAvatar={res => console.log('hello', res)}
         // alwaysShowSend

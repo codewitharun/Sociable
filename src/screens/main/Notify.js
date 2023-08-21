@@ -1,230 +1,325 @@
-import React, {useEffect, useState, useRef, useLayoutEffect} from 'react';
-import {Button, Text, View, SafeAreaView, TextInput} from 'react-native';
-import io from 'socket.io-client';
+// Imports dependencies.
+import React, {useEffect, useState} from 'react';
 import {
-  RTCView,
-  RTCPeerConnection,
-  RTCSessionDescription,
-  RTCIceCandidate,
-  mediaDevices,
-} from 'react-native-webrtc';
-
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import {
+  ChatClient,
+  ChatOptions,
+  ChatMessageChatType,
+  ChatMessage,
+} from 'react-native-agora-chat';
+// Defines the App object.
 const Notify = () => {
-  const socketRef = useRef(null);
-  const peerConnectionRef = useRef(null);
-  const localStreamRef = useRef(null);
-  const remoteStreamRef = useRef(null);
-  const [isConnected, setIsConnected] = useState(false);
-  const [prod, setProd] = useState(true);
-  const [user, setUser] = useState('arun');
-  const [roomId, setRoomId] = useState('test');
-  const [refreshKey, setRefreshKey] = useState(0);
-
+  // Defines the variable.
+  const title = 'AgoraChatQuickstart';
+  // Replaces <your appKey> with your app key.
+  const appKey = '411018970#1190086';
+  // Replaces <your userId> with your user ID.
+  const [username, setUsername] = React.useState('arunk4it');
+  // Replaces <your agoraToken> with your Agora token.
+  const [chatToken, setChatToken] = React.useState(
+    '007eJxTYFBwNY3+/9n7dIrt2bu6OQu7zO5F5U70nPKVf8H1NR0fLixSYLA0NDa2NDMwNzVOTTExNzRJNDezNEiyNE42NDWwSLMwe7jscUpDICPDbrlJzIwMrAyMQAjiqzAkG5snmicaGeiaGJgk6xoapqbqWpglW+immCalGFgkJqekGaYCAADgKVs=',
+  );
+  const [targetId, setTargetId] = React.useState('');
+  const [content, setContent] = React.useState('');
+  const [logText, setWarnText] = React.useState('Show log area');
+  const chatClient = ChatClient.getInstance();
+  const [isInitialized, setInitialized] = useState(undefined);
+  const chatManager = chatClient.chatManager;
+  // Outputs console logs.
   useEffect(() => {
-    const link = prod
-      ? 'https://sociable-xisn.onrender.com'
-      : 'http://10.0.2.2:3001';
-    socketRef.current = io(link, {
-      transports: ['websocket'],
+    logText.split('\n').forEach((value, index, array) => {
+      if (index === 0) {
+        console.log(value);
+      }
     });
-
-    socketRef.current.on('connect', () => {
-      console.log('Connected to server');
-      setIsConnected(true);
-      // socketRef.current.emit('joinSession', user);s
-      // socketRef.current.emit('joinSession', user, roomId);
-      // Join the session with user and room ID
-      // Join the session with user and room ID
-    });
-
-    socketRef.current.on('incomingOffer', async data => {
-      try {
-        const {offer, socketId} = data;
-        const configuration = {
-          iceServers: [{urls: 'stun:stun.l.google.com:19302'}],
-        };
-        const peerConnection = new RTCPeerConnection(configuration);
-        peerConnectionRef.current = peerConnection;
-
-        peerConnection.onicecandidate = event => {
-          if (event.candidate) {
-            const iceCandidateData = {
-              candidate: event.candidate,
-              socketId,
-            };
-            socketRef.current.emit('iceCandidate', iceCandidateData);
+  }, [logText]);
+  // Outputs UI logs.
+  const rollLog = text => {
+    setWarnText(preLogText => {
+      let newLogText = text;
+      preLogText
+        .split('\n')
+        .filter((value, index, array) => {
+          if (index > 8) {
+            return false;
           }
-        };
-
-        peerConnection.ontrack = event => {
-          const remoteStream = event.streams[0];
-          remoteStreamRef.current = remoteStream;
-        };
-
-        await peerConnection.setRemoteDescription(
-          new RTCSessionDescription(offer),
-        );
-        const answer = await peerConnection.createAnswer();
-        await peerConnection.setLocalDescription(answer);
-
-        const answerData = {
-          answer: peerConnection.localDescription,
-          socketId,
-        };
-        socketRef.current.emit('answer', answerData);
-      } catch (error) {
-        console.error('Error handling incoming offer:', error);
-      }
+          return true;
+        })
+        .forEach((value, index, array) => {
+          newLogText += '\n' + value;
+        });
+      return newLogText;
     });
-
-    socketRef.current.on('incomingAnswer', async data => {
-      try {
-        const {answer, socketId} = data;
-        const peerConnection = peerConnectionRef.current;
-        await peerConnection.setRemoteDescription(
-          new RTCSessionDescription(answer),
-        );
-      } catch (error) {
-        console.error('Error handling incoming answer:', error);
-      }
-    });
-
-    socketRef.current.on('incomingIceCandidate', async data => {
-      try {
-        const {candidate, socketId} = data;
-        const peerConnection = peerConnectionRef.current;
-        await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
-      } catch (error) {
-        console.error('Error handling incoming ICE candidate:', error);
-      }
-    });
-
-    // return () => {
-    //   socketRef.current.disconnect();
-    // };
-  }, []);
-
-  const disconnectSocket = () => {
-    socketRef.current.disconnect(); // Disconnect the socket
-    setIsConnected(false);
-
-    // Replace 'your-room-id' with the actual room ID
-    socketRef.current.emit('disconnectRoom', roomId);
   };
-  const initiateCall = async () => {
-    socketRef.current.emit('joinSession', {user, roomId});
-    try {
-      const stream = await mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-      });
-      localStreamRef.current = stream;
-
-      const configuration = {
-        iceServers: [{urls: 'stun:stun.l.google.com:19302'}],
+  useEffect(() => {
+    // Registers listeners for messaging.
+    const setMessageListener = () => {
+      let msgListener = {
+        onMessagesReceived(messages) {
+          for (let index = 0; index < messages.length; index++) {
+            rollLog('received msgId: ' + messages[index].msgId);
+            console.log(
+              '🚀 ~ file: Notify.js:66 ~ onMessagesReceived ~ messages:',
+              messages,
+            );
+          }
+        },
+        onCmdMessagesReceived: messages => {},
+        onMessagesRead: messages => {},
+        onGroupMessageRead: groupMessageAcks => {},
+        onMessagesDelivered: messages => {},
+        onMessagesRecalled: messages => {},
+        onConversationsUpdate: () => {},
+        onConversationRead: (from, to) => {},
       };
-      const peerConnection = new RTCPeerConnection(configuration);
-      peerConnectionRef.current = peerConnection;
-
-      stream.getTracks().forEach(track => {
-        peerConnection.addTrack(track, stream);
+      chatManager.removeAllMessageListener();
+      chatManager.addMessageListener(msgListener);
+    };
+    // Initializes the SDK.
+    // Initializes any interface before calling it.
+    const init = () => {
+      let o = new ChatOptions({
+        autoLogin: false,
+        appKey: appKey,
       });
-
-      peerConnection.onicecandidate = event => {
-        if (event.candidate) {
-          const data = {
-            candidate: event.candidate,
-            socketId: 'server',
+      chatClient.removeAllConnectionListener();
+      chatClient
+        .init(o)
+        .then(() => {
+          rollLog('init success');
+          setInitialized(true);
+          let listener = {
+            onTokenWillExpire() {
+              rollLog('token expire.');
+            },
+            onTokenDidExpire() {
+              rollLog('token did expire');
+            },
+            onConnected() {
+              rollLog('onConnected');
+              setMessageListener();
+            },
+            onDisconnected(errorCode) {
+              rollLog('onDisconnected:' + errorCode);
+            },
           };
-          socketRef.current.emit('iceCandidate', data);
-        }
-      };
+          chatClient.addConnectionListener(listener);
+        })
+        .catch(error => {
+          rollLog(
+            'init fail: ' +
+              (error instanceof Object ? JSON.stringify(error) : error),
+          );
+        });
+    };
+    init();
+  }, [chatClient, chatManager, appKey]);
 
-      peerConnection.ontrack = event => {
-        const remoteStream = event.streams[0];
-        remoteStreamRef.current = remoteStream;
-      };
-
-      const offer = await peerConnection.createOffer();
-      await peerConnection.setLocalDescription(offer);
-
-      const roomIdentifier = roomId == '' ? generateRoomId() : roomId; // Generate a random room ID
-      setRoomId(roomIdentifier); // Set the generated room ID in state
-
-      const data = {
-        offer: peerConnection.localDescription,
-        roomId: roomIdentifier,
-      };
-      socketRef.current.emit('offer', data);
-    } catch (error) {
-      console.error('Error initializing video call:', error);
+  // Logs in with an account ID and a token.
+  const login = () => {
+    if (isInitialized === false || isInitialized === undefined) {
+      rollLog('Perform initialization first.');
+      return;
     }
+    rollLog('start login ...');
+    chatClient
+      .loginWithAgoraToken(username, chatToken)
+      .then(() => {
+        rollLog('login operation success.');
+      })
+      .catch(reason => {
+        rollLog('login fail: ' + JSON.stringify(reason));
+      });
   };
-
-  const generateRoomId = () => {
-    const characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const length = 6;
-    let result = '';
-
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(
-        Math.floor(Math.random() * characters.length),
-      );
+  // Logs out from server.
+  const logout = () => {
+    if (isInitialized === false || isInitialized === undefined) {
+      rollLog('Perform initialization first.');
+      return;
     }
-
-    return result;
+    rollLog('start logout ...');
+    chatClient
+      .logout()
+      .then(() => {
+        rollLog('logout success.');
+      })
+      .catch(reason => {
+        rollLog('logout fail:' + JSON.stringify(reason));
+      });
   };
-
+  // Sends a text message to somebody.
+  const sendmsg = () => {
+    if (isInitialized === false || isInitialized === undefined) {
+      rollLog('Perform initialization first.');
+      return;
+    }
+    let msg = ChatMessage.createTextMessage(
+      targetId,
+      content,
+      ChatMessageChatType.PeerChat,
+    );
+    const callback = new (class {
+      onProgress(locaMsgId, progress) {
+        rollLog(`send message process: ${locaMsgId}, ${progress}`);
+      }
+      onError(locaMsgId, error) {
+        rollLog(`send message fail: ${locaMsgId}, ${JSON.stringify(error)}`);
+      }
+      onSuccess(message) {
+        console.log('🚀 ~ file: Notify.js:176 ~ onSuccess ~ message:', message);
+        rollLog('send message success: ' + message.localMsgId);
+      }
+    })();
+    rollLog('start send message ...');
+    chatClient.chatManager
+      .sendMessage(msg, callback)
+      .then(() => {
+        rollLog('send message: ' + msg.localMsgId);
+      })
+      .catch(reason => {
+        rollLog('send fail: ' + JSON.stringify(reason));
+      });
+  };
+  // Renders the UI.
   return (
     <SafeAreaView>
-      <View>
-        <Text style={{color: 'black'}}>
-          {isConnected ? 'Connected' : 'Disconnected'}
-        </Text>
-        <Text style={{color: 'black'}}>Room ID: {roomId}</Text>
-        <TextInput
-          style={{color: 'black'}}
-          placeholder="Custom Room id "
-          onChangeText={txt => {
-            setRoomId(txt);
-          }}
-        />
-        <TextInput
-          style={{color: 'black'}}
-          placeholder="Custom User "
-          onChangeText={txt => {
-            setUser(txt);
-          }}
-        />
-        <Button
-          title="Click me"
-          onPress={() => {
-            initiateCall();
-          }}
-        />
-        {/* Render remote and local video streams */}
-        {remoteStreamRef.current && (
-          <RTCView
-            streamURL={remoteStreamRef.current.toURL()}
-            style={{width: 200, height: 150}}
-          />
-        )}
-        {localStreamRef.current && (
-          <RTCView
-            streamURL={localStreamRef.current.toURL()}
-            style={{width: 200, height: 150}}
-          />
-        )}
-        <Button
-          title="Disconnect"
-          onPress={() => {
-            disconnectSocket();
-          }}
-        />
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>{title}</Text>
       </View>
+      <ScrollView>
+        <View style={styles.inputCon}>
+          <TextInput
+            multiline
+            style={styles.inputBox}
+            placeholder="Enter username"
+            onChangeText={text => setUsername(text)}
+            value={username}
+          />
+        </View>
+        <View style={styles.inputCon}>
+          <TextInput
+            multiline
+            style={styles.inputBox}
+            placeholder="Enter chatToken"
+            onChangeText={text => setChatToken(text)}
+            value={chatToken}
+          />
+        </View>
+        <View style={styles.buttonCon}>
+          <Text style={styles.eachBtn} onPress={login}>
+            SIGN IN
+          </Text>
+          <Text style={styles.eachBtn} onPress={logout}>
+            SIGN OUT
+          </Text>
+        </View>
+        <View style={styles.inputCon}>
+          <TextInput
+            multiline
+            style={styles.inputBox}
+            placeholder="Enter the username you want to send"
+            onChangeText={text => setTargetId(text)}
+            value={targetId}
+          />
+        </View>
+        <View style={styles.inputCon}>
+          <TextInput
+            multiline
+            style={styles.inputBox}
+            placeholder="Enter content"
+            onChangeText={text => setContent(text)}
+            value={content}
+          />
+        </View>
+        <View style={styles.buttonCon}>
+          <Text style={styles.btn2} onPress={sendmsg}>
+            SEND TEXT
+          </Text>
+        </View>
+        <View>
+          <Text style={styles.logText} multiline={true}>
+            {logText}
+          </Text>
+        </View>
+        <View>
+          <Text style={styles.logText}>{}</Text>
+        </View>
+        <View>
+          <Text style={styles.logText}>{}</Text>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
-
+// Sets UI styles.
+const styles = StyleSheet.create({
+  titleContainer: {
+    height: 60,
+    backgroundColor: '#6200ED',
+  },
+  title: {
+    lineHeight: 60,
+    paddingLeft: 15,
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: '700',
+  },
+  inputCon: {
+    marginLeft: '5%',
+    width: '90%',
+    height: 60,
+    paddingBottom: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  inputBox: {
+    marginTop: 15,
+    width: '100%',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  buttonCon: {
+    marginLeft: '2%',
+    width: '96%',
+    flexDirection: 'row',
+    marginTop: 20,
+    height: 26,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  eachBtn: {
+    height: 40,
+    width: '28%',
+    lineHeight: 40,
+    textAlign: 'center',
+    color: '#fff',
+    fontSize: 16,
+    backgroundColor: '#6200ED',
+    borderRadius: 5,
+  },
+  btn2: {
+    height: 40,
+    width: '45%',
+    lineHeight: 40,
+    textAlign: 'center',
+    color: '#fff',
+    fontSize: 16,
+    backgroundColor: '#6200ED',
+    borderRadius: 5,
+  },
+  logText: {
+    padding: 10,
+    marginTop: 10,
+    color: '#ccc',
+    fontSize: 14,
+    lineHeight: 20,
+  },
+});
 export default Notify;
