@@ -6,6 +6,7 @@ export const COLOR = {
   TEXTINPUT: '#D8A7B1',
   Link: '#5252C7',
   WTEXT: '#FFF',
+  TRANSPARENT: 'rgba(255, 255, 255, 0.10)',
 };
 
 import {Dimensions} from 'react-native';

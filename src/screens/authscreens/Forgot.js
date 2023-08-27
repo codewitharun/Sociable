@@ -69,69 +69,67 @@ function Forgot({navigation}) {
   }
 
   return (
-    <SafeAreaView style={{backgroundColor: 'black'}}>
-      <KeyboardAwareScrollView>
+    <KeyboardAwareScrollView>
+      <View
+        style={{
+          height: height * 1,
+
+          width: width * 1,
+          backgroundColor: '#ffffff',
+          display: 'flex',
+          flexDirection: 'column',
+        }}>
+        <View style={{height: '30%', width: '100%'}}>
+          <Header name={'Sociable'} />
+          <SafeAreaView>
+            <StatusBar barStyle={'light-content'} />
+          </SafeAreaView>
+        </View>
         <View
           style={{
-            height: height * 1,
-
-            width: width * 1,
-            backgroundColor: '#ffffff',
-            display: 'flex',
-            flexDirection: 'column',
+            height: '70%',
+            width: '100%',
+            backgroundColor: '#FFFFFF',
+            alignItems: 'center',
+            // justifyContent: 'center',
+            borderTopLeftRadius: 28,
+            borderTopRightRadius: 28,
           }}>
-          <View style={{height: '30%', width: '100%'}}>
-            <Header name={'Sociable'} />
+          <View style={{marginBottom: 30, justifyContent: 'center'}}>
+            <Text
+              style={{
+                textAlign: 'center',
+                width: width * 1,
+                paddingVertical: 40,
+                paddingHorizontal: 40,
+              }}>
+              Have you Forgot your password we will help you getting your
+              account back !!
+            </Text>
+            <CommonTextInput
+              placeholder={'Enter your email'}
+              setText={txt => {
+                setEmail(txt);
+              }}
+              validate={txt => {
+                _emailvalidate(txt);
+              }}
+            />
           </View>
-          <View
-            style={{
-              height: '70%',
-              width: '100%',
-              backgroundColor: '#FFFFFF',
-              alignItems: 'center',
-              // justifyContent: 'center',
-              borderTopLeftRadius: 28,
-              borderTopRightRadius: 28,
-            }}>
-            <View style={{marginBottom: 30, justifyContent: 'center'}}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  width: width * 1,
-                  paddingVertical: 40,
-                  paddingHorizontal: 40,
-                }}>
-                Have you Forgot your password we will help you getting your
-                account back !!
+          <View>
+            <CommonButton name={'Send Reset Link'} onPress={() => onSubmit()} />
+          </View>
+          <View style={{paddingVertical: 40}}>
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+              <Text>
+                Already have an account ?
+                <Text style={{color: COLOR.Link}}> SIGN IN</Text>
               </Text>
-              <CommonTextInput
-                placeholder={'Enter your email'}
-                setText={txt => {
-                  setEmail(txt);
-                }}
-                validate={txt => {
-                  _emailvalidate(txt);
-                }}
-              />
-            </View>
-            <View>
-              <CommonButton
-                name={'Send Reset Link'}
-                onPress={() => onSubmit()}
-              />
-            </View>
-            <View style={{paddingVertical: 40}}>
-              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                <Text>
-                  Already have an account ?
-                  <Text style={{color: COLOR.Link}}> SIGN IN</Text>
-                </Text>
-              </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
-      </KeyboardAwareScrollView>
-    </SafeAreaView>
+      </View>
+    </KeyboardAwareScrollView>
   );
 }
 

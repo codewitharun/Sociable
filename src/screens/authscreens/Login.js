@@ -9,6 +9,7 @@ import {
   Button,
   ActivityIndicator,
   Image,
+  StatusBar,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {
@@ -121,104 +122,106 @@ const Login = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView>
-      <KeyboardAwareScrollView>
-        <View style={styles.container}>
-          <View style={{height: '30%', width: '100%'}}>
-            <Header name={'Sociable'} />
-          </View>
-          <View style={styles.textViewContainer}>
-            <View style={{marginTop: 30}}>
-              <CommonTextInput
-                placeholder={'Enter your email Id'}
-                hidden={false}
-                setText={txt => {
-                  setEmail(txt);
-                }}
-                validate={txt => {
-                  _emailvalidate(txt);
-                }}
-              />
+    <KeyboardAwareScrollView>
+      <StatusBar barStyle={'light-content'} />
+      <View style={styles.container}>
+        <View style={{height: '30%', width: '100%'}}>
+          <Header name={'Sociable'} />
+          <SafeAreaView>
+            <StatusBar barStyle={'light-content'} />
+          </SafeAreaView>
+        </View>
+        <View style={styles.textViewContainer}>
+          <View style={{marginTop: 30}}>
+            <CommonTextInput
+              placeholder={'Enter your email Id'}
+              hidden={false}
+              setText={txt => {
+                setEmail(txt);
+              }}
+              validate={txt => {
+                _emailvalidate(txt);
+              }}
+            />
 
-              <CommonTextInput
-                placeholder={'Enter your Password'}
-                hide={true}
-                hidden={hidePass}
-                showEye={() => {
-                  toggleEye();
-                }}
-                setText={txt => {
-                  setPassword(txt);
-                }}
-                validate={txt => {
-                  _passwordvalidate(txt);
-                }}
-              />
-            </View>
+            <CommonTextInput
+              placeholder={'Enter your Password'}
+              hide={true}
+              hidden={hidePass}
+              showEye={() => {
+                toggleEye();
+              }}
+              setText={txt => {
+                setPassword(txt);
+              }}
+              validate={txt => {
+                _passwordvalidate(txt);
+              }}
+            />
+          </View>
+          <View
+            style={{
+              height: height * 0.1,
+              width: width * 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <TouchableOpacity onPress={() => navigation.navigate('Forgot')}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  fontSize: 14,
+                  color: COLOR.Link,
+                  fontWeight: '400',
+                  letterSpacing: 2,
+                }}>
+                FORGOT PASSWORD
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <CommonButton
+            loading={loading}
+            name={'LOG IN'}
+            onPress={() => onSubmit()}
+          />
+          <View style={styles.secondLogin}>
             <View
               style={{
-                height: height * 0.1,
-                width: width * 1,
-                justifyContent: 'center',
-                alignItems: 'center',
+                justifyContent: 'flex-start',
               }}>
-              <TouchableOpacity onPress={() => navigation.navigate('Forgot')}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    fontSize: 14,
-                    color: COLOR.Link,
-                    fontWeight: '400',
-                    letterSpacing: 2,
-                  }}>
-                  FORGOT PASSWORD
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <CommonButton
-              loading={loading}
-              name={'LOG IN'}
-              onPress={() => onSubmit()}
-            />
-            <View style={styles.secondLogin}>
-              <View
+              <Text
                 style={{
-                  justifyContent: 'flex-start',
+                  color: '#606060',
+                  fontWeight: '400',
+                  letterSpacing: 2,
                 }}>
-                <Text
-                  style={{
-                    color: '#606060',
-                    fontWeight: '400',
-                    letterSpacing: 2,
-                  }}>
-                  OR LOG IN BY
-                </Text>
-              </View>
-              <TouchableOpacity
-                onPress={() => {
-                  Dialog.show({
-                    type: ALERT_TYPE.WARNING,
-                    title: 'Google Login',
-                    textBody: `Google Login Coming Soon! meanwhile you can Login by Sign Up manually`,
-                    button: `OK`,
-                  });
-                }}>
-                <Image
-                  style={{height: 50, width: 50, borderRadius: 50}}
-                  source={CommonImage.googleLogo}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-                <Text>
-                  Don't have account ?
-                  <Text style={{color: COLOR.Link}}> SIGN UP</Text>
-                </Text>
-              </TouchableOpacity>
+                OR LOG IN BY
+              </Text>
             </View>
+            <TouchableOpacity
+              onPress={() => {
+                Dialog.show({
+                  type: ALERT_TYPE.WARNING,
+                  title: 'Google Login',
+                  textBody: `Google Login Coming Soon! meanwhile you can Login by Sign Up manually`,
+                  button: `OK`,
+                });
+              }}>
+              <Image
+                style={{height: 50, width: 50, borderRadius: 50}}
+                source={CommonImage.googleLogo}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+              <Text>
+                Don't have account ?
+                <Text style={{color: COLOR.Link}}> SIGN UP</Text>
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </KeyboardAwareScrollView>
-    </SafeAreaView>
+      </View>
+    </KeyboardAwareScrollView>
   );
 };
 

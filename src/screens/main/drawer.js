@@ -10,6 +10,7 @@ import {
   ScrollView,
   RefreshControl,
   ActivityIndicator,
+  ImageBackground,
 } from 'react-native';
 import {Toast, ALERT_TYPE} from 'react-native-alert-notification';
 import React, {useEffect, useState} from 'react';
@@ -18,8 +19,11 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useSelector, useDispatch} from 'react-redux';
 import {userSignout} from '../../redux/action/firebaseActions';
 import asyncStorage from '@react-native-async-storage/async-storage';
+import {WebView} from 'react-native-webview';
 
 import {getPosts, getUser} from '../../redux/action/firebaseActions';
+import CommonImage from '../components/CommonImage';
+import Profile from '../authscreens/Profile';
 
 const Drawer = ({navigation}) => {
   const {user} = useSelector(state => state.fromReducer);
@@ -49,274 +53,218 @@ const Drawer = ({navigation}) => {
       });
     });
   };
-
+  const navigationData = [
+    {name: 'Profile', navigateTo: 'Profile'},
+    {
+      name: 'All Users',
+      navigateTo: 'AllUsers',
+    },
+    {
+      name: 'Settings',
+      navigateTo: 'AllUsers',
+    },
+    {
+      name: 'Change Password',
+      navigateTo: 'ChangePassword',
+    },
+    {
+      name: 'Term & Privacy',
+      navigateTo: 'Privacy',
+    },
+    {
+      name: 'About Developer',
+      navigateTo: 'Codewitharun',
+    },
+  ];
   return (
-    <SafeAreaView style={{backgroundColor: 'black'}}>
-      <View
-        style={{
-          height: height * 1,
-          // flex: 1,
-          // justifyContent: 'flex-start',
-          width: width * 1,
-          backgroundColor: 'black',
-          position: 'relative',
-        }}>
+    <ImageBackground
+      source={CommonImage.BackGroundImage}
+      resizeMode="contain"
+      style={{
+        height: height * 1,
+        // flex: 1,
+        // justifyContent: 'flex-start',
+        width: width * 1,
+        backgroundColor: 'black',
+        position: 'relative',
+      }}>
+      <SafeAreaView>
+        <StatusBar barStyle={'light-content'} />
         <View
           style={{
-            height: height * 0.25,
+            height: height * 0.15,
             width: width * 0.95,
             alignSelf: 'center',
             borderRadius: 20,
-            // borderColor: COLOR.BUTTON,
-            borderWidth: 1,
-            // flexDirection: 'row',
+            backgroundColor: 'rgba(255, 255, 255, 0.10)',
             justifyContent: 'center',
+            marginTop: 30,
+            flexDirection: 'row',
+            display: 'flex',
           }}>
           <View
             style={{
-              justifyContent: 'center',
-              width: width * 0.3,
-              // height: height * 0.3,
+              width: width * 0.2,
+
               alignSelf: 'center',
-              // backgroundColor: 'red',
+              marginLeft: 30,
+              // backgroundColor: 'green',
             }}>
             <Image
               style={{
                 height: 90,
                 width: 90,
                 borderRadius: 100 / 2,
-                borderColor: COLOR.BACKGROUND_COLOR,
+                resizeMode: 'cover',
               }}
               source={{uri: user?.photoUrl}}
             />
           </View>
-          <View style={{position: 'absolute', bottom: 0}}>
-            <TouchableOpacity>
-              <Icon name="bell-badge-outline" color="white" size={30} />
-            </TouchableOpacity>
-          </View>
+
           <View
             style={{
               justifyContent: 'center',
               flexDirection: 'column',
               alignSelf: 'center',
-              width: width * 0.6,
-              // backgroundColor: 'red',
-              alignItems: 'center',
+              width: width * 0.5,
+
+              marginLeft: 20,
             }}>
-            <Text style={{color: 'white', fontSize: 20, marginTop: 10}}>
+            <Text
+              style={{
+                color: 'white',
+                fontSize: 16,
+                marginTop: 10,
+                fontWeight: '700',
+              }}>
               {user?.displayName}
             </Text>
-            <Text style={{color: 'white', fontSize: 15, marginBottom: 10}}>
+            <Text style={{color: 'white', fontSize: 14, marginBottom: 10}}>
               {user?.email}
             </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                width: width * 0.6,
+          </View>
+          <View
+            style={{
+              justifyContent: 'center',
+              width: width * 0.2,
 
+              // backgroundColor: 'yellow',
+            }}>
+            <TouchableOpacity
+              style={{
                 // backgroundColor: 'red',
-              }}>
-              <TouchableOpacity
-                style={{
-                  // backgroundColor: 'red',
-                  marginTop: 10,
-                  borderWidth: 2,
-                  borderColor: COLOR.BUTTON,
-                  height: 35,
-                  width: 100,
-                  justifyContent: 'center',
-                  borderRadius: 7,
-                }}
-                onPress={() => navigation.navigate('Profile')}>
-                <Text
-                  style={{color: 'white', fontSize: 15, textAlign: 'center'}}>
-                  Edit Profile
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  // backgroundColor: 'red',
-                  marginTop: 10,
-                  borderWidth: 2,
-                  borderColor: COLOR.BUTTON,
-                  height: 35,
-                  width: 100,
-                  justifyContent: 'center',
-                  borderRadius: 7,
-                }}
-                onPress={() => onSignOut()}>
-                <Text
-                  style={{color: 'white', fontSize: 15, textAlign: 'center'}}>
-                  Sign Out
-                </Text>
-              </TouchableOpacity>
-            </View>
+
+                justifyContent: 'center',
+                borderRadius: 7,
+              }}
+              onPress={() => navigation.navigate('Profile')}>
+              <Image
+                style={{height: 30, width: 30}}
+                source={CommonImage.editIcon}
+              />
+            </TouchableOpacity>
           </View>
         </View>
 
         <View
           style={{
-            backgroundColor: '#171717',
-
             height: height * 0.67,
             // height: 200,
-            width: width * 0.95,
+            width: width * 1,
             alignSelf: 'center',
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
+
             marginTop: 20,
           }}>
           <ScrollView
             refreshControl={
               <RefreshControl
                 title="Referesing Data..."
-                tintColor={COLOR.BUTTON}
+                tintColor={COLOR.Link}
                 titleColor="#fff"
                 refreshing={refreshing}
               />
             }>
-            <View>
-              <View style={{paddingLeft: 10, paddingTop: 20}}>
-                <TouchableOpacity
-                  style={{
-                    flexDirection: 'row',
-                    // justifyContent: 'space-between',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                  onPress={() => navigation.navigate('Postprofile')}>
-                  <Icon
-                    name="badge-account-outline"
-                    size={20}
-                    color={'white'}
-                    style={{width: width * 0.1}}
-                  />
-                  <Text
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                height: height * 0.67,
+                width: width * 1,
+              }}>
+              <View>
+                {navigationData.map((item, index) => (
+                  <View
                     style={{
-                      color: 'white',
-                      fontFamily: 'Comfortaa-Bold',
-                      fontSize: 15,
-                      width: width * 0.75,
+                      backgroundColor: COLOR.TRANSPARENT,
+                      height: 50,
+                      justifyContent: 'center',
+                      marginVertical: 10,
+                      width: width * 0.7,
+                      borderTopEndRadius: 40,
+                      borderBottomEndRadius: 40,
+                      paddingHorizontal: 10,
+                    }}
+                    key={index}>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate(item.navigateTo)}
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}>
+                      <Text
+                        style={{
+                          color: 'white',
+                          fontFamily: 'Comfortaa-Bold',
+                          fontSize: 16,
+                          fontWeight: '400',
+                        }}>
+                        {item.name}
+                      </Text>
+                      <Icon
+                        name="chevron-right-circle"
+                        color={'rgba(255, 255, 255, 0.20)'}
+                        size={30}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ))}
+                <TouchableOpacity
+                  onPress={() => onSignOut()}
+                  style={{
+                    width: 130,
+                    height: 50,
+                    backgroundColor: 'white',
+                    justifyContent: 'center',
+                    marginTop: 30,
+                    marginLeft: 20,
+                    borderRadius: 30,
+                    overflow: 'hidden',
+                  }}>
+                  <View
+                    style={{
+                      justifyContent: 'space-around',
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      display: 'flex',
+                      paddingHorizontal: 14,
                     }}>
-                    Profile
-                  </Text>
-                  <Icon name="arrow-right-thin" color={'white'} size={20} />
+                    <Icon name="exit-to-app" size={30} color={'black'} />
+                    <Text
+                      style={{fontSize: 14, color: 'black', fontWeight: '400'}}>
+                      Log Out
+                    </Text>
+                  </View>
                 </TouchableOpacity>
               </View>
-              <View style={{paddingLeft: 10, paddingTop: 20}}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('AllUsers')}
-                  style={{
-                    flexDirection: 'row',
-                    // justifyContent: 'space-between',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Icon
-                    name="account-supervisor-outline"
-                    size={20}
-                    color={'white'}
-                    style={{width: width * 0.1}}
-                  />
-                  <Text
-                    style={{
-                      color: 'white',
-                      fontFamily: 'Comfortaa-Bold',
-                      fontSize: 15,
-                      width: width * 0.75,
-                    }}>
-                    All Users
-                  </Text>
-                  <Icon name="arrow-right-thin" color={'white'} size={20} />
-                </TouchableOpacity>
-              </View>
-              <View style={{paddingLeft: 10, paddingTop: 20}}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('Privacy')}
-                  style={{
-                    flexDirection: 'row',
-                    // justifyContent: 'space-between',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Icon
-                    name="lock-outline"
-                    size={20}
-                    color={'white'}
-                    style={{width: width * 0.1}}
-                  />
-                  <Text
-                    style={{
-                      color: 'white',
-                      fontFamily: 'Comfortaa-Bold',
-                      fontSize: 15,
-                      width: width * 0.75,
-                    }}>
-                    Privacy Policy
-                  </Text>
-                  <Icon name="arrow-right-thin" color={'white'} size={20} />
-                </TouchableOpacity>
-              </View>
-              <View style={{paddingLeft: 10, paddingTop: 20}}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('TandC')}
-                  style={{
-                    flexDirection: 'row',
-                    // justifyContent: 'space-between',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Icon
-                    name="checkbox-intermediate"
-                    size={20}
-                    color={'white'}
-                    style={{width: width * 0.1}}
-                  />
-                  <Text
-                    style={{
-                      color: 'white',
-                      fontFamily: 'Comfortaa-Bold',
-                      fontSize: 15,
-                      width: width * 0.75,
-                    }}>
-                    Term & Conditions
-                  </Text>
-                  <Icon name="arrow-right-thin" color={'white'} size={20} />
-                </TouchableOpacity>
-              </View>
-              <View style={{paddingLeft: 10, paddingTop: 20}}>
-                <TouchableOpacity
-                  style={{
-                    flexDirection: 'row',
-                    // justifyContent: 'space-between',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Icon
-                    name="application-settings"
-                    size={20}
-                    color={'white'}
-                    style={{width: width * 0.1}}
-                  />
-                  <Text
-                    style={{
-                      color: 'white',
-                      fontFamily: 'Comfortaa-Bold',
-                      fontSize: 15,
-                      width: width * 0.75,
-                    }}>
-                    Settings
-                  </Text>
-                  <Icon name="arrow-right-thin" color={'white'} size={20} />
-                </TouchableOpacity>
+              <View style={{width: width * 0.5}}>
+                <Profile />
               </View>
             </View>
           </ScrollView>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 

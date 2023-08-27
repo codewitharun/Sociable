@@ -45,72 +45,73 @@ const Authscreen = ({navigation}) => {
   //   var arun = {};
   //   console.log(arun);
   return (
-    <SafeAreaView>
+    <View
+      style={{
+        height: '100%',
+        width: '100%',
+        backgroundColor: '#FFFFFF',
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
       <View
         style={{
-          height: '100%',
+          // backgroundColor: 'green',
+          height: '30%',
           width: '100%',
-          backgroundColor: '#FFFFFF',
-          display: 'flex',
-          flexDirection: 'column',
         }}>
-        <View
-          style={{
-            // backgroundColor: 'green',
-            height: '30%',
-            width: '100%',
-          }}>
-          <Header name={'Sociable'} />
-        </View>
-        <View
-          style={{
-            backgroundColor: '#FFFFFF',
-            height: '70%',
-            width: '100%',
-            // justifyContent: 'center',
-            borderTopLeftRadius: 28,
-            borderTopRightRadius: 28,
-          }}>
-          <View style={styles.container}>
-            <Text style={styles.welcomeText}>Welcome to Sociable App!</Text>
-            {/* <Text style={styles.description}>
+        <Header name={'Sociable'} />
+        <SafeAreaView>
+          <StatusBar barStyle={'light-content'} />
+        </SafeAreaView>
+      </View>
+      <View
+        style={{
+          backgroundColor: '#FFFFFF',
+          height: '70%',
+          width: '100%',
+          // justifyContent: 'center',
+          borderTopLeftRadius: 28,
+          borderTopRightRadius: 28,
+        }}>
+        <View style={styles.container}>
+          <Text style={styles.welcomeText}>Welcome to Sociable App!</Text>
+          {/* <Text style={styles.description}>
               Connect with friends, share moments, and explore new experiences.
             </Text> */}
-            {/* <Text style={styles.description}>Created with ❤️ by Arun </Text> */}
-            <Text style={styles.instructions}>
-              Get started by creating your profile and connecting with others.
-            </Text>
-          </View>
-          <CommonButton
-            name={'CREATE NEW ACCOUNT'}
-            onPress={() => navigation.navigate('Signup')}
-          />
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.LoginText}>Log in</Text>
-          </TouchableOpacity>
-          <View
+          {/* <Text style={styles.description}>Created with ❤️ by Arun </Text> */}
+          <Text style={styles.instructions}>
+            Get started by creating your profile and connecting with others.
+          </Text>
+        </View>
+        <CommonButton
+          name={'CREATE NEW ACCOUNT'}
+          onPress={() => navigation.navigate('Signup')}
+        />
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.LoginText}>Log in</Text>
+        </TouchableOpacity>
+        <View
+          style={{
+            height: '30%',
+            width: '100%',
+            // backgroundColor: 'red',
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'absolute',
+            bottom: 20,
+          }}>
+          <Image
             style={{
-              height: '30%',
-              width: '100%',
-              // backgroundColor: 'red',
-              justifyContent: 'center',
-              alignItems: 'center',
-              position: 'absolute',
-              bottom: 20,
-            }}>
-            <Image
-              style={{
-                height: 100,
-                width: 300,
-                resizeMode: 'contain',
-              }}
-              source={CommonImage.threeSquires}
-            />
-            <Text style={styles.description}>Created with ❤️ by Arun </Text>
-          </View>
+              height: 100,
+              width: 300,
+              resizeMode: 'contain',
+            }}
+            source={CommonImage.threeSquires}
+          />
+          <Text style={styles.description}>Created with ❤️ by Arun </Text>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

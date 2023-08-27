@@ -7,7 +7,6 @@ import {
   ImageBackground,
 } from 'react-native';
 import React from 'react';
-import Images from '../assets/images/image';
 import CommonImage from '../screens/components/CommonImage';
 
 const {height, width} = Dimensions.get('screen');
@@ -22,6 +21,7 @@ const Header = ({name}) => {
         position: 'absolute',
         top: 0,
       }}>
+        
       <View
         style={{
           height: height * 0.2,

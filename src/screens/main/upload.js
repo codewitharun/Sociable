@@ -21,7 +21,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {height, width, COLOR} from '../components/Colors';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
-import Images from '../../assets/images/image';
+import CommonImage from '../components/CommonImage';
 import {showAlert, closeAlert} from 'react-native-customisable-alert';
 // import ImagePicker from 'react-native-image-picker';
 import firestore from '@react-native-firebase/firestore';
@@ -343,7 +343,10 @@ const Upload = ({navigation, params}) => {
             ) : (
               <View>
                 <TouchableOpacity onPress={() => onChoose()}>
-                  <Image source={Images.AuthHeader} style={styles.imageStyle} />
+                  <Image
+                    source={CommonImage.AuthHeader}
+                    style={styles.imageStyle}
+                  />43
                 </TouchableOpacity>
               </View>
             )}

@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Image,
+  StatusBar,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import messaging from '@react-native-firebase/messaging';
@@ -223,94 +224,95 @@ const Signup = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView>
-      <KeyboardAwareScrollView>
-        <View style={styles.container}>
-          <View style={{height: '30%', width: '100%'}}>
-            <Header name={'Sociable'} />
-          </View>
-          <View style={styles.textViewContainer}>
-            <View style={{marginTop: 30, marginBottom: 30}}>
-              <CommonTextInput
-                placeholder={'Enter your email Id'}
-                setText={txt => {
-                  setEmail(txt);
-                }}
-                validate={txt => {
-                  _emailvalidate(txt);
-                }}
-              />
-
-              <CommonTextInput
-                placeholder={'Enter your Full Name'}
-                setText={txt => {
-                  setUsername(txt);
-                }}
-                validate={txt => {
-                  _validateName(txt);
-                }}
-              />
-              <CommonTextInput
-                placeholder={'Enter New Password'}
-                aa
-                hide={true}
-                hidden={hidePass}
-                showEye={() => {
-                  toggleEye();
-                }}
-                setText={txt => {
-                  setPassword(txt);
-                }}
-                validate={txt => {
-                  _passwordvalidate(txt);
-                }}
-              />
-            </View>
-
-            <CommonButton
-              loading={loading}
-              name={'SIGN UP'}
-              onPress={() => onSubmit()}
+    <KeyboardAwareScrollView>
+      <View style={styles.container}>
+        <View style={{height: '30%', width: '100%'}}>
+          <Header name={'Sociable'} />
+          <SafeAreaView>
+            <StatusBar barStyle={'light-content'} />
+          </SafeAreaView>
+        </View>
+        <View style={styles.textViewContainer}>
+          <View style={{marginTop: 30, marginBottom: 30}}>
+            <CommonTextInput
+              placeholder={'Enter your email Id'}
+              setText={txt => {
+                setEmail(txt);
+              }}
+              validate={txt => {
+                _emailvalidate(txt);
+              }}
             />
-            <View style={styles.secondLogin}>
-              <View
+
+            <CommonTextInput
+              placeholder={'Enter your Full Name'}
+              setText={txt => {
+                setUsername(txt);
+              }}
+              validate={txt => {
+                _validateName(txt);
+              }}
+            />
+            <CommonTextInput
+              placeholder={'Enter New Password'}
+              aa
+              hide={true}
+              hidden={hidePass}
+              showEye={() => {
+                toggleEye();
+              }}
+              setText={txt => {
+                setPassword(txt);
+              }}
+              validate={txt => {
+                _passwordvalidate(txt);
+              }}
+            />
+          </View>
+
+          <CommonButton
+            loading={loading}
+            name={'SIGN UP'}
+            onPress={() => onSubmit()}
+          />
+          <View style={styles.secondLogin}>
+            <View
+              style={{
+                justifyContent: 'flex-start',
+              }}>
+              <Text
                 style={{
-                  justifyContent: 'flex-start',
+                  color: '#606060',
+                  fontWeight: '400',
+                  letterSpacing: 2,
                 }}>
-                <Text
-                  style={{
-                    color: '#606060',
-                    fontWeight: '400',
-                    letterSpacing: 2,
-                  }}>
-                  OR SIGN UP BY
-                </Text>
-              </View>
-              <TouchableOpacity
-                onPress={() => {
-                  Dialog.show({
-                    type: ALERT_TYPE.WARNING,
-                    title: 'Google Login',
-                    textBody: `Google Login Coming Soon! meanwhile you can Login by Sign Up manually`,
-                    button: `OK`,
-                  });
-                }}>
-                <Image
-                  style={{height: 50, width: 50, borderRadius: 50}}
-                  source={CommonImage.googleLogo}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                <Text>
-                  Already have an account ?
-                  <Text style={{color: COLOR.Link}}> SIGN IN</Text>
-                </Text>
-              </TouchableOpacity>
+                OR SIGN UP BY
+              </Text>
             </View>
+            <TouchableOpacity
+              onPress={() => {
+                Dialog.show({
+                  type: ALERT_TYPE.WARNING,
+                  title: 'Google Login',
+                  textBody: `Google Login Coming Soon! meanwhile you can Login by Sign Up manually`,
+                  button: `OK`,
+                });
+              }}>
+              <Image
+                style={{height: 50, width: 50, borderRadius: 50}}
+                source={CommonImage.googleLogo}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+              <Text>
+                Already have an account ?
+                <Text style={{color: COLOR.Link}}> SIGN IN</Text>
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </KeyboardAwareScrollView>
-    </SafeAreaView>
+      </View>
+    </KeyboardAwareScrollView>
   );
 };
 

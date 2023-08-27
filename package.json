@@ -60,6 +60,7 @@
     "react-native-video": "^5.2.1",
     "react-native-video-controls": "^2.8.1",
     "react-native-webrtc": "^111.0.1",
+    "react-native-webview": "^13.4.0",
     "react-redux": "^8.0.4",
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.1",
