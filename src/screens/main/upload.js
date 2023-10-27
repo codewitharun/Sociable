@@ -346,7 +346,7 @@ const Upload = ({navigation, params}) => {
                   <Image
                     source={CommonImage.AuthHeader}
                     style={styles.imageStyle}
-                  />43
+                  />
                 </TouchableOpacity>
               </View>
             )}

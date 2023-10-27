@@ -45,7 +45,7 @@ function MyTabBar({state, descriptors, navigation}) {
     <View
       style={{
         flexDirection: 'row',
-        height: 70,
+        height: 60,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
@@ -100,8 +100,8 @@ function MyTabBar({state, descriptors, navigation}) {
           tabStylePlus = {
             backgroundColor: 'white',
             borderRadius: 10,
-            height: 40,
-            width: 40,
+            height: 30,
+            width: 30,
           };
         }
         if (route.name === 'Dashboard') {
@@ -132,7 +132,7 @@ function MyTabBar({state, descriptors, navigation}) {
             }}>
             <Icon
               name={iconName}
-              size={40}
+              size={30}
               style={{
                 color: isFocused ? COLOR.Link : COLOR.TEXT,
                 alignSelf: 'center',
