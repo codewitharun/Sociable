@@ -70,9 +70,9 @@ const Splash = ({navigation}) => {
     }, 2000);
   }, []);
 
-  if (!user) {
-    return <Authscreen navigation={navigation} />;
-  }
+  // if (!user) {
+  //   return <Authscreen navigation={navigation} />;
+  // }
 
   return <Afterauth navigation={navigation} />;
 };

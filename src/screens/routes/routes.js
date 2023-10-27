@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {useState, useEffect} from 'react';
-import {View, Text, Image} from 'react-native';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
 import {NavigationContainer, DrawerActions} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -35,100 +35,137 @@ import Notify from '../main/Notify';
 import YourComponent from '../main/Location';
 const Drawer = createDrawerNavigator();
 
-//     <DrawerContentScrollView {...props}>
-//       <View style={{height: 200, width: '70%', backgroundColor: 'green'}}>
-//         <Image source={{uri: UImage}} style={{height: 100, width: 100}} />
-//         <Text style={{fontSize: 30, color: 'black'}}>{name}</Text>
-//       </View>
+function MyTabBar({state, descriptors, navigation}) {
+  console.log(
+    '🚀 ~ file: routes.js:43 ~ {state.routes.map ~ options:',
+    state,
+    descriptors,
+  );
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        height: 70,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
+      }}>
+      {state.routes.map((route, index) => {
+        const {options} = descriptors[route.key];
 
-//       <DrawerItem
-//         label="Close drawer"
-//         onPress={() => props.navigation.dispatch(DrawerActions.closeDrawer())}
-//       />
-//       <DrawerItem
-//         label="Toggle drawer"
-//         onPress={() => props.navigation.dispatch(DrawerActions.toggleDrawer())}
-//       />
-//       <DrawerItemList {...props} />
-//     </DrawerContentScrollView>
-//   );
-// }
-// function MyDrawer(props) {
-//   return (
-//     <Drawer.Navigator
-//       drawerContent={props => <CustomDrawerContent {...props} />}
-//       screenOptions={{
-//         headerShown: false,
-//         drawerActiveTintColor: 'red',
-//         drawerPosition: 'right',
-//         drawerType: 'back',
-//       }}>
-//       <Drawer.Screen name="Home" component={Dashboard} />
-//       <Drawer.Screen name="Profile" component={Profile} />
-//     </Drawer.Navigator>
-//   );
-// }
+        const label =
+          options.tabBarLabel !== undefined
+            ? options.tabBarLabel
+            : options.title !== undefined
+            ? options.title
+            : route.name;
+
+        const isFocused = state.index === index;
+
+        const onPress = () => {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+            canPreventDefault: true,
+          });
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name, route.params);
+          }
+        };
+
+        const onLongPress = () => {
+          navigation.emit({
+            type: 'tabLongPress',
+            target: route.key,
+          });
+        };
+        let iconName;
+        let tabStyles = {};
+        let tabStylePlus = {};
+        if (route.name === 'Upload') {
+          tabStyles = {
+            backgroundColor: COLOR.Link,
+            height: 80,
+            width: 80,
+            borderRadius: 100 / 2,
+            position: 'absolute',
+            bottom: 35,
+            elevation: 5,
+            shadowColor: COLOR.Link,
+            borderBottomColor: '#BDBDBD',
+            borderBottomWidth: 2,
+            justifyContent: 'space-evenly',
+          };
+          tabStylePlus = {
+            backgroundColor: 'white',
+            borderRadius: 10,
+            height: 40,
+            width: 40,
+          };
+        }
+        if (route.name === 'Dashboard') {
+          iconName = 'home';
+        } else if (route.name === 'MyFriends') {
+          iconName = 'account-group';
+        } else if (route.name === 'Upload') {
+          iconName = 'plus';
+        } else if (route.name === 'Beta') {
+          iconName = 'beta';
+        } else if (route.name === 'More') {
+          iconName = 'menu';
+        }
+
+        return (
+          <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityState={isFocused ? {selected: true} : {}}
+            accessibilityLabel={options.tabBarAccessibilityLabel}
+            testID={options.tabBarTestID}
+            onPress={onPress}
+            onLongPress={onLongPress}
+            style={{
+              flex: 1,
+              ...tabStyles,
+              alignItems: 'center',
+              position: 'relative',
+            }}>
+            <Icon
+              name={iconName}
+              size={40}
+              style={{
+                color: isFocused ? COLOR.Link : COLOR.TEXT,
+                alignSelf: 'center',
+                ...tabStylePlus,
+              }}
+            />
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+}
 
 const bottom = createBottomTabNavigator();
 export function Afterauth(props) {
   return (
     <bottom.Navigator
+      tabBar={props => <MyTabBar {...props} />}
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {backgroundColor: 'black'},
+        tabBarStyle: {backgroundColor: 'white'},
         // tabBarActiveBackgroundColor: 'green',
         // tabBarInactiveBackgroundColor: 'yellow',
         tabBarInactiveTintColor: COLOR.TEXT,
-        tabBarActiveTintColor: COLOR.BUTTON,
+        tabBarActiveTintColor: COLOR.Link,
       }}>
-      <bottom.Screen
-        name="Dashboard"
-        component={Dashboard}
-        options={{
-          tabBarIcon: ({}) => <Icon name="home" color="white" size={30} />,
-        }}
-      />
+      <bottom.Screen name="Dashboard" component={Dashboard} />
 
-      <bottom.Screen
-        name="MyFriends"
-        component={Addedfriends}
-        options={{
-          tabBarIcon: ({}) => (
-            <Icon name="account-group" color="white" size={30} />
-          ),
-        }}
-      />
-      <bottom.Screen
-        name="Upload"
-        component={Upload}
-        options={{
-          tabBarIcon: ({}) => <Icon name="plus" color="white" size={40} />,
-        }}
-      />
-      <bottom.Screen
-        name="Beta"
-        component={Notify}
-        options={{
-          tabBarIcon: ({}) => <Icon name="beta" color="white" size={30} />,
-        }}
-      />
+      <bottom.Screen name="MyFriends" component={Addedfriends} />
+      <bottom.Screen name="Upload" component={Upload} />
+      <bottom.Screen name="Beta" component={Notify} />
 
-      <bottom.Screen
-        name="More"
-        component={MyDrawer}
-        options={{
-          tabBarIcon: ({}) => (
-            <Icon
-              name="menu"
-              color="white"
-              size={30}
-              // onPress={() =>
-              //   props.navigation.dispatch(DrawerActions.toggleDrawer())
-              // }
-            />
-          ),
-        }}
-      />
+      <bottom.Screen name="More" component={MyDrawer} />
     </bottom.Navigator>
   );
 }

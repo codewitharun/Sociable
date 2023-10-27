@@ -84,6 +84,7 @@ const Signup = ({navigation}) => {
         })
 
         .catch(error => {
+          setLoading(false);
           if (error.code === 'auth/email-already-in-use') {
             console.log('That email address is already in use!');
           }
@@ -96,6 +97,7 @@ const Signup = ({navigation}) => {
         });
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   }
 
@@ -136,10 +138,10 @@ const Signup = ({navigation}) => {
     var nameRegex = /^[a-z A-Z ]{2,32}$/i;
     if (name == '' || name == undefined || name == null) {
       setErrorUsername('*Please enter full name.');
-      showAlert(errorUsername);
+      // showAlert(errorUsername);
     } else if (!nameRegex.test(name)) {
       setErrorUsername('*Please enter valid valid name.');
-      showAlert(errorUsername);
+      // showAlert(errorUsername);
     } else {
       setErrorUsername(null);
     }
@@ -152,10 +154,10 @@ const Signup = ({navigation}) => {
     //  /^(?:\d{10}|\w+@\w+\.\w{2,3})$/;
     if (mail === '' || mail === undefined || mail === null) {
       setErrorEmail('*Please enter email.');
-      showAlert(errorEmail);
+      // showAlert(errorEmail);
     } else if (!emailRegex.test(mail)) {
       setErrorEmail('*Please enter valid email.');
-      showAlert(errorEmail);
+      // showAlert(errorEmail);
     } else {
       setErrorEmail(null);
     }
@@ -165,15 +167,15 @@ const Signup = ({navigation}) => {
       /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
     if (pass === '') {
       setErrorPassword('*Please enter password.');
-      showAlert(ErrorPassword);
+      // showAlert(ErrorPassword);
     } else if (/([A-Z]+)/g.test(pass) && pass.length < 8) {
       setErrorPassword(
         '*Please enter a special character and length must be 8 digit.',
       );
-      showAlert(ErrorPassword);
+      // showAlert(ErrorPassword);
     } else if (!passwordRegex.test(pass)) {
       setErrorPassword('*Please enter valid password.');
-      showAlert(ErrorPassword);
+      // showAlert(ErrorPassword);
     } else {
       setErrorPassword(null);
     }
@@ -190,20 +192,20 @@ const Signup = ({navigation}) => {
 
     if (username === '') {
       setErrorUsername('*Please enter Name.');
-      showAlert(errorUsername);
+      // showAlert(errorUsername);
       flag = false;
     }
 
     if (email === '') {
       setErrorEmail('*Please enter email.');
-      showAlert(errorEmail);
+      // showAlert(errorEmail);
 
       flag = false;
     }
 
     if (password === '') {
       setErrorPassword('*Please enter password.');
-      showAlert(ErrorPassword);
+      // showAlert(ErrorPassword);
 
       flag = false;
     }

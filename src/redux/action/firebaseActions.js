@@ -166,7 +166,8 @@ export const loginUser = (user, onsucess) => {
       });
     })
     .catch(error => {
-      console.log(error);
+      console.log('throwing error from redux login ', error);
+      onsucess('');
       Toast.show({
         type: ALERT_TYPE.DANGER,
         title: 'Login Failed',

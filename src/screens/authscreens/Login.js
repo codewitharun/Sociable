@@ -45,20 +45,24 @@ const Login = ({navigation}) => {
       password: password,
     };
     loginUser(user, Login => {
-      console.log('on success ', JSON.parse(Login));
-      const name = JSON.parse(Login);
-      setLoading(false);
-      Dialog.show({
-        type: ALERT_TYPE.SUCCESS,
+      if (Login !== '') {
+        console.log('on success ', JSON.parse(Login));
+        const name = JSON.parse(Login);
+        setLoading(false);
+        Dialog.show({
+          type: ALERT_TYPE.SUCCESS,
 
-        title: 'Login Success',
-        textBody: `Welcome to Sociable ${name.displayName}`,
-        button: 'close',
-      });
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Success'}],
-      });
+          title: 'Login Success',
+          textBody: `Welcome to Sociable ${name.displayName}`,
+          button: 'close',
+        });
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Success'}],
+        });
+      } else {
+        setLoading(false);
+      }
     });
   }
 
@@ -67,10 +71,10 @@ const Login = ({navigation}) => {
     var emailRegex = /[a-zA-Z0-9]@(yopmail)\.com\b$/g;
     if (mail === '') {
       setErrorEmail('*Please enter email.');
-      showAlert(errorEmail);
+      // showAlert(errorEmail);
     } else if (!emailRegex.test(mail)) {
       setErrorEmail('*Please enter valid email.');
-      showAlert(errorEmail);
+      // showAlert(errorEmail);
     } else {
       setErrorEmail(null);
     }
@@ -80,12 +84,12 @@ const Login = ({navigation}) => {
       /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
     if (pass === '') {
       setErrorPassword('*Please enter password.');
-      showAlert(ErrorPassword);
+      // showAlert(ErrorPassword);
     } else if (/([A-Z]+)/g.test(pass) && pass.length < 8) {
       setErrorPassword(
         '*Please enter a special character and length must be 8 digit.',
       );
-      showAlert(ErrorPassword);
+      // showAlert(ErrorPassword);
     } else if (!passwordRegex.test(pass)) {
       setErrorPassword('*Please enter valid password.');
     } else {

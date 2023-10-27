@@ -230,7 +230,7 @@ const Dashboard = ({navigation}) => {
           height: height * 1,
           // justifyContent: 'flex-start',
           width: width * 1,
-          backgroundColor: 'black',
+          backgroundColor: '#BDBDBD',
         }}>
         <View
           style={{
