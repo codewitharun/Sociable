@@ -16,7 +16,9 @@ const CommonTextInput = ({
   validate,
   hidden,
   hide,
+  value,
 }) => {
+  console.log('🚀 ~ file: textinput.js:20 ~ validate:', validate);
   return (
     <View
       style={{
@@ -30,10 +32,12 @@ const CommonTextInput = ({
       <TextInput
         placeholder={placeholder}
         placeholderTextColor={'#BDBDBD'}
+        value={value}
         secureTextEntry={hidden}
         autoCapitalize={false}
         onChangeText={txt => {
-          setText(txt), validate(txt);
+          setText(txt);
+          validate !== false && validate(txt);
         }}
         style={{
           backgroundColor: '#F3F5F7',
@@ -48,7 +52,6 @@ const CommonTextInput = ({
           fontSize: 16,
         }}
       />
-
       {hide && (
         <TouchableOpacity onPress={() => showEye()} style={styles.eyeIcon}>
           {/* You can use appropriate icons or images for the show/hide toggle */}

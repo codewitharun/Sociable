@@ -14,7 +14,7 @@ import {
   FlatList,
   RefreshControl,
   Pressable,
-  TextInput
+  TextInput,
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import React, {useState, useEffect} from 'react';
@@ -25,7 +25,6 @@ import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import {showAlert, closeAlert} from 'react-native-customisable-alert';
 // import ImagePicker from 'react-native-image-picker';
-
 
 import firestore from '@react-native-firebase/firestore';
 import {color} from 'react-native-reanimated';
@@ -41,6 +40,7 @@ import {
   getUser,
   getCurrentUsersPosts,
 } from '../../redux/action/firebaseActions';
+import ProfileHeader from '../../common/profileheader';
 
 const Postprofile = ({navigation, params}) => {
   const [liked, setLiked] = useState(false);
@@ -71,8 +71,6 @@ const Postprofile = ({navigation, params}) => {
     fetchUser();
     setRefreshing(false);
   }, []);
-
-
 
   const onChoose = () => {
     try {
@@ -428,93 +426,166 @@ const Postprofile = ({navigation, params}) => {
           height: height * 1,
           // justifyContent: 'center',
           width: width * 1,
-          backgroundColor: 'black',
+          backgroundColor: 'white',
+          position: 'relative',
         }}>
+        <ProfileHeader name={user.email}></ProfileHeader>
+
         <View
           style={{
-            height: height * 0.2,
+            height: height * 0.4,
             width: width * 1,
             // backgroundColor: 'red',
-            alignSelf: 'center',
             justifyContent: 'center',
-            flexDirection: 'row',
-            borderRadius: 8,
-            borderWidth: 1,
+            alignSelf: 'center',
+            // flexDirection: 'row',
+
             borderColor: COLOR.BUTTON,
+            position: 'absolute',
+            top: 100,
           }}>
-          <View style={{justifyContent: 'center'}}>
+          <View
+            style={{
+              justifyContent: 'center',
+              // marginTop: ,
+              // backgroundColor: 'red',
+              alignItems: 'center',
+              marginBottom: 10,
+            }}>
             <Image
               source={{uri: user.photoUrl}}
               style={{
                 height: 100,
                 width: 100,
                 borderRadius: 100 / 2,
+                borderWidth: 4,
+                borderColor: 'white',
               }}
             />
-          </View>
-          <View style={{justifyContent: 'center', marginLeft: 20}}>
-            <Text
+            <View
               style={{
-                color: 'white',
-                fontSize: 20,
-                fontFamily: 'Comfortaa-bold',
-              }}>
-              {user.displayName}
-            </Text>
-            <Text
-              style={{
-                color: 'white',
-                fontSize: 20,
-                fontFamily: 'Comfortaa-bold',
-              }}>
-              {user.email}
-            </Text>
-            <TouchableOpacity
-              style={{
-                height: 35,
-                marginTop: 10,
-
-                width: 150,
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: COLOR.BUTTON,
-
                 justifyContent: 'center',
-              }}
-              onPress={() => navigation.navigate('Profile')}>
+                marginTop: 10,
+                // backgroundColor: 'red',
+                alignItems: 'center',
+              }}>
               <Text
                 style={{
-                  textAlign: 'center',
-                  color: 'white',
+                  color: 'black',
+                  fontSize: 20,
                   fontWeight: '700',
+                  fontFamily: 'Comfortaa-bold',
                 }}>
-                Edit Profile
+                {user.displayName}
               </Text>
-            </TouchableOpacity>
+              <Text
+                style={{
+                  color: '#8F90A7',
+                  fontSize: 16,
+
+                  fontFamily: 'Comfortaa-bold',
+                  fontWeight: '400',
+                }}>
+                {user.address}
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              // backgroundColor: '#f23',
+              height: 40,
+              width: width * 0.95,
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+              alignSelf: 'center',
+            }}>
+            <View
+              style={{
+                width: '45%',
+                backgroundColor: '#F6F7F9',
+                height: 40,
+                alignSelf: 'center',
+                justifyContent: 'center',
+                borderRadius: 6,
+              }}>
+              <Text style={styles.follower}>Follower</Text>
+            </View>
+            <View
+              style={{
+                alignSelf: 'center',
+                width: '45%',
+                backgroundColor: '#F6F7F9',
+                height: 40,
+                justifyContent: 'center',
+                borderRadius: 6,
+              }}>
+              <Text style={styles.follower}>Follower</Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              backgroundColor: '#f23',
+              height: 60,
+              width: width * 0.95,
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+              alignSelf: 'center',
+              marginTop: 40,
+              padding: 6,
+            }}>
+            <View
+              style={{
+                width: '45%',
+                backgroundColor: '#F6F7F9',
+                height: 40,
+                alignSelf: 'center',
+                justifyContent: 'center',
+                borderRadius: 6,
+              }}>
+              <Text style={styles.follower}>Follower</Text>
+            </View>
+            <View
+              style={{
+                alignSelf: 'center',
+                width: '45%',
+                backgroundColor: '#F1F1FE',
+                height: 40,
+                justifyContent: 'center',
+                borderRadius: 6,
+              }}>
+              <Text style={styles.follower}>Follower</Text>
+            </View>
           </View>
         </View>
+
         <View
           style={{
             height: height * 0.65,
             width: width * 0.95,
             alignSelf: 'center',
-            backgroundColor: 'black',
+            backgroundColor: 'green',
+            marginTop: 250,
+            display: 'none',
           }}>
-          <View
+          {/* <View
             style={{
               height: height * 0.1,
               width: width * 0.95,
               alignSelf: 'center',
               justifyContent: 'center',
-              // backgroundColor: COLOR.TABCARD,
+              backgroundColor: COLOR.TABCARD,
             }}>
             <TouchableOpacity onPress={() => navigation.navigate('Upload')}>
               <View style={{justifyContent: 'center', alignSelf: 'center'}}>
                 <Icon name="plus" size={50} color={'white'} />
               </View>
             </TouchableOpacity>
-          </View>
-          <View>
+          </View> */}
+          <View style={{marginTop: 20}}>
             <FlatList
               data={currentUserPosts}
               renderItem={renderItem}
@@ -626,5 +697,11 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+  },
+  follower: {
+    textAlign: 'center',
+    color: '#242424',
+    fontWeight: '700',
+    fontSize: 16,
   },
 });

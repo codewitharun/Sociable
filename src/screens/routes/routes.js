@@ -48,7 +48,7 @@ function MyTabBar({state, descriptors, navigation}) {
         height: 60,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white',
+        backgroundColor: "rgba(138, 149, 158, 0.2)",
       }}>
       {state.routes.map((route, index) => {
         const {options} = descriptors[route.key];
@@ -118,6 +118,7 @@ function MyTabBar({state, descriptors, navigation}) {
 
         return (
           <TouchableOpacity
+            key={index}
             accessibilityRole="button"
             accessibilityState={isFocused ? {selected: true} : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}

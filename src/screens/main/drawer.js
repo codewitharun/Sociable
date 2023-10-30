@@ -54,7 +54,7 @@ const Drawer = ({navigation}) => {
     });
   };
   const navigationData = [
-    {name: 'Profile', navigateTo: 'Profile'},
+    {name: 'Profile', navigateTo: 'Postprofile'},
     {
       name: 'All Users',
       navigateTo: 'AllUsers',

@@ -26,10 +26,17 @@ import {showAlert, closeAlert} from 'react-native-customisable-alert';
 // import ImagePicker from 'react-native-image-picker';
 import firestore from '@react-native-firebase/firestore';
 import {getUser} from '../../redux/action/firebaseActions';
+import CommonButton from '../../common/button';
+import CommonTextInput from '../../common/textinput';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import ProfileHeader from '../../common/profileheader';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 const Upload = ({navigation, params}) => {
   const {user} = useSelector(state => state.fromReducer);
   // console.log('user in upload screen', user);
   const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(false);
   // console.log('users from drawer screen', users.displayName);
   const dispatch = useDispatch();
   const fetchUser = () => dispatch(getUser());
@@ -114,6 +121,7 @@ const Upload = ({navigation, params}) => {
   const reference = storage().ref(ImageName);
   async function uploadDetails() {
     try {
+      setLoading(true);
       await firestore()
         .collection('Upload')
         .doc()
@@ -121,6 +129,7 @@ const Upload = ({navigation, params}) => {
         .then(() => {
           Alert.alert('Post Uploaded');
           navigation.navigate('Success');
+          setLoading(false);
         })
         .then(() => {
           ImagePicker.clean()
@@ -129,10 +138,12 @@ const Upload = ({navigation, params}) => {
             })
             .catch(e => {
               alert('error while cleaning tmp images from picker: ' + e);
+              setLoading(false);
             });
         });
     } catch (error) {
       console.log('error while uploading post', error);
+      setLoading(false);
     }
   }
   const captureImage = async type => {
@@ -291,120 +302,141 @@ const Upload = ({navigation, params}) => {
       });
   };
   return (
-    <SafeAreaView style={{backgroundColor: 'black'}}>
-      <View
-        style={{
-          height: height * 1,
-          justifyContent: 'center',
-          width: width * 1,
-          backgroundColor: 'black',
-        }}>
+    <SafeAreaView style={{backgroundColor: 'white'}}>
+      <ProfileHeader name={'Upload'}></ProfileHeader>
+      <KeyboardAwareScrollView>
         <View
           style={{
             height: height * 1,
-            marginTop: 70,
-            width: width * 0.95,
-            alignSelf: 'center',
-            // justifyContent: 'center',
+            justifyContent: 'center',
+            width: width * 1,
+            backgroundColor: 'white',
           }}>
           <View
             style={{
-              height: height * 0.47,
-              // backgroundColor: 'red',
-
+              height: height * 1,
+              // marginTop: 30,
+              width: width * 0.95,
               alignSelf: 'center',
-              alignItems: 'center',
-              width: width * 0.9,
+              // justifyContent: 'center',
             }}>
-            {filePath ? (
-              <TouchableOpacity onPress={() => onChoose()}>
-                <Image
-                  onLoad={async () => {
-                    // path to existing file on filesystem
-                    const pathToFile = filePath;
+            <View
+              style={{
+                height: height * 0.47,
 
-                    // uploads file
-                    await reference.putFile(pathToFile);
-                    const urrl = await storage()
-                      .ref(ImageName)
-                      .getDownloadURL();
+                alignSelf: 'center',
+                alignItems: 'center',
+                width: width * 0.95,
+                position: 'relative',
+              }}>
+              {filePath ? (
+                <TouchableOpacity
+                  style={{
+                    height: height * 0.47,
 
-                    console.log('url link get after Post upload ', urrl);
-                    setImage(urrl);
-                    findDate();
-                    console.log('setImaage', image);
+                    alignSelf: 'center',
+                    alignItems: 'center',
+                    width: width * 0.95,
                   }}
-                  source={{
-                    uri: filePath,
-                  }}
-                  style={styles.imageStyle1}
-                />
-              </TouchableOpacity>
-            ) : (
-              <View>
-                <TouchableOpacity onPress={() => onChoose()}>
+                  onPress={() => onChoose()}>
                   <Image
-                    source={CommonImage.AuthHeader}
-                    style={styles.imageStyle}
+                    onLoad={async () => {
+                      // path to existing file on filesystem
+                      const pathToFile = filePath;
+
+                      // uploads file
+                      await reference.putFile(pathToFile);
+                      const urrl = await storage()
+                        .ref(ImageName)
+                        .getDownloadURL();
+
+                      console.log('url link get after Post upload ', urrl);
+                      setImage(urrl);
+                      findDate();
+                      console.log('setImaage', image);
+                    }}
+                    source={{
+                      uri: filePath,
+                    }}
+                    style={styles.imageStyle1}
                   />
                 </TouchableOpacity>
-              </View>
-            )}
-          </View>
+              ) : (
+                <View>
+                  <TouchableOpacity
+                    style={{
+                      height: height * 0.47,
 
-          <View style={{height: height * 0.2}}>
-            <View>
-              <TextInput
-                placeholder="Caption "
-                multiline={true}
-                placeholderTextColor={'rgb(122,122,122)'}
-                onChangeText={txt => {
-                  setcaption(txt);
-                }}
-                style={{
-                  height: height * 0.2,
-                  backgroundColor: 'rgb(54,54,54)',
-                  borderRadius: 3,
-                  paddingHorizontal: 10,
-                  color: '#fff',
-                  // marginTop: 20,
-                  fontFamily: 'InstagramSans-Medium',
-                  //   justifyContent: 'flex-start',
-                }}
-              />
-            </View>
-
-            <View>
+                      alignSelf: 'center',
+                      alignItems: 'center',
+                      width: width * 0.95,
+                    }}
+                    onPress={() => onChoose()}>
+                    <Image
+                      source={CommonImage.AuthHeader}
+                      style={styles.imageStyle}
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
               <TouchableOpacity
-                onPress={() => uploadDetails()}
+                onPress={() => onChoose()}
                 style={{
-                  height: height * 0.06,
-                  backgroundColor: 'rgb(28,154,236)',
-                  borderRadius: 3,
+                  position: 'absolute',
+                  bottom: 20,
+                  flexDirection: 'row',
+                  backgroundColor: COLOR.Link,
+                  width: width * 0.71,
                   justifyContent: 'center',
-
-                  marginTop: 20,
+                  alignItems: 'center',
+                  borderRadius: 20,
+                  height: 50,
                 }}>
-                <Text
-                  style={{
-                    color: '#fff',
-                    textAlign: 'center',
-                    fontSize: 18,
-                    fontFamily: 'InstagramSans-Medium',
-                  }}>
-                  Upload Post
-                </Text>
+                <Icon
+                  name="cloud-upload-outline"
+                  size={40}
+                  color={COLOR.WTEXT}
+                />
+                {filePath ? (
+                  <Text style={{fontSize: 25, color: COLOR.WTEXT}}>
+                    {'  '}
+                    Choose another
+                  </Text>
+                ) : (
+                  <Text style={{fontSize: 30, color: COLOR.WTEXT}}>
+                    {' '}
+                    Select Image
+                  </Text>
+                )}
               </TouchableOpacity>
             </View>
 
-            {/* <Button
-                style={{marginTop: 20}}
-                title="Sign Out"
-                onPress={() => onSignout()}
-              /> */}
+            <View
+              style={{
+                height: height * 0.2,
+                width: width * 0.95,
+                justifyContent: 'center',
+                alignItems: 'center',
+                // backgroundColor: 'green',
+              }}>
+              <CommonTextInput
+                placeholder={'Caption...'}
+                validate={false}
+                setText={txt => {
+                  setcaption(txt);
+                }}
+              />
+
+              <View style={{marginTop: 20}}>
+                <CommonButton
+                  onPress={() => uploadDetails()}
+                  name={'Upload Post'}
+                />
+              </View>
+            </View>
           </View>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
@@ -440,10 +472,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   imageStyle: {
-    width: width * 0.9,
-    height: height * 0.3,
+    width: 300,
+    height: 400,
     resizeMode: 'contain',
-    margin: 20,
+    // margin: 20,
     // backgroundColor: 'red',
     borderWidth: 1,
     borderStyle: 'dashed',
@@ -454,8 +486,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   imageStyle1: {
-    width: width * 0.9,
-    height: height * 0.4,
+    width: 300,
+    height: 400,
 
     // backgroundColor: 'red',
     borderWidth: 1,

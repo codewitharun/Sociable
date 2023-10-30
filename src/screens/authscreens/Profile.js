@@ -13,7 +13,8 @@ import {
   ActivityIndicator,
   RefreshControl,
   KeyboardAvoidingView,
-  ScrollView, TextInput
+  ScrollView,
+  TextInput,
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import React, {useState, useEffect} from 'react';
@@ -28,6 +29,10 @@ import {showAlert, closeAlert} from 'react-native-customisable-alert';
 import firestore from '@react-native-firebase/firestore';
 import {color} from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ProfileHeader from '../../common/profileheader';
+import CommonTextInput from '../../common/textinput';
+import CommonButton from '../../common/button';
+import CommonImage from '../components/CommonImage';
 const Profile = ({navigation, params}) => {
   const [name, setName] = useState('');
   const [image, setImage] = useState('hejr');
@@ -39,7 +44,8 @@ const Profile = ({navigation, params}) => {
   const [filePath, setFilePath] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const [userData, setUserData] = useState();
-
+  const [loading, setLoading] = useState(false);
+  // console.log('🚀 ~ file: Profile.js:36 ~ Profile ~ image:', userData);
   // const parsedUserData = JSON.stringify(JSON.parse(userData));
   // console.log('User data is after' + userData.displayName);
   const update = {
@@ -126,14 +132,17 @@ const Profile = ({navigation, params}) => {
   async function uploadDetails() {
     console.log(update);
     try {
+      setLoading(true);
       await firestore()
         .collection('Users')
         .doc(User.uid)
         .set(update)
         .then(() => {
           console.log('User updated!');
+          setLoading(false);
+
           AsyncStorage.setItem('LoggedUser', JSON.stringify(update));
-          navigation.navigate('Success');
+          navigation.goBack();
         })
         .then(() => {
           ImagePicker.clean()
@@ -142,10 +151,12 @@ const Profile = ({navigation, params}) => {
             })
             .catch(e => {
               alert('error while cleaning tmp images from picker: ' + e);
+              setLoading(false);
             });
         });
     } catch (error) {
       // console.log(' image upload to storage', error);
+      setLoading(false);
       Alert.alert('Please Fill all the fields', error);
     }
   }
@@ -225,7 +236,7 @@ const Profile = ({navigation, params}) => {
   };
 
   return (
-    <SafeAreaView style={{backgroundColor: 'black'}}>
+    <SafeAreaView style={{backgroundColor: 'white'}}>
       <ScrollView
         refreshControl={
           <RefreshControl
@@ -236,209 +247,133 @@ const Profile = ({navigation, params}) => {
             onRefresh={fetchUsers}
           />
         }>
-        <View
-          style={{
-            height: height * 1,
-            justifyContent: 'center',
-            width: width * 1,
-            backgroundColor: 'black',
-          }}>
-          <KeyboardAvoidingView>
+        <KeyboardAvoidingView>
+          <View
+            style={{
+              height: height * 1,
+              width: width * 1,
+              backgroundColor: 'white',
+              position: 'relative',
+            }}>
+            <ProfileHeader name={'Edit Profile'}></ProfileHeader>
             <View
               style={{
-                height: height * 1,
-                marginTop: 70,
-                width: width * 0.95,
+                height: height * 0.13,
+                // backgroundColor: 'red',
+                justifyContent: 'center',
                 alignSelf: 'center',
-                // justifyContent: 'center',
+                alignItems: 'center',
+                width: width * 0.3,
+                position: 'absolute',
+                top: 120,
               }}>
-              <View
-                style={{
-                  height: height * 0.16,
-                  // backgroundColor: 'red',
-
-                  alignSelf: 'center',
-                  alignItems: 'center',
-                  width: width * 0.9,
-                }}>
-                {filePath ? (
-                  <View>
-                    <TouchableOpacity onPress={() => onChoose()}>
-                      <Image
-                        onLoad={async () => {
-                          // path to existing file on filesystem
-                          const pathToFile = filePath;
-
-                          // uploads file
-                          await reference.putFile(pathToFile);
-                          const urrl = await storage()
-                            .ref(`${User.uid}/profilePhoto`)
-                            .getDownloadURL();
-                          setImage(urrl);
-
-                          console.log('url link get after image upload', urrl);
-                        }}
-                        source={{
-                          uri: filePath ? filePath : image,
-                        }}
-                        style={styles.imageStyle}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                ) : (
-                  <View>
-                    <TouchableOpacity onPress={() => onChoose()}>
-                      <Image
-                        // source={require('../../assets/images/upload.png')}
-                        source={{uri: image}}
-                        style={styles.imageStyle}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                )}
-              </View>
-
-              {/* <View>
-            <TouchableOpacity
-              activeOpacity={0.5}
-              style={styles.buttonStyle}
-              onPress={() => onChoose()}>
-              <Text style={styles.textStyle}>Choose Image</Text>
-            </TouchableOpacity>
-          </View> */}
-              <View style={{height: height * 0.2}}>
+              {filePath ? (
                 <View>
-                  <TextInput
-                    // editable={userData?.email == '' ? true : false}
-                    value={email}
-                    placeholder="Enter your corporate email ID"
-                    placeholderTextColor={'rgb(122,122,122)'}
-                    onChangeText={txt => {
-                      setEmail(txt);
-                    }}
-                    style={{
-                      height: height * 0.06,
-                      backgroundColor: 'rgb(54,54,54)',
-                      borderRadius: 3,
-                      paddingHorizontal: 10,
-                      color: '#fff',
-                      fontFamily: 'InstagramSans-Medium',
-                    }}
-                  />
-                  <TextInput
-                    placeholder="Full Name"
-                    // editable={userData?.displayName == '' ? true : false}
-                    value={name}
-                    placeholderTextColor={'rgb(122,122,122)'}
-                    // secureTextEntry={true}
-                    onChangeText={txt => {
-                      setName(txt);
-                    }}
-                    style={{
-                      height: height * 0.06,
-                      backgroundColor: 'rgb(54,54,54)',
-                      borderRadius: 3,
-                      paddingHorizontal: 10,
-                      color: '#fff',
-                      marginTop: 20,
-                      fontFamily: 'InstagramSans-Medium',
-                    }}
-                  />
-                  <TextInput
-                    placeholder="Phone Number"
-                    placeholderTextColor={'rgb(122,122,122)'}
-                    maxLength={10}
-                    value={phone}
-                    // editable={userData?.phoneNumber == '' ? true : false}
-                    // secureTextEntry={true}
-                    onChangeText={txt => {
-                      setPhone(txt);
-                    }}
-                    style={{
-                      height: height * 0.06,
-                      backgroundColor: 'rgb(54,54,54)',
-                      borderRadius: 3,
-                      paddingHorizontal: 10,
-                      color: '#fff',
-                      marginTop: 20,
-                      fontFamily: 'InstagramSans-Medium',
-                    }}
-                  />
-                  <TextInput
-                    placeholder="Address"
-                    value={address}
-                    // defaultValue={userData?.address}
-                    // editable={userData?.address == '' ? true : false}
-                    placeholderTextColor={'rgb(122,122,122)'}
-                    // secureTextEntry={true}
-                    onChangeText={txt => {
-                      setAddress(txt);
-                    }}
-                    style={{
-                      height: height * 0.06,
-                      backgroundColor: 'rgb(54,54,54)',
-                      borderRadius: 3,
-                      paddingHorizontal: 10,
-                      color: '#fff',
-                      marginTop: 20,
+                  <Image
+                    onLoad={async () => {
+                      // path to existing file on filesystem
+                      const pathToFile = filePath;
 
-                      fontFamily: 'InstagramSans-Medium',
+                      // uploads file
+                      await reference.putFile(pathToFile);
+                      const urrl = await storage()
+                        .ref(`${User.uid}/profilePhoto`)
+                        .getDownloadURL();
+                      setImage(urrl);
+
+                      console.log('url link get after image upload', urrl);
                     }}
-                  />
-                  <TextInput
-                    placeholder="About me"
-                    multiline={true}
-                    // editable={userData?.bio == '' ? true : false}
-                    value={bio}
-                    placeholderTextColor={'rgb(122,122,122)'}
-                    // secureTextEntry={true}
-                    onChangeText={txt => {
-                      setBio(txt);
+                    source={{
+                      uri: filePath ? filePath : image,
                     }}
-                    style={{
-                      height: height * 0.1,
-                      backgroundColor: 'rgb(54,54,54)',
-                      borderRadius: 3,
-                      paddingHorizontal: 10,
-                      color: '#fff',
-                      marginTop: 20,
-                      fontFamily: 'InstagramSans-Medium',
-                    }}
+                    style={styles.imageStyle}
                   />
                 </View>
-
+              ) : (
                 <View>
-                  <TouchableOpacity
-                    onPress={() => uploadDetails()}
-                    style={{
-                      height: height * 0.06,
-                      backgroundColor: 'rgb(28,154,236)',
-                      borderRadius: 3,
-                      justifyContent: 'center',
-
-                      marginTop: 20,
-                    }}>
-                    <Text
-                      style={{
-                        color: '#fff',
-                        textAlign: 'center',
-                        fontSize: 18,
-                        fontFamily: 'InstagramSans-Medium',
-                      }}>
-                      Update details
-                    </Text>
-                  </TouchableOpacity>
+                  <Image
+                    // source={require('../../assets/images/upload.png')}
+                    source={{uri: image}}
+                    style={styles.imageStyle}
+                  />
                 </View>
-
-                {/* <Button
-              style={{marginTop: 20}}
-              title="Sign Out"
-              onPress={() => onSignout()}
-            /> */}
+              )}
+              <View style={{position: 'absolute', bottom: 10, right: 10}}>
+                <TouchableOpacity onPress={() => onChoose()}>
+                  <Image source={CommonImage.cameraIcon} />
+                </TouchableOpacity>
               </View>
             </View>
-          </KeyboardAvoidingView>
-        </View>
+
+            <View
+              style={{
+                height: height * 0.6,
+                marginTop: 100,
+                alignSelf: 'center',
+                alignItems: 'center',
+                width: width * 0.9,
+                // backgroundColor: 'red',
+              }}>
+              <View>
+                <CommonTextInput
+                  placeholder={'Please enter your email'}
+                  hidden={false}
+                  value={email}
+                  validate={false}
+                  setText={txt => {
+                    setEmail(txt);
+                  }}
+                />
+                <CommonTextInput
+                  placeholder={name ? name : 'Please enter you name'}
+                  hidden={false}
+                  value={name}
+                  validate={false}
+                  setText={txt => {
+                    setName(txt);
+                  }}
+                />
+                <CommonTextInput
+                  placeholder={phone ? phone : 'Please enter your phone number'}
+                  hidden={false}
+                  validate={false}
+                  value={phone}
+                  setText={txt => {
+                    setPhone(txt);
+                  }}
+                />
+                <CommonTextInput
+                  placeholder={address ? address : 'Please enter your address'}
+                  hidden={false}
+                  validate={false}
+                  value={address}
+                  setText={txt => {
+                    setAddress(txt);
+                  }}
+                />
+                <CommonTextInput
+                  placeholder={bio ? bio : 'Please enter your bio'}
+                  hidden={false}
+                  validate={false}
+                  value={bio}
+                  setText={txt => {
+                    setBio(txt);
+                  }}
+                />
+              </View>
+
+              <View style={{marginTop: 50}}>
+                <CommonButton
+                  name={'Update details'}
+                  loading={loading}
+                  onPress={() => {
+                    uploadDetails();
+                  }}
+                />
+              </View>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
       </ScrollView>
     </SafeAreaView>
   );
