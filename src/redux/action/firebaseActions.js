@@ -20,6 +20,7 @@ import {
   GET_FRIENDS,
   SET_MODAL,
   GET_ADDED_FRIENDS,
+  GET_POST_DETAILS,
 } from '../type/type';
 import {Alert} from 'react-native';
 
@@ -235,6 +236,36 @@ export const getCurrentUsersPosts = () => {
       error,
     );
   }
+};
+export const getPostDetails = id => {
+  console.log('🚀 ~ file: firebaseActions.js:240 ~ getPostDetails ~ id:', id);
+
+  // Assuming you have the GET_CURRENT_POSTS action type defined in './types'
+
+  return async dispatch => {
+    try {
+      const querySnapshot = await firestore()
+        .collection('Upload')
+        .doc(id)
+        .get();
+
+      if (querySnapshot.exists) {
+        const postDetails = querySnapshot.data();
+        const temp = {id: querySnapshot.id, ...postDetails};
+
+        dispatch({
+          type: GET_POST_DETAILS,
+          payload: temp,
+        });
+        // return temp;
+        console.log('Post data from redux', temp);
+      } else {
+        console.log('Document does not exist');
+      }
+    } catch (error) {
+      console.log('Error while getting POST data from firestore', error);
+    }
+  };
 };
 
 export const getFriend = () => {

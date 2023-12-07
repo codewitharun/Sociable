@@ -33,14 +33,10 @@ import Addedfriends from '../main/Addedfriend';
 import PreviousChat from '../main/PreviousChat';
 import Notify from '../main/Notify';
 import YourComponent from '../main/Location';
+import PostView from '../main/PostDetails';
 const Drawer = createDrawerNavigator();
 
 function MyTabBar({state, descriptors, navigation}) {
-  console.log(
-    '🚀 ~ file: routes.js:43 ~ {state.routes.map ~ options:',
-    state,
-    descriptors,
-  );
   return (
     <View
       style={{
@@ -48,7 +44,7 @@ function MyTabBar({state, descriptors, navigation}) {
         height: 60,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: "rgba(138, 149, 158, 0.2)",
+        backgroundColor: 'rgba(138, 149, 158, 0.2)',
       }}>
       {state.routes.map((route, index) => {
         const {options} = descriptors[route.key];
@@ -190,6 +186,7 @@ function Routes() {
         <Auth.Screen name="Privacy" component={Privacy} />
         <Auth.Screen name="Chat" component={MyScreen} />
         <Auth.Screen name="AllUsers" component={Friends} />
+        <Auth.Screen name="Post" component={PostView} />
         {/* <bottom.Screen
         name="MyFriends"
         component={Addedfriends}

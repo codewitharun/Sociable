@@ -18,7 +18,6 @@ const CommonTextInput = ({
   hide,
   value,
 }) => {
-  console.log('🚀 ~ file: textinput.js:20 ~ validate:', validate);
   return (
     <View
       style={{

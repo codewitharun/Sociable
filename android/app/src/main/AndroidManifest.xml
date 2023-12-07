@@ -25,6 +25,7 @@
       android:roundIcon="@mipmap/ic_launcher"
       android:allowBackup="false"
       android:theme="@style/AppTheme"
+       android:forceDarkAllowed="false"
        >
        <service
 	android:name="app.notifee.core.ForegroundService"

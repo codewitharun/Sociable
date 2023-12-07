@@ -15,6 +15,7 @@ import {
   RefreshControl,
   Pressable,
   TextInput,
+  ScrollView,
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import React, {useState, useEffect} from 'react';
@@ -31,9 +32,10 @@ import {color} from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useSelector, useDispatch} from 'react-redux';
-import {userSignout} from '../../redux/action/firebaseActions';
+import {getPostDetails, userSignout} from '../../redux/action/firebaseActions';
 import asyncStorage from '@react-native-async-storage/async-storage';
 import Modal from 'react-native-modal';
+import Gallery from 'react-native-awesome-gallery';
 
 import {
   getPosts,
@@ -41,6 +43,7 @@ import {
   getCurrentUsersPosts,
 } from '../../redux/action/firebaseActions';
 import ProfileHeader from '../../common/profileheader';
+import CommonImage from '../components/CommonImage';
 
 const Postprofile = ({navigation, params}) => {
   const [liked, setLiked] = useState(false);
@@ -58,7 +61,9 @@ const Postprofile = ({navigation, params}) => {
     setModalVisible(!isModalVisible);
   };
   const {user} = useSelector(state => state.fromReducer);
+  console.log('🚀 ~ file: Postprofile.js:64 ~ Postprofile ~ user:', user);
   const {currentUserPosts} = useSelector(state => state.fromReducer);
+  // const currentUserPosts = [];
   // console.log('user in PostProfile screen', currentUserPosts);
   const [refreshing, setRefreshing] = useState(false);
   // console.log('users from drawer screen', users.displayName);
@@ -286,322 +291,98 @@ const Postprofile = ({navigation, params}) => {
     />
   );
   const Item = ({title, url, thumbnailUrl, username, email, postId}) => (
-    <View style={styles.item}>
-      <View
-        style={{
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-          alignItems: 'center',
-          // backgroundColor: 'red',
-          borderColor: 'grey',
-          borderWidth: 0.2,
-          height: height * 0.07,
-        }}>
-        <View>
-          <TouchableOpacity>
-            <Image
-              source={{uri: thumbnailUrl}}
-              style={{height: 50, width: 50, borderRadius: 100 / 2}}
-            />
-          </TouchableOpacity>
-        </View>
-        <View>
-          <TouchableOpacity>
-            <Text style={{color: 'white', fontWeight: 'bold'}}>
-              {/* {useData?.displayName} */}
-              {username}
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View>
-          {/* <Button title="Show modal" onPress={toggleModal} /> */}
-          <TouchableOpacity
-            onPress={() => {
-              EditSelectedElement(postId);
-            }}>
-            <Icon name="dots-vertical" size={20} color={'white'} />
-          </TouchableOpacity>
-        </View>
-      </View>
-      {/* // modal starts here */}
-
-      <Modal isVisible={isModalVisible}>
-        <View style={{height: height * 0.5, backgroundColor: 'white'}}>
-          <Text>{postId}</Text>
-          <TextInput
-            style={{color: 'red'}}
-            placeholder={title}
-            placeholderTextColor={'red'}
-            // ref={userefForCaption}
-            onChangeText={txt => {
-              userefForCaption = txt;
-            }}
-          />
-          <Button
-            title="update caption"
-            onPress={() => {
-              firestore()
-                .collection('Upload')
-                .doc(postId)
-                .update({caption: userefForCaption});
-            }}
-          />
-          <Button title="Hide modal" onPress={toggleModal} />
-        </View>
-      </Modal>
-
-      <View
-        style={{
-          height: height * 0.5,
-          alignSelf: 'center',
-          width: width * 0.95,
-          // backgroundColor: 'green',
-          borderRadius: 20,
-          alignItems: 'center',
-          justifyContent: 'center',
-          // borderRadius: 20,
+    <View
+      style={{
+        height: height * 0.2,
+        // alignSelf: 'center',
+        width: width * 0.3,
+        // backgroundColor: 'green',
+        // borderRadius: 20,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        // borderRadius: 20,
+        margin: 5,
+      }}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('Post', {id: postId}),
+            dispatch(getPostDetails(postId));
         }}>
         <Image
           source={{uri: url}}
           style={{
-            height: 400,
-            width: 400,
+            height: 200,
+            width: 200,
             resizeMode: 'contain',
           }}
         />
-        {/* <Text style={{color: 'white'}}>{title}</Text> */}
-      </View>
-      <View
-        style={{
-          height: height * 0.035,
-          // backgroundColor: 'red',
-          width: width * 0.4,
-        }}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-          <TouchableOpacity>
-            <Icon
-              name={liked == true ? 'heart' : 'heart-outline'}
-              color={liked == true ? 'red' : 'white'}
-              size={30}
-              onPress={() => {
-                setLiked(isLiked => !isLiked);
-              }}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Icon name="comment-outline" color={'white'} size={30} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => deleteSelectedElement(title, postId)}>
-            <Icon name="delete-outline" color={'white'} size={30} />
-          </TouchableOpacity>
-        </View>
-      </View>
-      {/* username and caption portion starts here  */}
-      <View
-        style={{
-          height: height * 0.05,
-          // backgroundColor: 'red',
-          width: width * 0.9,
-        }}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-          <TouchableOpacity>
-            <Text style={{color: 'white', fontWeight: 'bold'}}>
-              {email?.split('.com')}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{width: width * 0.5}}>
-            <Text style={{color: 'white'}}>{title}</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 
+  const nodata = () => (
+    <View
+      style={{
+        height: 300,
+        width: 300,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <Image source={CommonImage.empty} style={{height: 200, width: 200}} />
+    </View>
+  );
   return (
-    <SafeAreaView style={{backgroundColor: 'black'}}>
-      <View
-        style={{
-          height: height * 1,
-          // justifyContent: 'center',
-          width: width * 1,
-          backgroundColor: 'white',
-          position: 'relative',
-        }}>
-        <ProfileHeader name={user.email}></ProfileHeader>
-
-        <View
-          style={{
-            height: height * 0.4,
-            width: width * 1,
-            // backgroundColor: 'red',
-            justifyContent: 'center',
-            alignSelf: 'center',
-            // flexDirection: 'row',
-
-            borderColor: COLOR.BUTTON,
-            position: 'absolute',
-            top: 100,
-          }}>
-          <View
-            style={{
-              justifyContent: 'center',
-              // marginTop: ,
-              // backgroundColor: 'red',
-              alignItems: 'center',
-              marginBottom: 10,
-            }}>
-            <Image
-              source={{uri: user.photoUrl}}
-              style={{
-                height: 100,
-                width: 100,
-                borderRadius: 100 / 2,
-                borderWidth: 4,
-                borderColor: 'white',
-              }}
-            />
-            <View
-              style={{
-                justifyContent: 'center',
-                marginTop: 10,
-                // backgroundColor: 'red',
-                alignItems: 'center',
-              }}>
-              <Text
-                style={{
-                  color: 'black',
-                  fontSize: 20,
-                  fontWeight: '700',
-                  fontFamily: 'Comfortaa-bold',
-                }}>
-                {user.displayName}
-              </Text>
-              <Text
-                style={{
-                  color: '#8F90A7',
-                  fontSize: 16,
-
-                  fontFamily: 'Comfortaa-bold',
-                  fontWeight: '400',
-                }}>
-                {user.address}
-              </Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.mainContainer}>
+        {/* Your ProfileHeader component */}
+        {/* <ScrollView> */}
+        <ProfileHeader name={user.email} />
+        {/* Content below ProfileHeader */}
+        <View style={styles.contentContainer}>
+          <View style={styles.profileInfo}>
+            <Image source={{uri: user.photoUrl}} style={styles.profileImage} />
+            <View style={styles.textContainer}>
+              <Text style={styles.name}>{user.displayName}</Text>
+              <Text style={styles.address}>{user.address}</Text>
             </View>
           </View>
 
-          <View
-            style={{
-              // backgroundColor: '#f23',
-              height: 40,
-              width: width * 0.95,
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
-              alignSelf: 'center',
-            }}>
-            <View
-              style={{
-                width: '45%',
-                backgroundColor: '#F6F7F9',
-                height: 40,
-                alignSelf: 'center',
-                justifyContent: 'center',
-                borderRadius: 6,
-              }}>
+          <View style={styles.buttonsContainer}>
+            <View style={styles.button}>
               <Text style={styles.follower}>Follower</Text>
             </View>
-            <View
-              style={{
-                alignSelf: 'center',
-                width: '45%',
-                backgroundColor: '#F6F7F9',
-                height: 40,
-                justifyContent: 'center',
-                borderRadius: 6,
-              }}>
-              <Text style={styles.follower}>Follower</Text>
+            <View style={styles.button}>
+              <Text style={styles.follower}>Following</Text>
             </View>
           </View>
 
-          <View
-            style={{
-              backgroundColor: '#f23',
-              height: 60,
-              width: width * 0.95,
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
-              alignSelf: 'center',
-              marginTop: 40,
-              padding: 6,
-            }}>
-            <View
-              style={{
-                width: '45%',
-                backgroundColor: '#F6F7F9',
-                height: 40,
-                alignSelf: 'center',
-                justifyContent: 'center',
-                borderRadius: 6,
-              }}>
-              <Text style={styles.follower}>Follower</Text>
-            </View>
-            <View
-              style={{
-                alignSelf: 'center',
-                width: '45%',
-                backgroundColor: '#F1F1FE',
-                height: 40,
-                justifyContent: 'center',
-                borderRadius: 6,
-              }}>
-              <Text style={styles.follower}>Follower</Text>
+          <View style={styles.myUploadsContainer}>
+            <View style={styles.button}>
+              <Text style={styles.follower}>My Uploads</Text>
             </View>
           </View>
         </View>
-
-        <View
-          style={{
-            height: height * 0.65,
-            width: width * 0.95,
-            alignSelf: 'center',
-            backgroundColor: 'green',
-            marginTop: 250,
-            display: 'none',
-          }}>
-          {/* <View
+        {/* Additional Container */}
+        <View style={styles.additionalContainer}>
+          <View
             style={{
-              height: height * 0.1,
-              width: width * 0.95,
-              alignSelf: 'center',
+              backgroundColor: 'pink',
+              height: height,
+              width: '100%',
               justifyContent: 'center',
-              backgroundColor: COLOR.TABCARD,
+              alignItems: 'center',
             }}>
-            <TouchableOpacity onPress={() => navigation.navigate('Upload')}>
-              <View style={{justifyContent: 'center', alignSelf: 'center'}}>
-                <Icon name="plus" size={50} color={'white'} />
-              </View>
-            </TouchableOpacity>
-          </View> */}
-          <View style={{marginTop: 20}}>
             <FlatList
               data={currentUserPosts}
+              scrollEnabled
               renderItem={renderItem}
               keyExtractor={item => item.id}
-              refreshControl={
-                <RefreshControl
-                  title="Referesing Data..."
-                  tintColor={COLOR.BUTTON}
-                  titleColor="#fff"
-                  refreshing={refreshing}
-                  onRefresh={fetchUserPosts}
-                />
-              }
+              numColumns={3} // Set the number of columns to 3
+              // contentContainerStyle={styles.container}
             />
           </View>
         </View>
+        {/* </ScrollView> */}
       </View>
     </SafeAreaView>
   );
@@ -611,97 +392,74 @@ export default Postprofile;
 
 const styles = StyleSheet.create({
   container: {
-    height: height * 1,
-    padding: 10,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    flex: 1,
+  },
+  mainContainer: {
+    flex: 1,
+  },
+  contentContainer: {
+    height: height * 0.35,
+    marginTop: -height * 0.05,
+    // Adjusted to cover half of ProfileHeader
+    // backgroundColor: 'red',
+  },
+  profileInfo: {
     justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
   },
-  titleText: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    paddingVertical: 20,
+  profileImage: {
+    height: 100,
+    width: 100,
+    borderRadius: 100 / 2,
+    borderWidth: 4,
+    borderColor: 'white',
   },
-  textStyle: {
-    padding: 10,
+  textContainer: {
+    justifyContent: 'center',
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  name: {
     color: 'black',
     fontSize: 20,
-    textAlign: 'center',
+    fontWeight: '700',
+    fontFamily: 'Comfortaa-bold',
   },
-  buttonStyle: {
-    // alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    // padding: 5,
-    marginVertical: 10,
-    width: width * 0.5,
-    alignSelf: 'center',
+  address: {
+    color: '#8F90A7',
+    fontSize: 16,
+    fontFamily: 'Comfortaa-bold',
+    fontWeight: '400',
   },
-  imageStyle: {
-    width: 100,
-    height: 100,
-
-    // backgroundColor: 'red',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: COLOR.BUTTON,
-    borderRadius: 200 / 2,
-  },
-  imageStyle1: {
-    width: 1,
-    height: 1,
-    margin: 5,
-    // backgroundColor: 'red',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: COLOR.BUTTON,
-    borderRadius: 200 / 2,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    width: '95%',
   },
   button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
+    width: '45%',
+    backgroundColor: '#F6F7F9',
+    height: 40,
+    justifyContent: 'center',
+    borderRadius: 6,
   },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
+  myUploadsContainer: {
+    height: 40,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 40,
+    borderRadius: 6,
+    backgroundColor: '#F6F7F9',
   },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
+  additionalContainer: {
+    backgroundColor: 'green',
+    height: height * 0.5,
+    marginTop: 40,
   },
   follower: {
     textAlign: 'center',
-    color: '#242424',
-    fontWeight: '700',
-    fontSize: 16,
   },
 });

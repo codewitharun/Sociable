@@ -5,12 +5,16 @@ import thunk from 'redux-thunk';
 import {AlertNotificationRoot} from 'react-native-alert-notification';
 import {Provider} from 'react-redux';
 import Routes from './src/screens/routes/routes';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+
 const App = ({navigation}) => {
   return (
     <Provider store={store}>
-      <AlertNotificationRoot theme="light">
-        <Routes />
-      </AlertNotificationRoot>
+      <GestureHandlerRootView style={{flex: 1}}>
+        <AlertNotificationRoot theme="light">
+          <Routes />
+        </AlertNotificationRoot>
+      </GestureHandlerRootView>
     </Provider>
   );
 };

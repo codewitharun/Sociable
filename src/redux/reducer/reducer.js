@@ -11,6 +11,7 @@ import {
   GET_LIKES,
   SET_MODAL,
   GET_ADDED_FRIENDS,
+  GET_POST_DETAILS,
 } from '../type/type';
 
 const initialState = {
@@ -26,6 +27,7 @@ const initialState = {
   likesOnpost: [],
   usersForModal: [],
   friendsAdded: [],
+  postDetails: [],
 };
 function fromReducer(state = initialState, action) {
   switch (action.type) {
@@ -60,6 +62,8 @@ function fromReducer(state = initialState, action) {
       };
     case SET_MODAL:
       return {...state, usersForModal: action.payload};
+      case GET_POST_DETAILS:
+        return {...state, postDetails: action.payload};
     default:
       return state;
   }
