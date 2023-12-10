@@ -87,12 +87,16 @@ function MyTabBar({state, descriptors, navigation}) {
             borderRadius: 100 / 2,
             position: 'absolute',
             bottom: 35,
-            elevation: 5,
-            shadowColor: COLOR.Link,
+            elevation: 5, // Android elevation
+            shadowColor: COLOR.Link, // Shadow color
+            shadowOffset: {width: 0, height: 4}, // Shadow offset
+            shadowOpacity: 0.3, // Shadow opacity
+            shadowRadius: 4, // Shadow radius
             borderBottomColor: '#BDBDBD',
             borderBottomWidth: 2,
             justifyContent: 'space-evenly',
           };
+
           tabStylePlus = {
             backgroundColor: 'white',
             borderRadius: 10,

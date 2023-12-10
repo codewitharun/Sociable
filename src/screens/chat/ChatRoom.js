@@ -17,8 +17,12 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 // import ImagePicker from 'react-native-image-picker';
 import PushNotification from 'react-native-push-notification';
-
+import {COLOR} from '../components/Colors';
+import ImagePicker from 'react-native-image-crop-picker';
+import Header from '../../common/header';
+import ProfileHeader from '../../common/profileheader';
 const ChatRoom = ({user1, user2, navigation}) => {
+  console.log('🚀 ~ file: ChatRoom.js:25 ~ ChatRoom ~ user2:', user2);
   const [messages, setMessages] = useState([]);
   const [chatRoomId, setChatRoomId] = useState('');
   const [fcmToken, setfcmToken] = useState('');
@@ -54,27 +58,28 @@ const ChatRoom = ({user1, user2, navigation}) => {
       });
       setMessages(messages);
     });
-    PushNotification.configure({
-      onRegister: function (token) {
-        // Send the token to the backend server to register the device
-      },
-      onNotification: function (notification) {
-        // Handle the incoming push notification
-      },
-    });
 
-    // Send push notification on new message
-    function sendPushNotification(message) {
-      PushNotification.localNotification({
-        message: message,
-      });
-    }
     return () => {
       chatRef.off();
     };
   }, [user1, user2]);
   const chatRoomsRef = firebase.database().ref(`chatRooms`);
+  PushNotification.configure({
+    onRegister: function (token) {
+      // Send the token to the backend server to register the device
+    },
+    onNotification: function (notification) {
+      // Handle the incoming push notification
+    },
+  });
 
+  // Send push notification on new message
+  function sendPushNotification(message) {
+    PushNotification.localNotification({
+      message: message,
+      channelId: 'test',
+    });
+  }
   const handleMediaSelection = useCallback(async () => {
     try {
       const image = await ImagePicker.openPicker({
@@ -179,6 +184,7 @@ const ChatRoom = ({user1, user2, navigation}) => {
           },
           image: mediaUrl ? mediaUrl : null,
         });
+      sendPushNotification('You have a new message');
     });
     setSelectedMedia(null);
     // Reset state after sending message
@@ -217,6 +223,8 @@ const ChatRoom = ({user1, user2, navigation}) => {
 
   return (
     <>
+      <ProfileHeader name={user2.key}></ProfileHeader>
+
       <GiftedChat
         showUserAvatar
         inverted={false}
@@ -245,7 +253,7 @@ const ChatRoom = ({user1, user2, navigation}) => {
         renderSend={props => (
           <Send {...props}>
             <View style={{marginRight: 10, marginBottom: 5}}>
-              <Icon name="send" size={32} color="#00AAFF" />
+              <Icon name="send" size={32} color={COLOR.Link} />
             </View>
           </Send>
         )}
@@ -254,7 +262,7 @@ const ChatRoom = ({user1, user2, navigation}) => {
           <InputToolbar
             {...props}
             containerStyle={{
-              backgroundColor: 'black',
+              backgroundColor: '#ffffff',
               borderTopWidth: 1,
               borderTopColor: 'gray',
             }}></InputToolbar>
@@ -264,15 +272,16 @@ const ChatRoom = ({user1, user2, navigation}) => {
             {...props}
             wrapperStyle={{
               right: {
-                backgroundColor: '#00AAFF',
+                backgroundColor: '#F1F1FE',
               },
               left: {
-                backgroundColor: '#E6E6E6',
+                backgroundColor: '#F6F7F9',
               },
             }}
             textStyle={{
               right: {
-                color: '#000',
+                color: '#828282',
+                width: '60%',
               },
               left: {
                 color: '#000',
@@ -282,10 +291,22 @@ const ChatRoom = ({user1, user2, navigation}) => {
         )}
         onInputTextChanged={onInputTextChanged}
         renderActions={() => (
-          <TouchableOpacity onPress={handleMediaSelection}>
-            <Icon name="attachment" size={32} color="#00AAFF" />
+          <TouchableOpacity
+            onPress={handleMediaSelection}
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              // backgroundColor: 'red',
+              height: '100%',
+            }}>
+            <Icon name="attachment" size={32} color={COLOR.Link} />
           </TouchableOpacity>
         )}
+        timeTextStyle={{
+          left: {color: '#828282'},
+          right: {color: '#828282'},
+        }}
+
         // textInputProps={{
         //   onFocus: onTyping,
         //   onBlur: onStopTyping,

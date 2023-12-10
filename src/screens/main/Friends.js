@@ -110,7 +110,7 @@ const Friends = ({navigation}) => {
           }}>
           <View style={{width: width * 0.15}}>
             <Image
-              source={{uri: url}}
+              source={url ? {uri: url} : CommonImage.dummyProfile}
               style={{height: 50, width: 50, borderRadius: 100 / 2}}
             />
           </View>
@@ -141,21 +141,22 @@ const Friends = ({navigation}) => {
               onPress={() => setModalVisible(false)}>
               <Icon name="close" size={24} color="black" />
             </TouchableOpacity>
-            <Image source={{uri: usersForModal.url}} style={styles.userPhoto} />
+            <Image
+              source={url ? {uri: usersForModal.url} : CommonImage.dummyProfile}
+              style={styles.userPhoto}
+            />
             <Text style={styles.userName}>{usersForModal.username}</Text>
             <Text style={styles.userEmail}>{usersForModal.email}</Text>
             <TouchableOpacity
               style={styles.actionButton}
               onPress={() => {
                 toggleModal(),
-                  dispatch(
-                    addFriends({
-                      displayName: usersForModal.username,
-                      email: usersForModal.email,
-                      uid: usersForModal.uid,
-                      photoUrl: usersForModal.url,
-                    }),
-                  );
+                  addFriends({
+                    displayName: usersForModal.username,
+                    email: usersForModal.email,
+                    uid: usersForModal.uid,
+                    photoUrl: usersForModal.url,
+                  });
               }}>
               <Text style={styles.actionButtonText}>Follow</Text>
             </TouchableOpacity>

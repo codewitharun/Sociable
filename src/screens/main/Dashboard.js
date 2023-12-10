@@ -101,14 +101,19 @@ const Dashboard = ({navigation}) => {
                   fontSize: 35,
                   // textAlign: 'center',
                   lineHeight: 40,
-                  color: COLOR.Link,
+                  color: COLOR.WTEXT,
+                  textAlign: 'center',
                 }}>
                 Sociable
               </Text>
             </View>
 
             <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginRight: 10,
+              }}>
               <View style={{justifyContent: 'center'}}>
                 <TouchableOpacity>
                   <Icon name="ladder" size={30} color="white" />

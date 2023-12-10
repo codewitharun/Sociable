@@ -7,4 +7,5 @@ export default IMAGES = {
   cameraIcon: require('../../assets/images/camera.png'),
   ProfileHeader: require('../../assets/images/profileHeader.png'),
   empty: require('../../assets/images/empty.png'),
+  dummyProfile: require('../../assets/images/dummydp.png'),
 };

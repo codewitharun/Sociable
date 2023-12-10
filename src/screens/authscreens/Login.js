@@ -21,6 +21,7 @@ import Header from '../../common/header';
 import CommonTextInput from '../../common/textinput';
 import CommonButton from '../../common/button';
 import showAlert from '../../common/showAlert';
+import {useDispatch} from 'react-redux';
 const {height, width} = Dimensions.get('screen');
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -29,31 +30,42 @@ const Login = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [hidePass, setHidePass] = useState(true);
-
+  const dispatch = useDispatch();
   const toggleEye = () => {
     setHidePass(!hidePass);
   };
-  async function EmailSign() {
-    setLoading(true);
-    const user = {
-      email: email,
-      password: password,
-    };
-    loginUser(user, Login => {
+  const EmailSign = async () => {
+    try {
+      setLoading(true);
+
+      const user = {
+        email: email,
+        password: password,
+      };
+
+      console.log('🚀 ~ file: Login.js:45 ~ EmailSign ~ user:', user);
+
+      // Dispatch the asynchronous action and wait for it to complete
+      const Login = await loginUser(user);
+
       if (Login !== '') {
         console.log('on success ', JSON.parse(Login));
-        const name = JSON.parse(Login);
+
         setLoading(false);
 
-        navigation.reset({
+        await navigation.reset({
           index: 0,
           routes: [{name: 'Success'}],
         });
       } else {
         setLoading(false);
       }
-    });
-  }
+    } catch (error) {
+      // Handle errors, e.g., display an error message to the user
+      console.error('Error in EmailSign:', error);
+      setLoading(false);
+    }
+  };
 
   // validation starts here
   const _emailvalidate = mail => {

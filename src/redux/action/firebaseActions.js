@@ -134,45 +134,43 @@ export const getPosts = () => {
     );
   }
 };
+export const loginUser = async user => {
+  console.log(
+    '🚀 ~ file: firebaseActions.js:138 ~ loginUser ~ user:',
+    user.email,
+  );
+  try {
+    await auth().signInWithEmailAndPassword(user.email, user.password);
+    const uid = firebase.auth().currentUser;
+    const documentSnapshot = await firestore()
+      .collection('Users')
+      .doc(uid.uid)
+      .get();
 
-export const loginUser = (user, onsucess) => {
-  console.log(user);
+    const userDetails = documentSnapshot.data();
+    if (userDetails) {
+      const userData = JSON.stringify(userDetails);
 
-  auth()
-    .signInWithEmailAndPassword(user.email, user.password)
-    .then(() => {
-      console.log('signed in!');
-      firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-          firestore()
-            .collection('Users')
-            .doc(user.uid)
-            .get()
-            .then(documentSnapshot => {
-              let userDetails = {};
-              userDetails = documentSnapshot.data();
-              const userData = JSON.stringify(userDetails);
-              getLoggedUser(userData);
-              console.log(
-                'user details from Login screen: ' +
-                  JSON.stringify(userDetails),
-              );
-              onsucess(userData);
-            });
-        }
-      });
-    })
-    .catch(error => {
-      console.log('throwing error from redux login ', error);
-      onsucess('');
-    });
+      getLoggedUser(userData);
+
+      const token = await AsyncStorage.getItem('fcmToken');
+      updateFcmToken(token);
+      return userData;
+    }
+    // onSuccess(userData);
+  } catch (error) {
+    console.log('Error from redux login:', error);
+  }
 };
 
 export async function getLoggedUser(userData) {
   try {
     const getKey = await AsyncStorage.setItem('LoggedUser', userData);
-    console.log('my call back function is working correctly', userData);
   } catch (error) {
+    console.log(
+      '🚀 ~ file: firebaseActions.js:176 ~ getLoggedUser ~ error:',
+      error,
+    );
     // Add custom logic to handle errors
   }
 }
@@ -314,6 +312,25 @@ export const addFriends = Friends => {
       console.log('error while adding friend', err);
     });
 };
+export const removeFriend = async friendUID => {
+  const currentUserUID = auth().currentUser.uid;
+  try {
+    const Delete = await firestore()
+      .collection('Users')
+      .doc(currentUserUID)
+      .collection('Friends')
+      .doc(friendUID.uid)
+      .delete();
+    getAddedFriend();
+    return "success";
+  } catch (error) {
+    console.log(
+      '🚀 ~ file: firebaseActions.js:319 ~ removeFriend ~ error:',
+      error,
+    );
+  }
+};
+
 export const deletePost = postId => {
   const user = auth().currentUser.uid;
   console.log('post to delete', postId);
@@ -329,7 +346,21 @@ export const deletePost = postId => {
       console.log('error while deleting post', err);
     });
 };
+export const updateFcmToken = fcmToken => {
+  const user = auth().currentUser.uid;
 
+  try {
+    firestore()
+      .collection('Users')
+      .doc(user)
+      .update({
+        fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+      });
+    showAlert('Login Success', 'success');
+  } catch (error) {
+    console.log('error while saving fcm ', error);
+  }
+};
 export const getAddedFriend = () => {
   const user = auth().currentUser.uid;
   try {

@@ -32,11 +32,9 @@ const Splash = ({navigation}) => {
 
     if (initializing) {
       setInitializing(false);
-
       const fcmToken = await messaging().getToken();
       setToken(fcmToken);
-
-      asyncStorage.setItem('fcmtoken', fcmToken);
+      asyncStorage.setItem('fcmToken', fcmToken);
     }
   }
   async function requestUserPermission() {

@@ -22,6 +22,9 @@ import {
   getFriend,
   userFromFriends,
   addFriends,
+  removeFriends,
+  removeFriend,
+  getAddedFriend,
 } from '../../redux/action/firebaseActions';
 import {clockRunning} from 'react-native-reanimated';
 import {firebase} from '@react-native-firebase/auth';
@@ -32,13 +35,13 @@ import CommonImage from '../components/CommonImage';
 const AddedFriends = ({navigation}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
-  const {allUsersOnApp} = useSelector(state => state.fromReducer);
+  const {friendsAdded} = useSelector(state => state.fromReducer);
   const {usersForModal} = useSelector(state => state.fromReducer);
   const [searchText, setSearchText] = useState('');
   // console.log('Users for Modal in friends', usersForModal);
 
   const dispatch = useDispatch();
-  const fetchFriends = () => dispatch(getFriend());
+  const fetchFriends = () => dispatch(getAddedFriend());
 
   const toggleModal = props => {
     props?.username && props?.email ? dispatch(userFromFriends(props)) : null;
@@ -46,10 +49,28 @@ const AddedFriends = ({navigation}) => {
     setModalVisible(!isModalVisible);
   };
   useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      // The screen is focused
+      setRefreshing(true);
+      // Call any action
+      setTimeout(() => {
+        getFriends();
+        setRefreshing(false);
+      }, 2000);
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+  // console.log(
+  //   '🚀 ~ file: Addedfriend.js:61 ~ AddedFriends ~ navigation:',
+  //   navigation,
+  // );
+  const getFriends = () => {
     setRefreshing(true);
     fetchFriends();
     setRefreshing(false);
-  }, []);
+  };
   function handleChat(params) {
     const usersForChat = {
       key: params.username,
@@ -110,7 +131,7 @@ const AddedFriends = ({navigation}) => {
           }}>
           <View style={{width: width * 0.15}}>
             <Image
-              source={{uri: url}}
+              source={url ? {uri: url} : CommonImage.dummyProfile}
               style={{height: 50, width: 50, borderRadius: 100 / 2}}
             />
           </View>
@@ -141,23 +162,21 @@ const AddedFriends = ({navigation}) => {
               onPress={() => setModalVisible(false)}>
               <Icon name="close" size={24} color="black" />
             </TouchableOpacity>
-            <Image source={{uri: usersForModal.url}} style={styles.userPhoto} />
+            <Image
+              source={url ? {uri: usersForModal.url} : CommonImage.dummyProfile}
+              style={styles.userPhoto}
+            />
             <Text style={styles.userName}>{usersForModal.username}</Text>
             <Text style={styles.userEmail}>{usersForModal.email}</Text>
             <TouchableOpacity
               style={styles.actionButton}
               onPress={() => {
                 toggleModal(),
-                  dispatch(
-                    addFriends({
-                      displayName: usersForModal.username,
-                      email: usersForModal.email,
-                      uid: usersForModal.uid,
-                      photoUrl: usersForModal.url,
-                    }),
-                  );
+                  removeFriend({
+                    uid: usersForModal.uid,
+                  });
               }}>
-              <Text style={styles.actionButtonText}>Follow</Text>
+              <Text style={styles.actionButtonText}>Unfollow</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
@@ -193,7 +212,7 @@ const AddedFriends = ({navigation}) => {
           height: height * 1,
 
           width: width * 1,
-          backgroundColor: 'black',
+          // backgroundColor: 'black',
           position: 'relative',
         }}>
         <View
@@ -213,6 +232,7 @@ const AddedFriends = ({navigation}) => {
                   : 'FONTSPRINGDEMO-BlueVinylRegular',
               fontSize: 35,
               lineHeight: 40,
+              // textAlign: 'center',
             }}>
             Friends
           </Text>
@@ -238,20 +258,20 @@ const AddedFriends = ({navigation}) => {
           </View>
         </View>
         <FlatList
-          data={allUsersOnApp.filter(item =>
+          data={friendsAdded.filter(item =>
             item.displayName.toLowerCase().includes(searchText),
           )}
           renderItem={renderItem}
           keyExtractor={item => item.id}
-          // refreshControl={
-          //   <RefreshControl
-          //     title="Referesing Users"
-          //     tintColor={COLOR.BUTTON}
-          //     titleColor="#fff"
-          //     refreshing={refreshing}
-          //     onRefresh={getFriend}
-          //   />
-          // }
+          refreshControl={
+            <RefreshControl
+              title="Refreshing Users"
+              tintColor={COLOR.BUTTON}
+              titleColor="#fff"
+              refreshing={refreshing}
+              onRefresh={() => getFriends()}
+            />
+          }
         />
       </ImageBackground>
     </SafeAreaView>

@@ -42,7 +42,7 @@ const Signup = ({navigation}) => {
   const update = {
     displayName: username,
     email: email,
-    token: firestore.FieldValue.arrayUnion(fcmToken),
+    fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
   };
   const toggleEye = () => {
     setHidePass(!hidePass);

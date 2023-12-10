@@ -1,13 +1,10 @@
-import {
-  legacy_createStore,
-  combineReducers,
-  applyMiddleware,
-  createStore,
-} from 'redux';
-// import {configureStore} from '@reduxjs/toolkit';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
 import fromReducer from './reducer/reducer';
+
 const rootReducer = combineReducers({
   fromReducer,
 });
-export const store = legacy_createStore(rootReducer, applyMiddleware(thunk));
+
+// Using createStore from the redux library, not @reduxjs/toolkit
+export const store = createStore(rootReducer, applyMiddleware(thunk));
