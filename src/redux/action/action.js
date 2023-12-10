@@ -1,10 +1,4 @@
-import {
-  GET_LIKES,
-  GET_USER,
-  LOGOUT_USER,
-  INCREMENT,
-  COMMENT,
-} from '../type/type';
+import {GET_LIKES, GET_USER, LOGOUT_USER, LIKE, COMMENT} from '../type/type';
 import auth from '@react-native-firebase/auth';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,6 +8,7 @@ import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
 import {Alert} from 'react-native';
+import showAlert from '../../common/showAlert';
 
 // export const getLikes = () => {
 //   try {
@@ -87,97 +82,86 @@ export const getLikes = postId => {
   }
 };
 
-const arr = [];
-export const increment = like => {
+const updatedLike = [];
+export const updateLike = like => {
+  const fieldName = 'like';
   const update = {
-    like: like,
+    [fieldName]: true,
     userId: auth().currentUser.uid,
     postId: like,
   };
-  // console.log(like);
-  if (arr.includes(like)) {
-    try {
-      return async dispatch => {
-        arr.pop(like);
 
-        dispatch({
-          type: INCREMENT,
-          payload: arr,
-        });
-        // console.log('dghjkfsdjkf', arr);
-        firestore()
-          .collection('Upload')
-          .doc(like)
-          .update({like: firestore.FieldValue.arrayRemove(update)});
-      };
-    } catch (error) {
-      console.log('Error while dislike', error);
-    }
-  } else {
+  const updateFirestore = async (like, operation) => {
+    console.log('🚀 ~ file: action.js:100 ~ updateFirestore ~ like:', like);
     try {
-      return async dispatch => {
-        arr.push(like);
-
-        dispatch({
-          type: INCREMENT,
-          payload: arr,
-        });
-        firestore()
-          .collection('Upload')
-          .doc(like)
-          .update({like: firestore.FieldValue.arrayUnion(update)});
-        // firestore().collection('Upload').doc(like).update({like: arr});
-        // console.log('dghjkfsdjkf', arr);
-      };
+      await firestore()
+        .collection('Upload')
+        .doc(like)
+        .update({[fieldName]: firestore.FieldValue[operation](update)});
     } catch (error) {
-      // Add custom logic to handle errors
-      console.log('Error while like', error);
+      console.log(
+        `Error while ${operation === 'arrayRemove' ? 'disliking' : 'liking'}`,
+        error,
+      );
     }
-  }
-};
-export const comments = (postId, dispatch, comments) => {
-  const update = {
-    comment: comments,
-    userId: auth().currentUser.uid,
-    postId: postId,
   };
-  // console.log(like);
-  if (arr.includes(comments)) {
-    try {
-      arr.pop(comments);
 
-      dispatch({
-        type: COMMENT,
-        payload: arr,
-      });
-      // console.log('dghjkfsdjkf', arr);
-      Alert.alert('tried to set comment in ==>', postId);
-      // firestore()
-      //   .collection('Upload')
-      //   .doc(postId)
-      //   .update({comment: firestore.FieldValue.arrayRemove(update)});
-    } catch (error) {
-      // Add custom logic to handle errors
-      console.log('Error while dislike', error);
-    }
+  if (updatedLike.includes(like)) {
+    updatedLike.pop(like);
   } else {
-    try {
-      arr.push(comments);
-
-      dispatch({
-        type: COMMENT,
-        payload: arr,
-      });
-      Alert.alert('tried to set comment in ==>', postId);
-      // firestore()
-      //   .collection('Upload')
-      //   .doc(postId)
-      //   .update({comment: firestore.FieldValue.arrayUnion(update)});
-      // firestore().collection('Upload').doc(like).update({like: arr});
-      // console.log('dghjkfsdjkf', arr);
-    } catch (error) {
-      // Add custom logic to handle errors
-      console.log('Error while like', error);
-    }
+    updatedLike.push(like);
   }
+
+  return dispatch => {
+    dispatch({
+      type: LIKE,
+      payload: updatedLike,
+    });
+
+    updateFirestore(
+      like,
+      updatedLike.includes(like) ? 'arrayRemove' : 'arrayUnion',
+    );
+  };
+};
+const updatedComment = [];
+export const updateComments = commentData => {
+  const fieldName = 'comment';
+  const update = {
+    [fieldName]: commentData.comment,
+    userId: auth().currentUser.uid,
+    postId: commentData.postId,
+  };
+  const updateFirestore = async (comment, operation) => {
+    try {
+      await firestore()
+        .collection('Upload')
+        .doc(comment)
+        .update({[fieldName]: firestore.FieldValue[operation](update)});
+      showAlert('Comment Added', 'success');
+    } catch (error) {
+      console.log(
+        `Error while ${operation === 'arrayRemove' ? 'comment' : 'comment'}`,
+        error,
+      );
+    }
+  };
+
+  if (updatedComment.includes(commentData.postId)) {
+    updatedComment.pop(commentData.postId);
+  } else {
+    updatedComment.push(commentData.postId);
+  }
+
+  return dispatch => {
+    dispatch({
+      type: COMMENT,
+      payload: updatedComment,
+    });
+
+    updateFirestore(
+      commentData.postId,
+      updatedComment.includes(commentData.postId) ? 'arrayUnion' : 'arrayUnion',
+    );
+  };
 };

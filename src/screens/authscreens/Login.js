@@ -12,12 +12,7 @@ import {
   StatusBar,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {
-  ALERT_TYPE,
-  Dialog,
-  AlertNotificationRoot,
-  Toast,
-} from 'react-native-alert-notification';
+
 import CommonImage from '../components/CommonImage';
 import {loginUser} from '../../redux/action/firebaseActions';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -49,13 +44,7 @@ const Login = ({navigation}) => {
         console.log('on success ', JSON.parse(Login));
         const name = JSON.parse(Login);
         setLoading(false);
-        Dialog.show({
-          type: ALERT_TYPE.SUCCESS,
 
-          title: 'Login Success',
-          textBody: `Welcome to Sociable ${name.displayName}`,
-          button: 'close',
-        });
         navigation.reset({
           index: 0,
           routes: [{name: 'Success'}],
@@ -117,11 +106,6 @@ const Login = ({navigation}) => {
       EmailSign();
     } else {
       setLoading(false);
-      Toast.show({
-        type: ALERT_TYPE.WARNING,
-        title: 'Warning',
-        textBody: 'Mandatory fields are required',
-      });
     }
   };
 
@@ -202,15 +186,7 @@ const Login = ({navigation}) => {
                 OR LOG IN BY
               </Text>
             </View>
-            <TouchableOpacity
-              onPress={() => {
-                Dialog.show({
-                  type: ALERT_TYPE.WARNING,
-                  title: 'Google Login',
-                  textBody: `Google Login Coming Soon! meanwhile you can Login by Sign Up manually`,
-                  button: `OK`,
-                });
-              }}>
+            <TouchableOpacity onPress={() => {}}>
               <Image
                 style={{height: 50, width: 50, borderRadius: 50}}
                 source={CommonImage.googleLogo}

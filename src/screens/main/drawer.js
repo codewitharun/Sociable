@@ -12,7 +12,7 @@ import {
   ActivityIndicator,
   ImageBackground,
 } from 'react-native';
-import {Toast, ALERT_TYPE} from 'react-native-alert-notification';
+
 import React, {useEffect, useState} from 'react';
 import {COLOR, height, width} from '../components/Colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -42,11 +42,7 @@ const Drawer = ({navigation}) => {
   const onSignOut = () => {
     userSignout(() => {
       console.log('on success ');
-      Toast.show({
-        type: ALERT_TYPE.SUCCESS,
-        title: 'Success',
-        textBody: 'Logout successfully',
-      });
+
       navigation.reset({
         index: 0,
         routes: [{name: 'Login'}],
@@ -175,93 +171,81 @@ const Drawer = ({navigation}) => {
 
             marginTop: 20,
           }}>
-          <ScrollView
-            refreshControl={
-              <RefreshControl
-                title="Referesing Data..."
-                tintColor={COLOR.Link}
-                titleColor="#fff"
-                refreshing={refreshing}
-              />
-            }>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                height: height * 0.67,
-                width: width * 1,
-              }}>
-              <View>
-                {navigationData.map((item, index) => (
-                  <View
-                    style={{
-                      backgroundColor: COLOR.TRANSPARENT,
-                      height: 50,
-                      justifyContent: 'center',
-                      marginVertical: 10,
-                      width: width * 0.7,
-                      borderTopEndRadius: 40,
-                      borderBottomEndRadius: 40,
-                      paddingHorizontal: 10,
-                    }}
-                    key={index}>
-                    <TouchableOpacity
-                      onPress={() => navigation.navigate(item.navigateTo)}
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                      }}>
-                      <Text
-                        style={{
-                          color: 'white',
-                          fontFamily: 'Comfortaa-Bold',
-                          fontSize: 16,
-                          fontWeight: '400',
-                        }}>
-                        {item.name}
-                      </Text>
-                      <Icon
-                        name="chevron-right-circle"
-                        color={'rgba(255, 255, 255, 0.20)'}
-                        size={30}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                ))}
-                <TouchableOpacity
-                  onPress={() => onSignOut()}
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              height: height * 0.67,
+              width: width * 1,
+            }}>
+            <View>
+              {navigationData.map((item, index) => (
+                <View
                   style={{
-                    width: 130,
+                    backgroundColor: COLOR.TRANSPARENT,
                     height: 50,
-                    backgroundColor: 'white',
                     justifyContent: 'center',
-                    marginTop: 30,
-                    marginLeft: 20,
-                    borderRadius: 30,
-                    overflow: 'hidden',
-                  }}>
-                  <View
+                    marginVertical: 10,
+                    width: width * 0.7,
+                    borderTopEndRadius: 40,
+                    borderBottomEndRadius: 40,
+                    paddingHorizontal: 10,
+                  }}
+                  key={index}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate(item.navigateTo)}
                     style={{
-                      justifyContent: 'space-around',
-                      alignItems: 'center',
                       flexDirection: 'row',
-                      display: 'flex',
-                      paddingHorizontal: 14,
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
                     }}>
-                    <Icon name="exit-to-app" size={30} color={'black'} />
                     <Text
-                      style={{fontSize: 14, color: 'black', fontWeight: '400'}}>
-                      Log Out
+                      style={{
+                        color: 'white',
+                        fontFamily: 'Comfortaa-Bold',
+                        fontSize: 16,
+                        fontWeight: '400',
+                      }}>
+                      {item.name}
                     </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <View style={{width: width * 0.5}}>
-                <Profile />
-              </View>
+                    <Icon
+                      name="chevron-right-circle"
+                      color={'rgba(255, 255, 255, 0.20)'}
+                      size={30}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ))}
+              <TouchableOpacity
+                onPress={() => onSignOut()}
+                style={{
+                  width: 130,
+                  height: 50,
+                  backgroundColor: 'white',
+                  justifyContent: 'center',
+                  marginTop: 30,
+                  marginLeft: 20,
+                  borderRadius: 30,
+                  overflow: 'hidden',
+                }}>
+                <View
+                  style={{
+                    justifyContent: 'space-around',
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    display: 'flex',
+                    paddingHorizontal: 14,
+                  }}>
+                  <Icon name="exit-to-app" size={30} color={'black'} />
+                  <Text
+                    style={{fontSize: 14, color: 'black', fontWeight: '400'}}>
+                    Log Out
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
-          </ScrollView>
+            <View style={{width: width * 0.5}}>{/* <Profile /> */}</View>
+          </View>
         </View>
       </SafeAreaView>
     </ImageBackground>

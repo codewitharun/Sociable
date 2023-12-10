@@ -13,7 +13,7 @@ import Header from '../../common/header';
 import CommonTextInput from '../../common/textinput';
 import CommonButton from '../../common/button';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {ALERT_TYPE, Dialog, Toast} from 'react-native-alert-notification';
+
 function Forgot({navigation}) {
   const [email, setEmail] = useState('');
   const [errorEmail, setErrorEmail] = useState('');
@@ -42,11 +42,6 @@ function Forgot({navigation}) {
     if (validate()) {
       EmailSign();
     } else {
-      Toast.show({
-        type: ALERT_TYPE.WARNING,
-        title: 'Missing Field',
-        textBody: `Email is required!`,
-      });
     }
   };
   async function EmailSign() {

@@ -20,30 +20,10 @@ import Header from '../../common/header';
 import CommonButton from '../../common/button';
 import CommonImage from '../components/CommonImage';
 import {COLOR} from '../components/Colors';
-GoogleSignin.configure({
-  webClientId:
-    '783880828424-errl5i9tcucvu8i9bl1643gi7ur1h4km.apps.googleusercontent.com',
-});
+
 
 const Authscreen = ({navigation}) => {
-  const isDarkMode = useColorScheme() === 'dark';
 
-  async function onGoogleButtonPress() {
-    // Get the users ID token
-    const {idToken} = await GoogleSignin.signIn();
-
-    // Create a Google credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-    // Sign-in the user with the credential
-    return auth().signInWithCredential(googleCredential);
-  }
-  GoogleSignin.configure({
-    webClientId:
-      '783880828424-errl5i9tcucvu8i9bl1643gi7ur1h4km.apps.googleusercontent.com',
-  });
-  //   var arun = {};
-  //   console.log(arun);
   return (
     <View
       style={{

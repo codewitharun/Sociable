@@ -26,13 +26,10 @@ const Splash = ({navigation}) => {
   async function onAuthStateChanged(user) {
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
-        // console.log('user from  splash screen', user); // It shows the Firebase user
         asyncStorage.setItem('userid', user.uid);
-        // console.log(firebase.auth().user); // It is still undefined
       }
     });
-    // console.log('User state changed', user);
-    setUser(user);
+
     if (initializing) {
       setInitializing(false);
 
@@ -40,13 +37,6 @@ const Splash = ({navigation}) => {
       setToken(fcmToken);
 
       asyncStorage.setItem('fcmtoken', fcmToken);
-      // firestore()
-      //   .collection('Users')
-      //   .doc(user)
-      //   .collection('FcmTokens')
-      //   .doc('fcmtoken')
-      //   .set({deviceToken: fcmToken});
-      // console.log('Device FcmToken: ========>>>>>', fcmToken);
     }
   }
   async function requestUserPermission() {
@@ -60,10 +50,11 @@ const Splash = ({navigation}) => {
     }
   }
   useEffect(() => {
-    // SplashScreen.hide();
+    asyncStorage.getItem('userid').then(item => {
+      setUser(item);
+    });
     setTimeout(() => {
       const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-      // console.log(subscriber);
       requestUserPermission();
       SplashScreen.hide();
       return subscriber;

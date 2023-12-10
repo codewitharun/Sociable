@@ -16,9 +16,6 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 // import ImagePicker from 'react-native-image-picker';
-import ImagePicker from 'react-native-image-crop-picker';
-import Video from 'react-native-video';
-import VideoPlayer from 'react-native-video-controls';
 import PushNotification from 'react-native-push-notification';
 
 const ChatRoom = ({user1, user2, navigation}) => {

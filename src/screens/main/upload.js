@@ -22,8 +22,6 @@ import {height, width, COLOR} from '../components/Colors';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import CommonImage from '../components/CommonImage';
-import {showAlert, closeAlert} from 'react-native-customisable-alert';
-// import ImagePicker from 'react-native-image-picker';
 import firestore from '@react-native-firebase/firestore';
 import {getUser} from '../../redux/action/firebaseActions';
 import CommonButton from '../../common/button';
@@ -31,13 +29,12 @@ import CommonTextInput from '../../common/textinput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import ProfileHeader from '../../common/profileheader';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import showAlert from '../../common/showAlert';
 
 const Upload = ({navigation, params}) => {
   const {user} = useSelector(state => state.fromReducer);
-  // console.log('user in upload screen', user);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(false);
-  // console.log('users from drawer screen', users.displayName);
   const dispatch = useDispatch();
   const fetchUser = () => dispatch(getUser());
   useEffect(() => {
@@ -58,20 +55,6 @@ const Upload = ({navigation, params}) => {
   const [ImageName, setImagename] = useState('');
   const [userData, setUserData] = useState();
   const [date, setDate] = useState();
-  // const parsedUserData = JSON.stringify(JSON.parse(userData));
-  // console.log('User data is after' + userData.displayName);
-  // console.log('IMageNAme ', ImageName);
-  const update = {
-    photoUrl: image,
-    userPhoto: user?.photoUrl,
-    email: user?.email,
-    caption: caption,
-    uid: user?.uid,
-    name: user?.displayName,
-    like: [],
-    comment: [],
-    createdAt: date,
-  };
 
   const findDate = () => {
     const date = new Date();
@@ -96,17 +79,7 @@ const Upload = ({navigation, params}) => {
 
             style: 'default',
           },
-          // {
-          //   text: 'Gallary',
-          //   onPress: () => chooseFile('photo'),
 
-          //   style: 'default',
-          // },
-          // {
-          //   text: 'Camera',
-          //   onPress: () => captureImage('photo'),
-          //   style: 'default',
-          // },
           {
             text: 'Camera',
             onPress: () => cropImage(),
@@ -121,152 +94,47 @@ const Upload = ({navigation, params}) => {
   const reference = storage().ref(ImageName);
   async function uploadDetails() {
     try {
-      setLoading(true);
-      await firestore()
-        .collection('Upload')
-        .doc()
-        .set(update)
-        .then(() => {
-          Alert.alert('Post Uploaded');
-          navigation.navigate('Success');
-          setLoading(false);
-        })
-        .then(() => {
-          ImagePicker.clean()
-            .then(() => {
-              console.log('removed all tmp images from tmp directory');
-            })
-            .catch(e => {
-              alert('error while cleaning tmp images from picker: ' + e);
-              setLoading(false);
-            });
-        });
+      const update = {
+        photoUrl: image,
+        userPhoto: user?.photoUrl,
+        email: user?.email,
+        caption: caption,
+        uid: user?.uid,
+        name: user?.displayName,
+        like: [],
+        comment: [],
+        createdAt: date,
+      };
+      if (image === '') {
+        showAlert('Please Select/Click Image', 'info');
+      } else {
+        setLoading(true);
+        await firestore()
+          .collection('Upload')
+          .doc()
+          .set(update)
+          .then(() => {
+            navigation.navigate('Success');
+            setLoading(false);
+            showAlert('Post Uploaded', 'Success');
+          })
+          .then(() => {
+            ImagePicker.clean()
+              .then(() => {
+                console.log('removed all tmp images from tmp directory');
+              })
+              .catch(e => {
+                alert('error while cleaning tmp images from picker: ' + e);
+                setLoading(false);
+              });
+          });
+      }
     } catch (error) {
       console.log('error while uploading post', error);
       setLoading(false);
     }
   }
-  const captureImage = async type => {
-    let options = {
-      mediaType: type,
-      maxWidth: 300,
-      maxHeight: 550,
-      quality: 1,
-      includeExtra: true,
-      saveToPhotos: false,
-      cameraType: 'front',
-    };
-    let isCameraPermitted = await requestCameraPermission();
-    let isStoragePermitted = await requestExternalWritePermission();
-    if (isCameraPermitted && isStoragePermitted) {
-      launchCamera(options, response => {
-        console.log('Response = ', response);
 
-        if (response.didCancel) {
-          alert('User cancelled camera picker');
-          return;
-        } else if (response.errorCode == 'camera_unavailable') {
-          alert('Camera not available on device');
-          return;
-        } else if (response.errorCode == 'permission') {
-          alert('Permission not satisfied');
-          return;
-        } else if (response.errorCode == 'others') {
-          alert(response.errorMessage);
-          return;
-        }
-
-        // console.log('base64 -> ', response.base64);
-        // console.log('uri -> ', response.uri);
-        // console.log('width -> ', response.width);
-        // console.log('height -> ', response.height);
-        // console.log('fileSize -> ', response.fileSize);
-        // console.log('type -> ', response.type);
-        // console.log('response assets response -> ', response.assets[0].uri);
-        setImagename(response.assets[0].fileName);
-        setFilePath(response);
-      });
-    }
-  };
-
-  const requestCameraPermission = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.CAMERA,
-          {
-            title: 'Camera Permission',
-            message: 'App needs camera permission',
-          },
-        );
-        // If CAMERA Permission is granted
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } catch (err) {
-        console.warn(err);
-        return false;
-      }
-    } else return true;
-  };
-
-  const requestExternalWritePermission = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'External Storage Write Permission',
-            message: 'App needs write permission',
-          },
-        );
-        // If WRITE_EXTERNAL_STORAGE Permission is granted
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } catch (err) {
-        console.warn(err);
-        alert('Write permission err', err);
-      }
-      return false;
-    } else return true;
-  };
-
-  const chooseFile = type => {
-    let options = {
-      mediaType: type,
-      maxWidth: 300,
-      maxHeight: 550,
-      saveToPhotos: false,
-      quality: 1,
-      selectionLimit: 0,
-    };
-    launchImageLibrary(options, response => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        alert('User cancelled camera picker');
-        return;
-      } else if (response.errorCode == 'camera_unavailable') {
-        alert('Camera not available on device');
-        return;
-      } else if (response.errorCode == 'permission') {
-        alert('Permission not satisfied');
-        return;
-      } else if (response.errorCode == 'others') {
-        alert(response.errorMessage);
-        return;
-      }
-      // console.log('base64 -> ', response.base64);
-      // // console.log('base64 -> ', response?.assets?.width);
-      // console.log('uri -> ', response.uri);
-      // console.log('width -> ', response.width);
-      // console.log('height -> ', response.height);
-      // console.log('fileSize -> ', response.fileSize);
-      // console.log('type -> ', response.type);
-      // console.log('response assets response -> ', response.assets[0].uri);
-
-      setFilePath(response);
-      setImagename(response.assets[0].fileName);
-      console.log(response);
-    });
-  };
   const cropImage = async () => {
     await ImagePicker.openCamera({
       width: 300,
@@ -276,9 +144,6 @@ const Upload = ({navigation, params}) => {
       .then(image => {
         setFilePath(image.path);
         setImagename(image.path);
-        console.log('edit image name', image.filename);
-        console.log('edit image path', image.path);
-        console.log('image response ', image);
       })
       .catch(error => {
         console.log('crop image error', error);
@@ -293,9 +158,6 @@ const Upload = ({navigation, params}) => {
       .then(image => {
         setFilePath(image.path);
         setImagename(image.path);
-        console.log('edit image name', image.filename);
-        console.log('edit image path', image.path);
-        console.log('image response', image);
       })
       .catch(error => {
         console.log('Crop image picker error ', error);
@@ -341,10 +203,8 @@ const Upload = ({navigation, params}) => {
                   onPress={() => onChoose()}>
                   <Image
                     onLoad={async () => {
-                      // path to existing file on filesystem
                       const pathToFile = filePath;
 
-                      // uploads file
                       await reference.putFile(pathToFile);
                       const urrl = await storage()
                         .ref(ImageName)
@@ -353,7 +213,7 @@ const Upload = ({navigation, params}) => {
                       console.log('url link get after Post upload ', urrl);
                       setImage(urrl);
                       findDate();
-                      console.log('setImaage', image);
+                      // console.log('setI);maage', image
                     }}
                     source={{
                       uri: filePath,
@@ -383,7 +243,7 @@ const Upload = ({navigation, params}) => {
                 onPress={() => onChoose()}
                 style={{
                   position: 'absolute',
-                  bottom: 20,
+                  bottom: 0,
                   flexDirection: 'row',
                   backgroundColor: COLOR.Link,
                   width: width * 0.71,
@@ -418,6 +278,7 @@ const Upload = ({navigation, params}) => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 // backgroundColor: 'green',
+                marginTop: 40,
               }}>
               <CommonTextInput
                 placeholder={'Caption...'}
@@ -429,6 +290,7 @@ const Upload = ({navigation, params}) => {
 
               <View style={{marginTop: 20}}>
                 <CommonButton
+                  loading={loading}
                   onPress={() => uploadDetails()}
                   name={'Upload Post'}
                 />
@@ -474,7 +336,7 @@ const styles = StyleSheet.create({
   imageStyle: {
     width: 300,
     height: 400,
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     // margin: 20,
     // backgroundColor: 'red',
     borderWidth: 1,

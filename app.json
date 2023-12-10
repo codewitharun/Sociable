@@ -1,5 +1,7 @@
 {
   "name": "sociable",
-  "displayName": "sociable"
+  "displayName": "sociable",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-6785297146070944~3800606646"
+  }
 }
-

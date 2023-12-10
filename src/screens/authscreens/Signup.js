@@ -21,12 +21,7 @@ import auth from '@react-native-firebase/auth';
 import CommonTextInput from '../../common/textinput';
 import Header from '../../common/header';
 import {COLOR} from '../components/Colors';
-import {
-  ALERT_TYPE,
-  Dialog,
-  AlertNotificationRoot,
-  Toast,
-} from 'react-native-alert-notification';
+
 import CommonButton from '../../common/button';
 import CommonImage from '../components/CommonImage';
 import showAlert from '../../common/showAlert';
@@ -291,15 +286,7 @@ const Signup = ({navigation}) => {
                 OR SIGN UP BY
               </Text>
             </View>
-            <TouchableOpacity
-              onPress={() => {
-                Dialog.show({
-                  type: ALERT_TYPE.WARNING,
-                  title: 'Google Login',
-                  textBody: `Google Login Coming Soon! meanwhile you can Login by Sign Up manually`,
-                  button: `OK`,
-                });
-              }}>
+            <TouchableOpacity onPress={() => {}}>
               <Image
                 style={{height: 50, width: 50, borderRadius: 50}}
                 source={CommonImage.googleLogo}

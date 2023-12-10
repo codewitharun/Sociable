@@ -6,12 +6,7 @@ import {firebase} from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
-import {
-  ALERT_TYPE,
-  Dialog,
-  AlertNotificationRoot,
-  Toast,
-} from 'react-native-alert-notification';
+
 import {
   GET_USER,
   GET_POSTS,
@@ -23,6 +18,7 @@ import {
   GET_POST_DETAILS,
 } from '../type/type';
 import {Alert} from 'react-native';
+import showAlert from '../../common/showAlert';
 
 // export const getPosts = () => {
 //   try {
@@ -169,11 +165,6 @@ export const loginUser = (user, onsucess) => {
     .catch(error => {
       console.log('throwing error from redux login ', error);
       onsucess('');
-      Toast.show({
-        type: ALERT_TYPE.DANGER,
-        title: 'Login Failed',
-        textBody: `${error}`,
-      });
     });
 };
 
@@ -317,10 +308,25 @@ export const addFriends = Friends => {
     .set(Friends)
     .then(res => {
       console.log('Added as Friend Successfully');
-      Alert.alert('Successfully added as Friend');
+      showAlert('Added as Friend', 'Success');
     })
     .catch(err => {
       console.log('error while adding friend', err);
+    });
+};
+export const deletePost = postId => {
+  const user = auth().currentUser.uid;
+  console.log('post to delete', postId);
+  firestore()
+    .collection('Upload')
+    .doc(postId)
+    .delete()
+    .then(res => {
+      console.log('🚀 ~ file: firebaseActions.js:325 ~ deletePost ~ res:', res);
+      showAlert('Post Deleted', 'success');
+    })
+    .catch(err => {
+      console.log('error while deleting post', err);
     });
 };
 
@@ -332,7 +338,6 @@ export const getAddedFriend = () => {
         .collection('Users')
         .doc(user)
         .collection('Friends')
-        // .doc(Friends.id)
         .orderBy('displayName', 'asc')
         .get()
         .then(querySnapshot => {

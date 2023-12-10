@@ -6,8 +6,7 @@ import {
   POST_USER,
   GET_CURRENT_POSTS,
   GET_FRIENDS,
-  INCREMENT,
-  DECREMENT,
+  LIKE,
   GET_LIKES,
   SET_MODAL,
   GET_ADDED_FRIENDS,
@@ -49,11 +48,10 @@ function fromReducer(state = initialState, action) {
       return {...state, allUsersOnApp: action.payload};
     case GET_ADDED_FRIENDS:
       return {...state, friendsAdded: action.payload};
-    case INCREMENT:
+    case LIKE:
       return {
         ...state,
         likeButton: action.payload,
-        // counter: state.likeButton + 1,
       };
     case GET_LIKES:
       return {
@@ -62,8 +60,8 @@ function fromReducer(state = initialState, action) {
       };
     case SET_MODAL:
       return {...state, usersForModal: action.payload};
-      case GET_POST_DETAILS:
-        return {...state, postDetails: action.payload};
+    case GET_POST_DETAILS:
+      return {...state, postDetails: action.payload};
     default:
       return state;
   }

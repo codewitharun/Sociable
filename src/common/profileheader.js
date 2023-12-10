@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 10,
+    // marginTop: 10,
   },
   backButton: {
     width: '10%',
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
       Platform.OS === 'android'
         ? 'Logo-Regular'
         : 'FONTSPRINGDEMO-BlueVinylRegular',
-    fontSize: 20,
+    fontSize: 30,
     lineHeight: 60,
   },
 });

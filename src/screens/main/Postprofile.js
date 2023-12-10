@@ -24,8 +24,6 @@ import RNFS from 'react-native-fs';
 import {height, width, COLOR} from '../components/Colors';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
-import {showAlert, closeAlert} from 'react-native-customisable-alert';
-// import ImagePicker from 'react-native-image-picker';
 
 import firestore from '@react-native-firebase/firestore';
 import {color} from 'react-native-reanimated';
@@ -34,8 +32,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useSelector, useDispatch} from 'react-redux';
 import {getPostDetails, userSignout} from '../../redux/action/firebaseActions';
 import asyncStorage from '@react-native-async-storage/async-storage';
-import Modal from 'react-native-modal';
-import Gallery from 'react-native-awesome-gallery';
 
 import {
   getPosts,
@@ -61,7 +57,7 @@ const Postprofile = ({navigation, params}) => {
     setModalVisible(!isModalVisible);
   };
   const {user} = useSelector(state => state.fromReducer);
-  console.log('🚀 ~ file: Postprofile.js:64 ~ Postprofile ~ user:', user);
+
   const {currentUserPosts} = useSelector(state => state.fromReducer);
   // const currentUserPosts = [];
   // console.log('user in PostProfile screen', currentUserPosts);
@@ -366,7 +362,7 @@ const Postprofile = ({navigation, params}) => {
         <View style={styles.additionalContainer}>
           <View
             style={{
-              backgroundColor: 'pink',
+              // backgroundColor: 'pink',
               height: height,
               width: '100%',
               justifyContent: 'center',
@@ -455,7 +451,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F6F7F9',
   },
   additionalContainer: {
-    backgroundColor: 'green',
+    // backgroundColor: 'green',
     height: height * 0.5,
     marginTop: 40,
   },

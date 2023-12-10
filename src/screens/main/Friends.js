@@ -12,6 +12,8 @@ import {
   TextInput,
   Button,
   Linking,
+  ImageBackground,
+  Animated,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
@@ -26,13 +28,14 @@ import {firebase} from '@react-native-firebase/auth';
 import {COLOR, height, width} from '../components/Colors';
 import {AlphabetList} from 'react-native-section-alphabet-list';
 import Modal from 'react-native-modal';
+import CommonImage from '../components/CommonImage';
 const Friends = ({navigation}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const {allUsersOnApp} = useSelector(state => state.fromReducer);
   const {usersForModal} = useSelector(state => state.fromReducer);
   const [searchText, setSearchText] = useState('');
-  console.log('Users for Modal in friends', usersForModal);
+  // console.log('Users for Modal in friends', usersForModal);
 
   const dispatch = useDispatch();
   const fetchFriends = () => dispatch(getFriend());
@@ -54,6 +57,28 @@ const Friends = ({navigation}) => {
     };
     navigation.navigate('Chat', usersForChat);
   }
+
+  const [animation] = useState(new Animated.Value(0));
+
+  useEffect(() => {
+    Animated.spring(animation, {
+      toValue: 1,
+      friction: 4,
+      useNativeDriver: true,
+    }).start();
+  }, []);
+
+  const animatedStyle = {
+    transform: [
+      {
+        translateY: animation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [height, 0],
+        }),
+      },
+    ],
+  };
+
   const Item = ({
     title,
     url,
@@ -66,14 +91,22 @@ const Friends = ({navigation}) => {
   }) => (
     <View>
       <TouchableOpacity
-        onPress={() => toggleModal({username, email, uid, url})}>
+        onPress={() => toggleModal({username, email, uid, url})}
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: width * 0.95,
+        }}>
         <View
           style={{
             justifyContent: 'space-between',
             flexDirection: 'row',
             alignItems: 'center',
             height: height * 0.07,
+            width: width * 0.95,
             marginVertical: 16,
+            backgroundColor: 'rgba(255, 255, 255, 0.10)',
+            borderRadius: 20,
           }}>
           <View style={{width: width * 0.15}}>
             <Image
@@ -93,78 +126,47 @@ const Friends = ({navigation}) => {
             </Text>
           </View>
           <View style={{width: width * 0.1}}>
-            <Icon name="chat-outline" size={20} color={'white'} />
+            <Icon name="plus" size={20} color={'white'} />
           </View>
         </View>
       </TouchableOpacity>
       <View>
-        <Modal isVisible={isModalVisible}>
-          <View
-            style={{
-              height: height * 0.5,
-              backgroundColor: 'black',
-              borderRadius: 10,
-              borderColor: COLOR.BUTTON,
-              borderWidth: 1,
-              // borderStyle: 'dotted',
-            }}>
-            <View style={{padding: 20}}>
-              <TouchableOpacity onPress={toggleModal}>
-                <Icon
-                  name="close"
-                  color={'white'}
-                  size={40}
-                  style={{alignSelf: 'flex-end'}}
-                />
-              </TouchableOpacity>
-              <Image
-                source={{uri: usersForModal.url}}
-                style={{
-                  height: 60,
-                  width: 60,
-                  borderRadius: 100 / 2,
-                  alignSelf: 'center',
-                }}
-              />
-              <Text style={{color: 'white', alignSelf: 'center'}}>
-                {usersForModal.username}
-              </Text>
-              <TouchableOpacity
-                onPress={() => Linking.openURL(`mailto:${email}`)}>
-                <Text style={{color: 'white', alignSelf: 'center'}}>
-                  {usersForModal.email}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  toggleModal(), handleChat(usersForModal);
-                }}>
-                <Icon
-                  style={{color: 'white', alignSelf: 'center'}}
-                  name="chat-outline"
-                  size={50}
-                  color={'white'}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  toggleModal(),
+        <Modal
+          backdropOpacity={0.1} // Adjust the backdrop opacity for the blur effect
+          onBackdropPress={() => setModalVisible(false)}
+          isVisible={isModalVisible}>
+          <Animated.View style={[styles.cardContainer, animatedStyle]}>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}>
+              <Icon name="close" size={24} color="black" />
+            </TouchableOpacity>
+            <Image source={{uri: usersForModal.url}} style={styles.userPhoto} />
+            <Text style={styles.userName}>{usersForModal.username}</Text>
+            <Text style={styles.userEmail}>{usersForModal.email}</Text>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => {
+                toggleModal(),
+                  dispatch(
                     addFriends({
                       displayName: usersForModal.username,
                       email: usersForModal.email,
                       uid: usersForModal.uid,
                       photoUrl: usersForModal.url,
-                    });
-                }}>
-                <Icon
-                  style={{color: 'white', alignSelf: 'center'}}
-                  name="chat-outline"
-                  size={50}
-                  color={'white'}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
+                    }),
+                  );
+              }}>
+              <Text style={styles.actionButtonText}>Follow</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                toggleModal(), handleChat(usersForModal);
+              }}
+              style={styles.actionButton}>
+              <Text style={styles.actionButtonText}>Chat</Text>
+            </TouchableOpacity>
+          </Animated.View>
         </Modal>
       </View>
     </View>
@@ -182,20 +184,25 @@ const Friends = ({navigation}) => {
     />
   );
   return (
-    <SafeAreaView style={{backgroundColor: 'black'}}>
+    <SafeAreaView>
       {/* <StatusBar > </StatusBar> */}
-      <View
+      <ImageBackground
+        source={CommonImage.BackGroundImage}
+        resizeMode="contain"
         style={{
-          backgroundColor: 'black',
           height: height * 1,
+
           width: width * 1,
+          backgroundColor: 'black',
+          position: 'relative',
         }}>
         <View
           style={{
-            height: height * 0.1,
+            height: height * 0.2,
             width: width * 0.95,
             alignSelf: 'center',
-            justifyContent: 'center',
+            justifyContent: 'space-evenly',
+            // backgroundColor: 'red',
           }}>
           <Text
             style={{
@@ -205,15 +212,16 @@ const Friends = ({navigation}) => {
                   ? 'Logo-Regular'
                   : 'FONTSPRINGDEMO-BlueVinylRegular',
               fontSize: 35,
+              lineHeight: 40,
             }}>
-            Others in Yopmail
+            Others in Sociable
           </Text>
           <View
             style={{
               backgroundColor: 'white',
               justifyContent: 'space-around',
               alignItems: 'center',
-              width: width * 1,
+              width: width * 0.95,
               height: height * 0.05,
               display: 'flex',
               flexDirection: 'row',
@@ -226,7 +234,7 @@ const Friends = ({navigation}) => {
               placeholder="Search..."
               placeholderTextColor={'gray'}
             />
-            <Button title="Search" />
+            <Button title="Search" color={COLOR.Link} />
           </View>
         </View>
         <FlatList
@@ -245,11 +253,59 @@ const Friends = ({navigation}) => {
           //   />
           // }
         />
-      </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 };
 
 export default Friends;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  cardContainer: {
+    backgroundColor: 'white',
+    borderRadius: 16,
+    padding: 20,
+    width: width - 40,
+    alignSelf: 'center',
+    position: 'absolute',
+    top: height / 2 - 150, // Adjust the top position based on card height
+    zIndex: 1,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },
+  userPhoto: {
+    height: 80,
+    width: 80,
+    borderRadius: 40,
+    marginBottom: 10,
+  },
+  userName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  userEmail: {
+    fontSize: 14,
+    color: 'gray',
+    marginBottom: 15,
+  },
+  actionButton: {
+    backgroundColor: COLOR.Link,
+    padding: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  actionButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+});
